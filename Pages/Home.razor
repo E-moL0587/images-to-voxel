@@ -1,6 +1,5 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components
-@using ImagesToVoxel.Pages
 
 @code {
   private string activePage = "title";
@@ -10,10 +9,8 @@
 <PageTitle>My Blazor App</PageTitle>
 
 @if (activePage == "title") { <Title SetActivePage="SetActivePage" /> }
-else if (activePage == "describe") { <Describe SetActivePage="SetActivePage" /> }
-else {
-  @if (activePage == "voxel") { <Voxel SetActivePage="SetActivePage" /> }
-  @if (activePage == "pixels") { <Pixels SetActivePage="SetActivePage" /> }
-  @if (activePage == "mesh") { <Mesh SetActivePage="SetActivePage" /> }
-  <Menu SetActivePage="SetActivePage" />
-}
+@if (activePage == "voxel") { <Voxel /> }
+@if (activePage == "pixels") { <Pixels /> }
+@if (activePage == "mesh") { <Mesh /> }
+@if (activePage == "pixels" || activePage == "voxel" || activePage == "mesh") { <Menu SetActivePage="SetActivePage" /> }
+@if (activePage == "describe") { <Describe SetActivePage="SetActivePage" /> }
