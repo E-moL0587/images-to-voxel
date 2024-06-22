@@ -13,10 +13,6 @@
       "PackagePath": "staticwebassets\\ImagesToVoxel.styles.css"
     },
     {
-      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\css\\app.css",
-      "PackagePath": "staticwebassets\\css\\app.css"
-    },
-    {
       "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
     },

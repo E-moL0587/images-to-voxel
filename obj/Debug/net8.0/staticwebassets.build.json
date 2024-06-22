@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Cw7QxQ4anw40e4ZmItYMK4SWsQnIBlX2htwmDtm6y0c=",
+  "Hash": "LJFRZQen6zhPy/6Wk+PTmKIr5VwyoA+DOhZgdrmuFtI=",
   "Source": "ImagesToVoxel",
   "BasePath": "/",
   "Mode": "Root",
@@ -7805,25 +7805,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\ImagesToVoxel.bundle.scp.css"
-    },
-    {
-      "Identity": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\css\\app.css",
-      "SourceId": "ImagesToVoxel",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "css/app.css",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\css\\app.css"
     },
     {
       "Identity": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\css\\bootstrap\\bootstrap.min.css",

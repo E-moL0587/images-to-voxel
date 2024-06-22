@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "ImagesToVoxel",
   "resources": {
-    "hash": "sha256-8FZ5U/facAGN0lEiuAwuyvt3T6QxG+CXWxVbMH8+vZU=",
+    "hash": "sha256-P7s2qnwOOpSd6TGyMbeSXymeTzMXY/3IH5VJpyjNPIw=",
     "jsModuleNative": {
       "dotnet.native.8.0.6.dua9gk3jic.js": "sha256-YU6M9+jtDVnB8/wtrgIndOstzNh778Ls8g9XnbjorSk="
     },
@@ -208,10 +208,10 @@
       "mscorlib.wasm": "sha256-masKveCdoRSahF99doEQk7H3YN2wHLVIE4M/Zu8OoD8=",
       "netstandard.wasm": "sha256-z1EJOmgVhSpTopn7Tek/0P//MKGF1I3NUD/sh4oLnwY=",
       "System.Private.CoreLib.wasm": "sha256-tuIWpR30u0OoEVtv4pXZ47mEpI2AmFBIyYFPnqDZZfw=",
-      "ImagesToVoxel.wasm": "sha256-lLOVhB1P/qhlPVaGLy3kLlJ/yfxNe05pgUhVBqIyesM="
+      "ImagesToVoxel.wasm": "sha256-oBa+Q9pFuQZ10E65Ld+B7IHpeK/A44JBkjCglSLf/5s="
     },
     "pdb": {
-      "ImagesToVoxel.pdb": "sha256-8I+8PZUWP5CMDtqIoFGdh3WXofZau73AYX3RfUbEifM="
+      "ImagesToVoxel.pdb": "sha256-NjEr3PU9qtfNbe+2bhiTYC938H4nHMcpcJ50xn2VHn4="
     }
   },
   "cacheBootResources": true,
