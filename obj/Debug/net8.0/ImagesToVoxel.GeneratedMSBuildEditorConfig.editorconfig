@@ -26,8 +26,20 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Pages/Describe.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVzY3JpYmUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Pages/Menu.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Pages/Mesh.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWVzaC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Pages/Pixels.razor]

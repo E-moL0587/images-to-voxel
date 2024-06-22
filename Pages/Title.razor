@@ -1,10 +1,9 @@
 @code {
   [Parameter] public EventCallback<string> SetActivePage { get; set; }
-  private void ChangePage() {
-    SetActivePage.InvokeAsync("Voxel");
-  }
+  private void ShowVoxelAndMenu() { SetActivePage.InvokeAsync("voxel"); }
 }
 
 <div>
-  <h1>Title</h1>
+  <h1>Images to Voxel</h1>
+  <button @onclick="ShowVoxelAndMenu">Tap to start</button>
 </div>

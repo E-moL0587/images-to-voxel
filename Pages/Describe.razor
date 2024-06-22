@@ -1,9 +1,11 @@
 @code {
   [Parameter] public EventCallback<string> SetActivePage { get; set; }
-  private void GoBack() { SetActivePage.InvokeAsync("menu"); }
+  private void GoBack() {
+    SetActivePage.InvokeAsync("voxel");
+  }
 }
 
 <div>
-  <h2>@(GetType().Name.Replace("Component", "")) Component</h2>
+  <h2>Describe Component</h2>
   <button @onclick="GoBack">Back to Menu</button>
 </div>
