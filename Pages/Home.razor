@@ -1,12 +1,11 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components
+@using ImagesToVoxel.Pages
 
 @code {
   private string activePage = "title";
   private void SetActivePage(string page) { activePage = page; }
 }
-
-<PageTitle>Images to Voxel</PageTitle>
 
 @if (activePage == "title") { <Title SetActivePage="SetActivePage" /> }
 @if (activePage == "voxel") { <Voxel /> }
