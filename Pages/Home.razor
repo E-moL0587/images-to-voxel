@@ -1,0 +1,12 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components
+
+@code {
+  private string activePage = "title";
+  private void SetActivePage(string page) { activePage = page; }
+}
+
+<PageTitle>My Blazor App</PageTitle>
+
+@if (activePage == "title") { <Title SetActivePage="SetActivePage" /> }
+@if (activePage == "voxel") { <Pixels /> }

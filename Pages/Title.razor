@@ -1,0 +1,10 @@
+@code {
+  [Parameter] public EventCallback<string> SetActivePage { get; set; }
+  private void ChangePage() {
+    SetActivePage.InvokeAsync("Voxel");
+  }
+}
+
+<div>
+  <h1>Title</h1>
+</div>
