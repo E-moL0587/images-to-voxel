@@ -25,10 +25,6 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
-      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\icon-192.png",
-      "PackagePath": "staticwebassets\\icon-192.png"
-    },
-    {
       "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },
