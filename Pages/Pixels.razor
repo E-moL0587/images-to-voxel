@@ -10,7 +10,7 @@
 
   protected override async Task OnInitializedAsync()
   {
-    var imagePath = "images/front.png";
+    var imagePath = "images/title.png";
 
     using (var response = await HttpClient.GetAsync(imagePath))
     using (var stream = await response.Content.ReadAsStreamAsync())
