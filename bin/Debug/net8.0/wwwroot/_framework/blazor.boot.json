@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "ImagesToVoxel",
   "resources": {
-    "hash": "sha256-tp4Iq4P5OGy6zQdgIJYTGVwHQWbxVv/cizF5FIT29q8=",
+    "hash": "sha256-w28fCDTjVDkvgrr8lX1/F2YrN4JeYaZUo0WosA8wEOs=",
     "jsModuleNative": {
       "dotnet.native.8.0.6.dua9gk3jic.js": "sha256-YU6M9+jtDVnB8/wtrgIndOstzNh778Ls8g9XnbjorSk="
     },
@@ -39,6 +39,7 @@
       "Microsoft.Extensions.Primitives.wasm": "sha256-pVrYOTfjb2ITls3LKIByW1t8jwOAWFhmkIVDewtJ1GE=",
       "Microsoft.JSInterop.wasm": "sha256-MwldKMFxneAed5VVuF+dWcoF8YxUQgxNT52sVyJNbN0=",
       "Microsoft.JSInterop.WebAssembly.wasm": "sha256-RcDZMe/Nr1RNBVHhtzQTbsJXTG6gd3gfC3DVIg+lGAo=",
+      "SixLabors.ImageSharp.wasm": "sha256-GH7bhZXZIuUXEeGk9U5eAFfVWaKQOS4KEBoyMLeLjhU=",
       "System.IO.Pipelines.wasm": "sha256-JqVBy6SV+3qk+IK3VJiyIDt9CsVk6b1/ytTXmrI4mTM=",
       "Microsoft.CSharp.wasm": "sha256-tCvW5JWjCw1LO0sIgb19bvhmbhFWhcLb093fZOHLDn8=",
       "Microsoft.VisualBasic.Core.wasm": "sha256-3G0tXcbu4lN45hu0BdqKGkHPcJJh1/0h+F9KuYp6Gx8=",
@@ -208,10 +209,10 @@
       "mscorlib.wasm": "sha256-masKveCdoRSahF99doEQk7H3YN2wHLVIE4M/Zu8OoD8=",
       "netstandard.wasm": "sha256-z1EJOmgVhSpTopn7Tek/0P//MKGF1I3NUD/sh4oLnwY=",
       "System.Private.CoreLib.wasm": "sha256-tuIWpR30u0OoEVtv4pXZ47mEpI2AmFBIyYFPnqDZZfw=",
-      "ImagesToVoxel.wasm": "sha256-aSRNpaCiMbp86I0uQsUY9sgWjUiEMK7q6LUq+FXh+9k="
+      "ImagesToVoxel.wasm": "sha256-nBWFMTl+ynI0O/LlGgIH3PNmAnW8LvRB81TrSThS0EY="
     },
     "pdb": {
-      "ImagesToVoxel.pdb": "sha256-a5UZlSdRFHW0vuPEp89ji3UDCVAeZfvVJtM8myvwetU="
+      "ImagesToVoxel.pdb": "sha256-Fu9YhyTRtar5L1Y6qB3LXrbryqXlZzkt84e+KkSpDE8="
     }
   },
   "cacheBootResources": true,

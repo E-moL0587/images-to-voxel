@@ -25,6 +25,22 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
+      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\images\\front.png",
+      "PackagePath": "staticwebassets\\images\\front.png"
+    },
+    {
+      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\images\\side.png",
+      "PackagePath": "staticwebassets\\images\\side.png"
+    },
+    {
+      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\images\\title.png",
+      "PackagePath": "staticwebassets\\images\\title.png"
+    },
+    {
+      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\images\\top.png",
+      "PackagePath": "staticwebassets\\images\\top.png"
+    },
+    {
       "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },

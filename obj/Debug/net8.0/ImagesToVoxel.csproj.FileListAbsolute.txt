@@ -1029,3 +1029,8 @@ C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\obj\Debug\net8.0\Ima
 C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\obj\Debug\net8.0\refint\ImagesToVoxel.dll
 C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\obj\Debug\net8.0\ImagesToVoxel.pdb
 C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\obj\Debug\net8.0\ref\ImagesToVoxel.dll
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Debug\net8.0\wwwroot\_framework\SixLabors.ImageSharp.wasm
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Debug\net8.0\wwwroot\_framework\SixLabors.ImageSharp.wasm.gz
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Debug\net8.0\SixLabors.ImageSharp.dll
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\obj\Debug\net8.0\webcil\SixLabors.ImageSharp.wasm
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\obj\Debug\net8.0\compressed\xntvecamke.gz
