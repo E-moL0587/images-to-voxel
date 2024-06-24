@@ -1,46 +1,83 @@
-<section>
-  <canvas id="voxelCanvas"></canvas>
-</section>
+<div>
+  <canvas id="mainCanvas"></canvas>
+</div>
+
+<div>
+  <button onclick="showScene('voxel')">Voxel</button>
+  <button onclick="showScene('mesh')">Mesh</button>
+  <button onclick="showScene('smooth')">Smooth</button>
+</div>
 
 <script>
-  const voxelCanvas = document.querySelector('#voxelCanvas');
-  const voxelRenderer = new THREE.WebGLRenderer({ canvas: voxelCanvas });
-  const voxelWidth = voxelCanvas.clientWidth;
-  const voxelHeight = voxelCanvas.clientHeight;
-  voxelRenderer.setSize(voxelWidth, voxelHeight, false);
+  const mainCanvas = document.querySelector('#mainCanvas');
+  const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas });
+  const width = mainCanvas.clientWidth;
+  const height = mainCanvas.clientHeight;
+  renderer.setSize(width, height, false);
 
-  const voxelScene = new THREE.Scene();
-  const voxelCamera = new THREE.PerspectiveCamera(45, voxelWidth / voxelHeight, 1, 10000);
-  voxelCamera.position.set(0, 0, 40);
+  const camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
+  camera.position.set(0, 0, 40);
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-  const voxelControls = new THREE.OrbitControls(voxelCamera, voxelRenderer.domElement);
-  voxelScene.add(new THREE.AmbientLight(0xffffff, 0.5));
-  const voxelLight = new THREE.DirectionalLight(0xffffff, 1);
-  voxelLight.position.set(5, 10, 7.5).normalize();
-  voxelScene.add(voxelLight);
+  const scenes = {
+    voxel: new THREE.Scene(),
+    mesh: new THREE.Scene(),
+    smooth: new THREE.Scene()
+  };
 
-  const voxelData = @Html.Raw(ViewData["VoxelData"]);
+  function initScene(scene, data) {
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(5, 10, 7.5).normalize();
+    scene.add(light);
 
-  const voxelBoundingBox = new THREE.Box3();
-  voxelData.forEach(([x, y, z]) => { voxelBoundingBox.expandByPoint(new THREE.Vector3(x, y, z)); });
+    const boundingBox = new THREE.Box3();
+    data.forEach(([x, y, z]) => boundingBox.expandByPoint(new THREE.Vector3(x, y, z)));
+    const center = new THREE.Vector3();
+    boundingBox.getCenter(center);
 
-  const voxelCenter = new THREE.Vector3();
-  voxelBoundingBox.getCenter(voxelCenter);
-
-  voxelData.forEach(([x, y, z]) => {
-    const voxelMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1), 
-      new THREE.MeshPhongMaterial({ color: 0xff00ff })
-    );
-    voxelMesh.position.set(-(x - voxelCenter.x), -(y - voxelCenter.y), -(z - voxelCenter.z));
-    voxelScene.add(voxelMesh);
-  });
-
-  function animateVoxel() {
-    requestAnimationFrame(animateVoxel);
-    voxelControls.update();
-    voxelRenderer.render(voxelScene, voxelCamera);
+    if (scene === scenes.voxel) {
+      data.forEach(([x, y, z]) => {
+        const voxelMesh = new THREE.Mesh(
+          new THREE.BoxGeometry(1, 1, 1),
+          new THREE.MeshPhongMaterial({ color: 0xff00ff })
+        );
+        voxelMesh.position.set(-(x - center.x), -(y - center.y), -(z - center.z));
+        scene.add(voxelMesh);
+      });
+    } else {
+      const geometry = new THREE.BufferGeometry();
+      const vertices = [];
+      data.forEach(point => {
+        vertices.push(-(point[0] - center.x), -(point[1] - center.y), -(point[2] - center.z));
+      });
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+      geometry.computeVertexNormals();
+      const material = new THREE.MeshPhongMaterial({ color: 0xff00ff, side: THREE.DoubleSide });
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+    }
   }
 
-  animateVoxel();
+  const voxelData = @Html.Raw(ViewData["VoxelData"]);
+  const meshData = @Html.Raw(ViewData["MeshData"]);
+  const smoothData = @Html.Raw(ViewData["SmoothData"]);
+
+  initScene(scenes.voxel, voxelData);
+  initScene(scenes.mesh, meshData);
+  initScene(scenes.smooth, smoothData);
+
+  let currentScene = scenes.voxel;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(currentScene, camera);
+  }
+
+  function showScene(sceneName) {
+    currentScene = scenes[sceneName];
+  }
+
+  animate();
 </script>
