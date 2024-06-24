@@ -3,6 +3,14 @@
   .title { position: fixed; top: 20%; text-align: center; width: 100%; }
   .image { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; }
   .button { position: fixed; bottom: 20%; text-align: center; width: 100%; }
+  header { z-index: 1; width: 100%; height: 5%; position: fixed; top: 0;
+    display: flex; justify-content: center; align-items: center;
+    background-color: #00ccff; }
+  main { z-index: 0; width: 100%; height: 90%; position: absolute; top: 5%;
+    overflow: hidden; overflow-y: auto; }
+  footer { z-index: 1; width: 100%; height: 5%; position: fixed; bottom: 0;
+    display: flex; justify-content: center; align-items: center;
+    background-color: #00ccff; }
 </style>
 
 <section id="titleScreen">
@@ -25,3 +33,16 @@
   <header></header>
   <footer></footer>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const titleScreen = document.getElementById('titleScreen');
+    const menuScreen = document.getElementById('menuScreen');
+    const titleButton = document.getElementById('titleButton');
+
+    titleButton.addEventListener('click', function () {
+      titleScreen.classList.add('hidden');
+      menuScreen.classList.remove('hidden');
+    });
+  });
+</script>

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ImagesToVoxel")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d0c2cfc278f6b99b051aa32e4f133ed70bbcad67")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bcf265c288db429f0c85b08602a2c2c6ae9ed341")]
 [assembly: System.Reflection.AssemblyProductAttribute("ImagesToVoxel")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ImagesToVoxel")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
