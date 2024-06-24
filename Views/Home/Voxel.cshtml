@@ -1,0 +1,49 @@
+<section>
+  <canvas id="voxelCanvas"></canvas>
+</section>
+
+<script src="https://unpkg.com/three@0.142.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.142.0/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+  const voxelCanvas = document.querySelector('#voxelCanvas');
+  const voxelRenderer = new THREE.WebGLRenderer({ canvas: voxelCanvas });
+  const voxelWidth = voxelCanvas.clientWidth;
+  const voxelHeight = voxelCanvas.clientHeight;
+  voxelRenderer.setSize(voxelWidth, voxelHeight, false);
+
+  const voxelScene = new THREE.Scene();
+  const voxelCamera = new THREE.PerspectiveCamera(45, voxelWidth / voxelHeight, 1, 10000);
+  voxelCamera.position.set(0, 0, 40);
+
+  const voxelControls = new THREE.OrbitControls(voxelCamera, voxelRenderer.domElement);
+  voxelScene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  const voxelLight = new THREE.DirectionalLight(0xffffff, 1);
+  voxelLight.position.set(5, 10, 7.5).normalize();
+  voxelScene.add(voxelLight);
+
+  const voxelData = @Html.Raw(ViewData["VoxelData"]);
+
+  const voxelBoundingBox = new THREE.Box3();
+  voxelData.forEach(([x, y, z]) => { voxelBoundingBox.expandByPoint(new THREE.Vector3(x, y, z)); });
+
+  const voxelCenter = new THREE.Vector3();
+  voxelBoundingBox.getCenter(voxelCenter);
+
+  voxelData.forEach(([x, y, z]) => {
+    const voxelMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1), 
+      new THREE.MeshPhongMaterial({ color: 0xff00ff })
+    );
+    voxelMesh.position.set(-(x - voxelCenter.x), -(y - voxelCenter.y), -(z - voxelCenter.z));
+    voxelScene.add(voxelMesh);
+  });
+
+  function animateVoxel() {
+    requestAnimationFrame(animateVoxel);
+    voxelControls.update();
+    voxelRenderer.render(voxelScene, voxelCamera);
+  }
+
+  animateVoxel();
+</script>

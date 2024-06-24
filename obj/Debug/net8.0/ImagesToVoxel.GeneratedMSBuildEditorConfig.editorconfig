@@ -22,12 +22,28 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Mesh.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNZXNoLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Pixels.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQaXhlbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Smooth.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTbW9vdGguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Voxel.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxWb3hlbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Shared/_ValidationScriptsPartial.cshtml]
@@ -41,7 +57,3 @@ build_metadata.AdditionalFiles.CssScope =
 [C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Shared/_Layout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = b-yesc6omwdf

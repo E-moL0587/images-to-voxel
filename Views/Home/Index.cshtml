@@ -1,8 +1,33 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<style>
+  .hidden { display: none; }
+  .title { position: fixed; top: 20%; text-align: center; width: 100%; }
+  .image { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; }
+  .button { position: fixed; bottom: 20%; text-align: center; width: 100%; }
+</style>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section id="titleScreen">
+  <h3 class="title">Images to Voxel</h3>
+  <img class="image" src="~/images/title.png" alt="title" />
+  <a class="button" id="titleButton">Tap to start</a>
+</section>
+
+<section>
+  @await Html.PartialAsync("Pixels")
+<section>
+
+<section>
+  @await Html.PartialAsync("Voxel")
+<section>
+
+<section>
+  @await Html.PartialAsync("Mesh")
+<section>
+
+<section>
+  @await Html.PartialAsync("Smooth")
+<section>
+
+<section id="menuScreen" class="hidden">
+  <header></header>
+  <footer></footer>
+</section>

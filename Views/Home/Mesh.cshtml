@@ -1,0 +1,55 @@
+<section>
+  <canvas id="meshCanvas"></canvas>
+</section>
+
+<script src="https://unpkg.com/three@0.142.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.142.0/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+  const meshCanvas = document.querySelector('#meshCanvas');
+  const meshRenderer = new THREE.WebGLRenderer({ canvas: meshCanvas });
+  const meshWidth = meshCanvas.clientWidth;
+  const meshHeight = meshCanvas.clientHeight;
+  meshRenderer.setSize(meshWidth, meshHeight, false);
+
+  const meshScene = new THREE.Scene();
+  const meshCamera = new THREE.PerspectiveCamera(45, meshWidth / meshHeight, 1, 10000);
+  meshCamera.position.set(0, 0, 40);
+
+  const meshControls = new THREE.OrbitControls(meshCamera, meshRenderer.domElement);
+  meshScene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  const meshLight = new THREE.DirectionalLight(0xffffff, 1);
+  meshLight.position.set(5, 10, 7.5).normalize();
+  meshScene.add(meshLight);
+
+  const meshData = @Html.Raw(ViewData["MeshData"]);
+
+  const meshGeometry = new THREE.BufferGeometry();
+
+  const meshVertices = [];
+  const meshPoints = [];
+  for (let i = 0; i < meshData.length; i++) { meshPoints.push(new THREE.Vector3(meshData[i][0], meshData[i][1], meshData[i][2])); }
+
+  const meshBoundingBox = new THREE.Box3();
+  meshPoints.forEach(point => { meshBoundingBox.expandByPoint(point); });
+
+  const meshCenter = new THREE.Vector3();
+  meshBoundingBox.getCenter(meshCenter);
+
+  meshPoints.forEach(point => { meshVertices.push(-(point.x - meshCenter.x), -(point.y - meshCenter.y), -(point.z - meshCenter.z)); });
+
+  meshGeometry.setAttribute('position', new THREE.Float32BufferAttribute(meshVertices, 3));
+  meshGeometry.computeVertexNormals();
+
+  const meshMaterial = new THREE.MeshPhongMaterial({ color: 0xff00ff, side: THREE.DoubleSide });
+  const mesh = new THREE.Mesh(meshGeometry, meshMaterial);
+  meshScene.add(mesh);
+
+  function animateMesh() {
+    requestAnimationFrame(animateMesh);
+    meshControls.update();
+    meshRenderer.render(meshScene, meshCamera);
+  }
+
+  animateMesh();
+</script>
