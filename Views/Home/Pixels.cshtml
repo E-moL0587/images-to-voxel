@@ -1,5 +1,4 @@
 <section>
-  <div id="myCanvas"></div>
   <canvas id="frontCanvas"></canvas>
   <canvas id="sideCanvas"></canvas>
   <canvas id="topCanvas"></canvas>
@@ -12,10 +11,9 @@
 
   function drawCanvas(canvasId, binaryData, flipHorizontal = false) {
     const canvas = document.getElementById(canvasId);
-    const myCanvas = document.querySelector('#myCanvas');
     const ctx = canvas.getContext('2d');
     const size = 20;
-    const scale = myCanvas.clientWidth / size;
+    const scale = canvas.clientWidth / size;
     canvas.width = size * scale;
     canvas.height = size * scale;
 
@@ -34,6 +32,4 @@
   drawCanvas('frontCanvas', frontBinaryData, true);
   drawCanvas('sideCanvas', sideBinaryData);
   drawCanvas('topCanvas', topBinaryData, true);
-
-  myCanvas.remove();
 </script>
