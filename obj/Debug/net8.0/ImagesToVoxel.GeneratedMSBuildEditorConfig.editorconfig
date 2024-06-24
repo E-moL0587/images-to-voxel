@@ -1,63 +1,47 @@
 is_global = true
-build_property.EnableAotAnalyzer = 
-build_property.EnableSingleFileAnalyzer = 
-build_property.EnableTrimAnalyzer = false
-build_property.IncludeAllContentForSelfExtract = 
 build_property.TargetFramework = net8.0
 build_property.TargetPlatformMinVersion = 
-build_property.UsingMicrosoftNETSdkWeb = 
+build_property.UsingMicrosoftNETSdkWeb = true
 build_property.ProjectTypeGuids = 
-build_property.InvariantGlobalization = false
+build_property.InvariantGlobalization = 
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
-build_property._SupportedPlatformList = browser
+build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = ImagesToVoxel
 build_property.RootNamespace = ImagesToVoxel
 build_property.ProjectDir = C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\
 build_property.EnableComHosting = 
-build_property.EnableGeneratedComInterfaceComImportInterop = false
+build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/App.razor]
-build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Pages/Describe.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVzY3JpYmUucmF6b3I=
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Pages/Home.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Pages/Menu.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWVudS5yYXpvcg==
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Pages/Mesh.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWVzaC5yYXpvcg==
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Pages/Pixels.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGl4ZWxzLnJhem9y
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Pages/Title.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGl0bGUucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Pages/Voxel.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVm94ZWwucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/_Imports.razor]
-build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Layout/MainLayout.razor]
-build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = b-kk44u9j1bd
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-yesc6omwdf

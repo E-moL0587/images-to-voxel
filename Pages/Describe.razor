@@ -1,9 +1,0 @@
-@code {
-  [Parameter] public EventCallback<string> SetActivePage { get; set; }
-  private void ChangePage(string page) { SetActivePage.InvokeAsync(page); }
-}
-
-<div>
-  <h2>説明</h2>
-  <button @onclick="@(() => ChangePage("voxel"))">もどる</button>
-</div>
