@@ -22,15 +22,15 @@ namespace ImagesToVoxel.Controllers {
     }
 
     public IActionResult Index() {
-      var frontBinaryData = _imageProcessor.ProcessImage(_frontImagePath);
-      var sideBinaryData = _imageProcessor.ProcessImage(_sideImagePath);
-      var topBinaryData = _imageProcessor.ProcessImage(_topImagePath);
+      var frontBinaryData = _imagesToPixels.Pixel(_frontImagePath);
+      var sideBinaryData = _imagesToPixels.Pixel(_sideImagePath);
+      var topBinaryData = _imagesToPixels.Pixel(_topImagePath);
 
       ViewData["FrontBinaryData"] = frontBinaryData;
       ViewData["SideBinaryData"] = sideBinaryData;
       ViewData["TopBinaryData"] = topBinaryData;
 
-      var (voxelData, _, _, _) = PrepareData();
+      var (voxelData, _, _, _) = PrepareVoxel();
       var meshData = _marchingCubes.Mesh(voxelData, 20, 20, 20);
       var smoothData = _laplacianSmoothing.Smooth(meshData);
 
@@ -41,11 +41,11 @@ namespace ImagesToVoxel.Controllers {
       return View();
     }
 
-    private (List<int[]> voxelData, string frontBinaryData, string sideBinaryData, string topBinaryData) PrepareData() {
-      var frontBinaryData = _imageProcessor.ProcessImage(_frontImagePath);
-      var sideBinaryData = _imageProcessor.ProcessImage(_sideImagePath);
-      var topBinaryData = _imageProcessor.ProcessImage(_topImagePath, 90);
-      var voxelData = _pixelsToVoxel.GenerateVoxelData(frontBinaryData, sideBinaryData, topBinaryData, 20);
+    private (List<int[]> voxelData, string frontBinaryData, string sideBinaryData, string topBinaryData) PrepareVoxel() {
+      var frontBinaryData = _imagesToPixels.Pixel(_frontImagePath);
+      var sideBinaryData = _imagesToPixels.Pixel(_sideImagePath);
+      var topBinaryData = _imagesToPixels.Pixel(_topImagePath, 90);
+      var voxelData = _pixelsToVoxel.Voxel(frontBinaryData, sideBinaryData, topBinaryData, 20);
 
       return (voxelData, frontBinaryData, sideBinaryData, topBinaryData);
     }
