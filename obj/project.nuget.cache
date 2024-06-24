@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "snb0ScGXHnc=",
+  "dgSpecHash": "XKXwWxkul5w=",
   "success": true,
   "projectFilePath": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\ImagesToVoxel.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\竹内 海斗\\.nuget\\packages\\sixlabors.imagesharp\\3.1.4\\sixlabors.imagesharp.3.1.4.nupkg.sha512"
+  ],
   "logs": []
 }
