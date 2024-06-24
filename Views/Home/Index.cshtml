@@ -2,39 +2,26 @@
   .hidden { display: none; }
   .title { position: fixed; top: 20%; text-align: center; width: 100%; }
   .image { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; }
-  .titleButton { position: fixed; bottom: 20%; text-align: center; width: 100%; }
+  .button { position: fixed; bottom: 20%; text-align: center; width: 100%; }
 </style>
 
 <section id="titleScreen">
   <h3 class="title">Images to Voxel</h3>
   <img class="image" src="~/images/title.png" alt="title" />
-  <a class="titleButton" id="titleButton">Tap to start</a>
+  <a class="button" id="titleButton">Tap to start</a>
 </section>
 
-<section id="mainScreen" class="hidden">
+<section>
+  @await Html.PartialAsync("Pixels")
+<section>
+
+<section>
   @await Html.PartialAsync("Voxel")
   @await Html.PartialAsync("Mesh")
   @await Html.PartialAsync("Smooth")
 <section>
 
-<section id="mainScreen" class="hidden">
-  @await Html.PartialAsync("Pixels")
-<section>
-
-<section id="mainScreen" class="hidden">
+<section id="menuScreen" class="hidden">
   <header></header>
   <footer></footer>
 </section>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const titleScreen = document.getElementById('titleScreen');
-    const mainScreen = document.getElementById('mainScreen');
-    const titleButton = document.getElementById('titleButton');
-
-    titleButton.addEventListener('click', function () {
-      titleScreen.classList.add('hidden');
-      mainScreen.classList.remove('hidden');
-    });
-  });
-</script>
