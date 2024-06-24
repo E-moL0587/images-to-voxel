@@ -1,0 +1,7 @@
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Publish\ImagesToVoxel.exe
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Publish\appsettings.Development.json
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Publish\appsettings.json
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Publish\ImagesToVoxel.dll
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Publish\ImagesToVoxel.deps.json
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Publish\ImagesToVoxel.runtimeconfig.json
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Publish\ImagesToVoxel.pdb
