@@ -1,16 +1,28 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\obj\\Release\\net8.0\\scopedcss\\projectbundle\\ImagesToVoxel.bundle.scp.css",
-      "PackagePath": "staticwebassets\\ImagesToVoxel.bundle.scp.css"
-    },
-    {
       "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
       "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\images\\front.png",
+      "PackagePath": "staticwebassets\\images\\front.png"
+    },
+    {
+      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\images\\side.png",
+      "PackagePath": "staticwebassets\\images\\side.png"
+    },
+    {
+      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\images\\title.png",
+      "PackagePath": "staticwebassets\\images\\title.png"
+    },
+    {
+      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\images\\top.png",
+      "PackagePath": "staticwebassets\\images\\top.png"
     },
     {
       "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\js\\site.js",

@@ -1,22 +1,21 @@
-html {
-  font-size: 14px;
+canvas { width: 100vw; height: 100vw; }
+@media (min-width: 641px) {
+  canvas { width: 100vh; height: 100vh; }
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+header {
+  z-index: 1; width: 100%; height: 10%; position: fixed; top: 0;
+  display: flex; justify-content: center; align-items: center;
+  background-color: #00ccff;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+main {
+  z-index: 0; width: 100%; height: 80%; position: absolute; top: 10%;
+  overflow: hidden; overflow-y: auto;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
+footer {
+  z-index: 1; width: 100%; height: 10%; position: fixed; bottom: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  background-color: #00ccff;
 }

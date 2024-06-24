@@ -5,3 +5,4 @@ C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Publish\ImagesTo
 C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Publish\ImagesToVoxel.deps.json
 C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Publish\ImagesToVoxel.runtimeconfig.json
 C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Publish\ImagesToVoxel.pdb
+C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel\bin\Publish\SixLabors.ImageSharp.dll
