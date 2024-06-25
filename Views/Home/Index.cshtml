@@ -13,6 +13,7 @@
 
 <section>
   @await Html.PartialAsync("Main")
+  @await Html.PartialAsync("Pixels")
 <section>
 
 <section>
@@ -20,10 +21,6 @@
   <button onclick="showScene('mesh')">Mesh</button>
   <button onclick="showScene('smooth')">Smooth</button>
 </section>
-
-<section>
-  @await Html.PartialAsync("Pixels")
-<section>
 
 <section id="menuScreen" class="hidden">
   <header>

@@ -1,7 +1,12 @@
-<section>
-  <canvas id="frontCanvas"></canvas>
-  <canvas id="sideCanvas"></canvas>
-  <canvas id="topCanvas"></canvas>
+<style>
+  .pixels-container { display: flex; justify-content: space-between; width: 100%; background-color: #ffccff; }
+  .pixel { width: calc(100vw / 3); height: calc(100vw / 3); padding: 2%; }
+</style>
+
+<section class="pixels-container">
+  <canvas id="frontCanvas" class="pixel"></canvas>
+  <canvas id="sideCanvas" class="pixel"></canvas>
+  <canvas id="topCanvas" class="pixel"></canvas>
 </section>
 
 <script>
