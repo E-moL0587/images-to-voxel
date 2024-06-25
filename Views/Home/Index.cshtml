@@ -19,24 +19,27 @@
   <a class="button" id="titleButton">Tap to start</a>
 </section>
 
-<section class="voxel-container">
-  @await Html.PartialAsync("Main")
+<section id="mainScreen">
+  <section class="voxel-container">
+    @await Html.PartialAsync("Main")
+  </section>
+
+  <section class="pixels-container">
+    @await Html.PartialAsync("Pixels")
+  </section>
+
+  <section class="menu-container">
+    <button onclick="showScene('voxel')">Voxel</button>
+    <button onclick="showScene('mesh')">Mesh</button>
+    <button onclick="showScene('smooth')">Smooth</button>
+  </section>
 </section>
 
-<section class="pixels-container">
-  @await Html.PartialAsync("Pixels")
-</section>
-
-<section class="menu-container">
-  <button onclick="showScene('voxel')">Voxel</button>
-  <button onclick="showScene('mesh')">Mesh</button>
-  <button onclick="showScene('smooth')">Smooth</button>
-</section>
-
-<section id="mainScreen" class="hidden">
+<section id="subScreen">
   <header>
     <p>ImagesToVoxel</p>
   </header>
+
   <footer>
     <p>aaa</p>
   </footer>
