@@ -18,16 +18,20 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\竹内 海斗\workspace\dotnet-space\ImagesToVoxel
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Describe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxEZXNjcmliZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Pixels.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQaXhlbHMuY3NodG1s
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Main.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNYWluLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Voxel.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxWb3hlbC5jc2h0bWw=
+[C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Home/Pixels.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQaXhlbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/竹内 海斗/workspace/dotnet-space/ImagesToVoxel/Views/Shared/Error.cshtml]
