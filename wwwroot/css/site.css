@@ -1,9 +1,1 @@
-canvas { width: 100vw; height: 100vw; }
-@media (min-width: 641px) {
-  canvas { width: 100vh; height: 100vh; }
-}
-
-/* main {
-  z-index: 0; width: 100%; height: 90%; position: absolute; top: 5%;
-  overflow: hidden; overflow-y: auto;
-} */
+@media (min-width: 641px) {}

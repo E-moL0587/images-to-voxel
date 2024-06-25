@@ -1,22 +1,24 @@
 ﻿<style>
   .hidden { display: none; }
-  .title { position: fixed; width: 100%; top: 20%; text-align: center; }
-  .image { position: fixed; width: 150px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-  .button { position: fixed; width: 100%; bottom: 20%; text-align: center; }
+  .title-context { position: fixed; width: 100%; top: 20%; text-align: center; }
+  .title-image { position: fixed; width: 150px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+  .title-button { position: fixed; width: 100%; bottom: 20%; text-align: center; }
 
-  header { z-index: 1; position: fixed; width: 100%; height: 5%; top: 0; background-color: #00ccff; }
-  footer { z-index: 1; position: fixed; width: 100%; height: 5%; bottom: 0; background-color: #00ccff; }
+  canvas { width: 100vw; height: 100vw; }
+  header { z-index: 2; position: fixed; width: 100%; height: 5%; top: 0; background-color: #00ccff; }
+  footer { z-index: 2; position: fixed; width: 100%; height: 5%; bottom: 0; background-color: #00ccff; }
 
-  .title-container { z-index: 2; position: fixed; width: 100%; height: 100%; background-color: #ffccff; }
+  .title-container { z-index: 3; position: fixed; width: 100%; height: 100%; background-color: #ffccff; }
   .voxel-container { position: fixed; width: 100%; height: 50%; top: 5%; }
   .pixels-container { position: fixed; width: 100%; height: 25%; top: 55%; background-color: #00ccff; }
   .menu-container { position: fixed; width: 100%; height: 15%; top: 80%; background-color: #ffcc00; }
+  .describe-container { z-index: 1; position: absolute; width: 100%; height: 90%; top: 5%; overflow: hidden; overflow-y: auto; }
 </style>
 
 <section id="titleScreen" class="title-container">
-  <h3 class="title">Images to Voxel</h3>
-  <img class="image" src="~/images/title.png" alt="title" />
-  <a class="button" id="titleButton">Tap to start</a>
+  <h3 class="title-context">Images to Voxel</h3>
+  <img class="title-image" src="~/images/title.png" alt="title" />
+  <a class="title-button" id="titleButton">Tap to start</a>
 </section>
 
 <section id="mainScreen">
@@ -32,7 +34,13 @@
     <button onclick="showScene('voxel')">Voxel</button>
     <button onclick="showScene('mesh')">Mesh</button>
     <button onclick="showScene('smooth')">Smooth</button>
+    <button onclick="exportSceneToGLB()">Export</button>
+    <a id="describeButton">Describe</a>
   </section>
+</section>
+
+<section id="describeScreen" class="describe-container">
+  @await Html.PartialAsync("Describe")
 </section>
 
 <section id="subScreen">
@@ -44,3 +52,14 @@
     <p>aaa</p>
   </footer>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const titleScreen = document.getElementById('titleScreen');
+    const titleButton = document.getElementById('titleButton');
+
+    titleButton.addEventListener('click', function () {
+      titleScreen.classList.add('hidden');
+    });
+  });
+</script>
