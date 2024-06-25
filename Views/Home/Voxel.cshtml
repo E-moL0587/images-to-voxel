@@ -6,7 +6,6 @@
   <button onclick="showScene('voxel')">Voxel</button>
   <button onclick="showScene('mesh')">Mesh</button>
   <button onclick="showScene('smooth')">Smooth</button>
-  <button onclick="togglePoints()">Toggle Points</button>
 </div>
 
 <script>
@@ -69,7 +68,11 @@
   initScene(scenes.smooth, smoothData);
 
   let currentScene = scenes.voxel;
-  let isPointMode = false;
+  let nextSceneName = 'voxel';
+  const transitionDuration = 2000;
+  let transitionStartTime = null;
+  let initialSceneData = [];
+  let targetSceneData = [];
 
   function animate() {
     requestAnimationFrame(animate);
@@ -77,20 +80,70 @@
     renderer.render(currentScene, camera);
   }
 
-  function showScene(sceneName) {
-    currentScene = scenes[sceneName];
-    if (isPointMode) {
-      showPointsOnly();
+  function animateTransition(timestamp) {
+    if (!transitionStartTime) {
+      transitionStartTime = timestamp;
+      initialSceneData = getCurrentSceneData();
+      targetSceneData = getSceneDataByName(nextSceneName);
+      adjustDataLength(initialSceneData, targetSceneData);
+    }
+    
+    const elapsed = timestamp - transitionStartTime;
+    const progress = Math.min(elapsed / transitionDuration, 1);
+
+    const interpolatedData = initialSceneData.map((point, i) => {
+      const targetPoint = targetSceneData[i];
+      return [
+        point[0] + (targetPoint[0] - point[0]) * progress,
+        point[1] + (targetPoint[1] - point[1]) * progress,
+        point[2] + (targetPoint[2] - point[2]) * progress
+      ];
+    });
+
+    currentScene.clear();
+    const pointsMaterial = new THREE.PointsMaterial({ color: 0xff00ff, size: 0.5 });
+    const pointsGeometry = new THREE.BufferGeometry();
+    const pointsVertices = [];
+    const boundingBox = new THREE.Box3();
+    interpolatedData.forEach(([x, y, z]) => boundingBox.expandByPoint(new THREE.Vector3(x, y, z)));
+    const center = new THREE.Vector3();
+    boundingBox.getCenter(center);
+    interpolatedData.forEach(point => {
+      pointsVertices.push(-(point[0] - center.x), -(point[1] - center.y), -(point[2] - center.z));
+    });
+    pointsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(pointsVertices, 3));
+    const points = new THREE.Points(pointsGeometry, pointsMaterial);
+    currentScene.add(points);
+
+    if (progress < 1) {
+      requestAnimationFrame(animateTransition);
+    } else {
+      transitionStartTime = null;
+      currentScene = scenes[nextSceneName];
+      initScenes();
     }
   }
 
-  function togglePoints() {
-    isPointMode = !isPointMode;
-    if (isPointMode) {
-      showPointsOnly();
-    } else {
-      initScenes();
+  function adjustDataLength(sourceData, targetData) {
+    const sourceLength = sourceData.length;
+    const targetLength = targetData.length;
+
+    if (sourceLength < targetLength) {
+      const additionalPoints = targetLength - sourceLength;
+      for (let i = 0; i < additionalPoints; i++) {
+        sourceData.push(sourceData[i % sourceLength]);
+      }
+    } else if (sourceLength > targetLength) {
+      const additionalPoints = sourceLength - targetLength;
+      for (let i = 0; i < additionalPoints; i++) {
+        targetData.push(targetData[i % targetLength]);
+      }
     }
+  }
+
+  function showScene(sceneName) {
+    nextSceneName = sceneName;
+    requestAnimationFrame(animateTransition);
   }
 
   function initScenes() {
@@ -102,28 +155,17 @@
     initScene(scenes.smooth, smoothData);
   }
 
-  function showPointsOnly() {
-    currentScene.clear();
-    const pointsMaterial = new THREE.PointsMaterial({ color: 0xff00ff, size: 0.5 });
-    const pointsGeometry = new THREE.BufferGeometry();
-    const pointsVertices = [];
-    const data = getCurrentSceneData();
-    const boundingBox = new THREE.Box3();
-    data.forEach(([x, y, z]) => boundingBox.expandByPoint(new THREE.Vector3(x, y, z)));
-    const center = new THREE.Vector3();
-    boundingBox.getCenter(center);
-    data.forEach(point => {
-      pointsVertices.push(-(point[0] - center.x), -(point[1] - center.y), -(point[2] - center.z));
-    });
-    pointsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(pointsVertices, 3));
-    const points = new THREE.Points(pointsGeometry, pointsMaterial);
-    currentScene.add(points);
-  }
-
   function getCurrentSceneData() {
     if (currentScene === scenes.voxel) return voxelData;
     if (currentScene === scenes.mesh) return meshData;
     if (currentScene === scenes.smooth) return smoothData;
+    return [];
+  }
+
+  function getSceneDataByName(sceneName) {
+    if (sceneName === 'voxel') return voxelData;
+    if (sceneName === 'mesh') return meshData;
+    if (sceneName === 'smooth') return smoothData;
     return [];
   }
 
