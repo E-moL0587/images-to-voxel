@@ -25,6 +25,22 @@
     smooth: new THREE.Scene()
   };
 
+  function isSurfaceVoxel(x, y, z, data) {
+    const directions = [
+      [1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]
+    ];
+    for (let [dx, dy, dz] of directions) {
+      if (!data.some(([nx, ny, nz]) => nx === x + dx && ny === y + dy && nz === z + dz)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function getSurfaceVoxels(data) {
+    return data.filter(([x, y, z]) => isSurfaceVoxel(x, y, z, data));
+  }
+
   function initScene(scene, data) {
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
     const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -37,7 +53,8 @@
     boundingBox.getCenter(center);
 
     if (scene === scenes.voxel) {
-      data.forEach(([x, y, z]) => {
+      const surfaceData = getSurfaceVoxels(data);
+      surfaceData.forEach(([x, y, z]) => {
         const voxelMesh = new THREE.Mesh(
           new THREE.BoxGeometry(1, 1, 1),
           new THREE.MeshPhongMaterial({ color: 0xff00ff })
@@ -69,7 +86,7 @@
 
   let currentScene = scenes.voxel;
   let nextSceneName = 'voxel';
-  const transitionDuration = 2000;
+  const transitionDuration = 1000;
   let transitionStartTime = null;
   let initialSceneData = [];
   let targetSceneData = [];
@@ -85,9 +102,12 @@
       transitionStartTime = timestamp;
       initialSceneData = getCurrentSceneData();
       targetSceneData = getSceneDataByName(nextSceneName);
+      if (nextSceneName === 'voxel') {
+        targetSceneData = getSurfaceVoxels(targetSceneData);
+      }
       adjustDataLength(initialSceneData, targetSceneData);
     }
-    
+
     const elapsed = timestamp - transitionStartTime;
     const progress = Math.min(elapsed / transitionDuration, 1);
 
@@ -156,14 +176,14 @@
   }
 
   function getCurrentSceneData() {
-    if (currentScene === scenes.voxel) return voxelData;
+    if (currentScene === scenes.voxel) return getSurfaceVoxels(voxelData);
     if (currentScene === scenes.mesh) return meshData;
     if (currentScene === scenes.smooth) return smoothData;
     return [];
   }
 
   function getSceneDataByName(sceneName) {
-    if (sceneName === 'voxel') return voxelData;
+    if (sceneName === 'voxel') return getSurfaceVoxels(voxelData);
     if (sceneName === 'mesh') return meshData;
     if (sceneName === 'smooth') return smoothData;
     return [];
