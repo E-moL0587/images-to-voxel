@@ -3,26 +3,37 @@
   .title { position: fixed; top: 20%; text-align: center; width: 100%; }
   .image { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; }
   .button { position: fixed; bottom: 20%; text-align: center; width: 100%; }
+
+  header { z-index: 1; position: fixed; width: 100%; height: 5%; top: 0; background-color: #00ccff; }
+  footer { z-index: 1; position: fixed; width: 100%; height: 5%; bottom: 0; background-color: #00ccff; }
+
+  .title-container { z-index: 2; position: fixed; width: 100%; height: 100%; background-color: #ffccff; }
+  .voxel-container { position: fixed; width: 100%; height: 50%; top: 5%; }
+  .pixels-container { position: fixed; width: 100%; height: 20%; top: 55%; background-color: #00ccff; }
+  .menu-container { position: fixed; width: 100%; height: 20%; top: 75%; background-color: #ffcc00; }
 </style>
 
-<section id="titleScreen">
+<section id="titleScreen" class="title-container">
   <h3 class="title">Images to Voxel</h3>
   <img class="image" src="~/images/title.png" alt="title" />
   <a class="button" id="titleButton">Tap to start</a>
 </section>
 
-<section>
+<section class="voxel-container">
   @await Html.PartialAsync("Main")
-  @await Html.PartialAsync("Pixels")
-<section>
+</section>
 
-<section>
+<section class="pixels-container">
+  @await Html.PartialAsync("Pixels")
+</section>
+
+<section class="menu-container">
   <button onclick="showScene('voxel')">Voxel</button>
   <button onclick="showScene('mesh')">Mesh</button>
   <button onclick="showScene('smooth')">Smooth</button>
 </section>
 
-<section id="menuScreen" class="hidden">
+<section id="mainScreen" class="hidden">
   <header>
     <p>ImagesToVoxel</p>
   </header>
