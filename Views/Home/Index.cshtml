@@ -39,6 +39,14 @@
     <button onclick="showScene('smooth')">Smooth</button>
     <button onclick="exportSceneToGLB()">Export</button>
     <button id="openDescribeButton">Open</button>
+
+    <form asp-controller="Home" asp-action="Upload" enctype="multipart/form-data" method="post">
+      <button type="submit">Apply</button>
+      <input type="file" name="frontImage" id="frontImage" accept="image/*" />
+      <input type="file" name="sideImage" id="sideImage" accept="image/*" />
+      <input type="file" name="topImage" id="topImage" accept="image/*" />
+    </form>
+
     <div>
       <label>R: <input type="range" id="redSlider" min="0" max="255" value="255" oninput="changeColor()"></label>
       <label>G: <input type="range" id="greenSlider" min="0" max="255" value="150" oninput="changeColor()"></label>
