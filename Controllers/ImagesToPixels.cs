@@ -5,10 +5,11 @@ using System.Text;
 
 namespace ImagesToVoxel.Controllers {
   public class ImagesToPixels {
-    public string Pixel(string imagePath, float rotationDegrees = 0) {
+    public string Pixel(string imagePath, float rotationDegrees = 0, bool flipY = false) {
       using var image = Image.Load<Rgba32>(imagePath);
 
       if (rotationDegrees != 0) image.Mutate(x => x.Rotate(rotationDegrees));
+      if (flipY) image.Mutate(y => y.Flip(FlipMode.Horizontal));
 
       image.Mutate(x => x.Resize(20, 20).Grayscale().BinaryThreshold(0.5f));
 

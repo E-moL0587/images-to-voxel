@@ -61,10 +61,11 @@ namespace ImagesToVoxel.Controllers {
     }
 
     private (List<int[]> voxelData, string frontBinaryData, string sideBinaryData, string topBinaryData) PrepareVoxel() {
-      var frontBinaryData = _imagesToPixels.Pixel(_frontImagePath);
+      var frontBinaryData = _imagesToPixels.Pixel(_frontImagePath, flipY: true);
       var sideBinaryData = _imagesToPixels.Pixel(_sideImagePath);
-      var topBinaryData = _imagesToPixels.Pixel(_topImagePath);
+      var topBinaryData = _imagesToPixels.Pixel(_topImagePath, flipY: true);
       var rotatedTopBinaryData = _imagesToPixels.Pixel(_topImagePath, 90);
+
       var voxelData = _pixelsToVoxel.Voxel(frontBinaryData, sideBinaryData, rotatedTopBinaryData, 20);
 
       return (voxelData, frontBinaryData, sideBinaryData, topBinaryData);
