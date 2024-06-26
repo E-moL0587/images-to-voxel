@@ -34,32 +34,6 @@ namespace ImagesToVoxel.Controllers {
       return View();
     }
 
-    [HttpPost]
-    public IActionResult Upload(IFormFile frontImage, IFormFile sideImage, IFormFile topImage) {
-      if (frontImage != null) {
-        using (var stream = new MemoryStream()) {
-          frontImage.CopyTo(stream);
-          System.IO.File.WriteAllBytes(_frontImagePath, stream.ToArray());
-        }
-      }
-
-      if (sideImage != null) {
-        using (var stream = new MemoryStream()) {
-          sideImage.CopyTo(stream);
-          System.IO.File.WriteAllBytes(_sideImagePath, stream.ToArray());
-        }
-      }
-
-      if (topImage != null) {
-        using (var stream = new MemoryStream()) {
-          topImage.CopyTo(stream);
-          System.IO.File.WriteAllBytes(_topImagePath, stream.ToArray());
-        }
-      }
-
-      return RedirectToAction("Index");
-    }
-
     private (List<int[]> voxelData, string frontBinaryData, string sideBinaryData, string topBinaryData) PrepareVoxel() {
       var frontBinaryData = _imagesToPixels.Pixel(_frontImagePath, flipY: true);
       var sideBinaryData = _imagesToPixels.Pixel(_sideImagePath);
