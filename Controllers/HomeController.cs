@@ -3,10 +3,9 @@ using System.Text.Json;
 
 namespace ImagesToVoxel.Controllers {
   public class HomeController : Controller {
-    private readonly string _startImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/");
-    private readonly string _frontImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/temp/front.png");
-    private readonly string _sideImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/temp/side.png");
-    private readonly string _topImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/temp/top.png");
+    private readonly string _frontImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/front.png");
+    private readonly string _sideImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/side.png");
+    private readonly string _topImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/top.png");
     private readonly ImagesToPixels _imagesToPixels;
     private readonly PixelsToVoxel _pixelsToVoxel;
     private readonly MarchingCubes _marchingCubes;
@@ -17,20 +16,6 @@ namespace ImagesToVoxel.Controllers {
       _pixelsToVoxel = new PixelsToVoxel();
       _marchingCubes = new MarchingCubes();
       _laplacianSmoothing = new LaplacianSmoothing();
-
-      InitializeImages();
-    }
-
-    private void InitializeImages() {
-      if (!System.IO.File.Exists(_frontImagePath)) {
-        System.IO.File.Copy(Path.Combine(_startImagePath, "front.png"), _frontImagePath);
-      }
-      if (!System.IO.File.Exists(_sideImagePath)) {
-        System.IO.File.Copy(Path.Combine(_startImagePath, "side.png"), _sideImagePath);
-      }
-      if (!System.IO.File.Exists(_topImagePath)) {
-        System.IO.File.Copy(Path.Combine(_startImagePath, "top.png"), _topImagePath);
-      }
     }
 
     public IActionResult Index() {

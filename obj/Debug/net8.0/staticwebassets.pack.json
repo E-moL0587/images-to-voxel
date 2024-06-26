@@ -257,6 +257,18 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\temp\\front.png",
+      "PackagePath": "staticwebassets\\temp\\front.png"
+    },
+    {
+      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\temp\\side.png",
+      "PackagePath": "staticwebassets\\temp\\side.png"
+    },
+    {
+      "Id": "C:\\Users\\竹内 海斗\\workspace\\dotnet-space\\ImagesToVoxel\\wwwroot\\temp\\top.png",
+      "PackagePath": "staticwebassets\\temp\\top.png"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.ImagesToVoxel.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
