@@ -19,6 +19,8 @@
     smooth: new THREE.Scene()
   };
 
+  let currentMaterialColor = { r: 1, g: 200 / 255, b: 1 };
+
   function isSurfaceVoxel(x, y, z, data) {
     const directions = [
       [1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]
@@ -51,7 +53,7 @@
       surfaceData.forEach(([x, y, z]) => {
         const voxelMesh = new THREE.Mesh(
           new THREE.BoxGeometry(1, 1, 1),
-          new THREE.MeshPhongMaterial({ color: 0xff00ff })
+          new THREE.MeshPhongMaterial({ color: new THREE.Color(currentMaterialColor.r, currentMaterialColor.g, currentMaterialColor.b) })
         );
         voxelMesh.position.set(-(x - center.x), -(y - center.y), -(z - center.z));
         scene.add(voxelMesh);
@@ -64,7 +66,7 @@
       });
       geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
       geometry.computeVertexNormals();
-      const material = new THREE.MeshPhongMaterial({ color: 0xff00ff, side: THREE.DoubleSide });
+      const material = new THREE.MeshPhongMaterial({ color: new THREE.Color(currentMaterialColor.r, currentMaterialColor.g, currentMaterialColor.b), side: THREE.DoubleSide });
       const mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
     }
@@ -115,7 +117,7 @@
     });
 
     currentScene.clear();
-    const pointsMaterial = new THREE.PointsMaterial({ color: 0xff00ff, size: 0.3 });
+    const pointsMaterial = new THREE.PointsMaterial({ color: new THREE.Color(currentMaterialColor.r, currentMaterialColor.g, currentMaterialColor.b), size: 0.3 });
     const pointsGeometry = new THREE.BufferGeometry();
     const pointsVertices = [];
     const boundingBox = new THREE.Box3();
@@ -181,6 +183,14 @@
     if (sceneName === 'mesh') return meshData;
     if (sceneName === 'smooth') return smoothData;
     return [];
+  }
+
+  function changeColor() {
+    const red = document.getElementById('redSlider').value / 255;
+    const green = document.getElementById('greenSlider').value / 255;
+    const blue = document.getElementById('blueSlider').value / 255;
+    currentMaterialColor = { r: red, g: green, b: blue };
+    initScenes();
   }
 
   animate();
