@@ -1,32 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Frontend.Api.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+namespace Frontend.Api.Controllers
 {
-    private static readonly string[] Summaries = new[]
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ArrayProcessorController : ControllerBase
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-    private readonly ILogger<WeatherForecastController> _logger;
-
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
-    {
-        _logger = logger;
-    }
-
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
-    {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        [HttpPost]
+        public IActionResult ProcessArray([FromBody] int[][] array)
+        {
+            if (array == null || array.Length == 0)
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+                return BadRequest("Array is null or empty");
+            }
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                for (int j = 0; j < array[i].Length; j++)
+                {
+                    array[i][j] += 1;
+                }
+            }
+
+            return Ok(array);
+        }
     }
 }
