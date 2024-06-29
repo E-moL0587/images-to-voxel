@@ -6,7 +6,15 @@ export const ImageUploader: FunctionComponent = () => {
   const [topFile, setTopFile] = useState<File | null>(null);
   const [pixelSize, setPixelSize] = useState<number>(20);
 
-  useEffect(() => { fetchAndDrawInitialImages(); }, [pixelSize]);
+  useEffect(() => {
+    fetchAndDrawInitialImages();
+  }, []);
+
+  useEffect(() => {
+    if (frontFile) uploadAndDraw(frontFile, 'frontCanvas');
+    if (sideFile) uploadAndDraw(sideFile, 'sideCanvas');
+    if (topFile) uploadAndDraw(topFile, 'topCanvas');
+  }, [pixelSize]);
 
   const fetchAndDrawInitialImages = () => {
     const initialImages = [
@@ -20,6 +28,11 @@ export const ImageUploader: FunctionComponent = () => {
         .then(response => response.blob())
         .then(blob => {
           const file = new File([blob], image.url.split('/').pop() || '', { type: 'image/png' });
+          switch (image.id) {
+            case 'frontCanvas': setFrontFile(file); break;
+            case 'sideCanvas': setSideFile(file); break;
+            case 'topCanvas': setTopFile(file); break;
+          }
           uploadAndDraw(file, image.id);
         });
     });
@@ -68,8 +81,8 @@ export const ImageUploader: FunctionComponent = () => {
     }
   };
 
-  const increasePixelSize = () => { setPixelSize(prevSize => prevSize + 1); };
-  const decreasePixelSize = () => { setPixelSize(prevSize => (prevSize > 1 ? prevSize - 1 : 1)); };
+  const increasePixelSize = () => { setPixelSize(prevSize => (prevSize < 50 ? prevSize + 1 : 50)); };
+  const decreasePixelSize = () => { setPixelSize(prevSize => (prevSize > 5 ? prevSize - 1 : 5)); };
 
   return (
     <>
