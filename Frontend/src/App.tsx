@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {LocationSelector} from "./components/LocationSelector";
+import {ImageUploader} from "./components/ImageUploader";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
           Learn React XY
         </a>
       </header>
-      <LocationSelector />
+      <ImageUploader />
     </div>
   );
 }
