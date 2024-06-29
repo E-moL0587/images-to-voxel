@@ -5,13 +5,10 @@ using System.Text;
 
 namespace Frontend.Api.Controllers {
   public class ImagesToPixels {
-    public string Pixel(string imagePath, float rotationDegrees = 0, bool flipY = false) {
+    public string Pixel(string imagePath, int pixelSize = 20) {
       using var image = Image.Load<Rgba32>(imagePath);
 
-      if (rotationDegrees != 0) image.Mutate(x => x.Rotate(rotationDegrees));
-      if (flipY) image.Mutate(y => y.Flip(FlipMode.Horizontal));
-
-      image.Mutate(x => x.Resize(20, 20).Grayscale().BinaryThreshold(0.5f));
+      image.Mutate(x => x.Resize(pixelSize, pixelSize).Grayscale().BinaryThreshold(0.5f));
 
       var binaryData = new StringBuilder(image.Height * image.Width);
       for (int y = 0; y < image.Height; y++) {

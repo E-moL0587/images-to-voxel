@@ -8,7 +8,7 @@ namespace Frontend.Api.Controllers {
     public HomeController() { _imagesToPixels = new ImagesToPixels(); }
 
     [HttpPost]
-    public async Task<IActionResult> ProcessImage([FromForm] IFormFile image) {
+    public async Task<IActionResult> ProcessImage([FromForm] IFormFile image, [FromForm] int pixelSize = 20) {
       if (image == null || image.Length == 0) {
         return BadRequest("No image uploaded");
       }
@@ -24,7 +24,7 @@ namespace Frontend.Api.Controllers {
           await memoryStream.CopyToAsync(tempFileStream);
         }
 
-        binaryData = _imagesToPixels.Pixel(tempFilePath);
+        binaryData = _imagesToPixels.Pixel(tempFilePath, pixelSize);
         System.IO.File.Delete(tempFilePath);
       }
 
