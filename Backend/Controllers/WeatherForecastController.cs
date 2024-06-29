@@ -1,29 +1,32 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Frontend.Api.Controllers
+namespace Frontend.Api.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class WeatherForecastController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ImageProcessorController : ControllerBase
+    private static readonly string[] Summaries = new[]
     {
-        [HttpPost]
-        public async Task<IActionResult> ProcessImage([FromForm] IFormFile image)
-        {
-            if (image == null || image.Length == 0)
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    };
+
+    private readonly ILogger<WeatherForecastController> _logger;
+
+    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    {
+        _logger = logger;
+    }
+
+    [HttpGet(Name = "GetWeatherForecast")]
+    public IEnumerable<WeatherForecast> Get()
+    {
+        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
-                return BadRequest("No image uploaded");
-            }
-
-            using (var memoryStream = new MemoryStream())
-            {
-                await image.CopyToAsync(memoryStream);
-                var imageBytes = memoryStream.ToArray();
-
-                // 画像の処理（例：ここで任意の画像処理を行う）
-                // 処理後の画像データをimageBytesに格納
-
-                return File(imageBytes, "image/jpeg"); // 必要に応じてMIMEタイプを変更
-            }
-        }
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            })
+            .ToArray();
     }
 }
