@@ -1,4 +1,4 @@
-﻿import React, { FunctionComponent, useState } from "react";
+﻿import React, { FunctionComponent, useState, useEffect } from "react";
 
 export const ImageUploader: FunctionComponent = () => {
   const [frontFile, setFrontFile] = useState<File | null>(null);
@@ -6,23 +6,33 @@ export const ImageUploader: FunctionComponent = () => {
   const [topFile, setTopFile] = useState<File | null>(null);
   const [pixelSize, setPixelSize] = useState<number>(20);
 
+  useEffect(() => { fetchAndDrawInitialImages(); }, [pixelSize]);
+
+  const fetchAndDrawInitialImages = () => {
+    const initialImages = [
+      { id: 'frontCanvas', url: '/images/front.png' },
+      { id: 'sideCanvas', url: '/images/side.png' },
+      { id: 'topCanvas', url: '/images/top.png' },
+    ];
+
+    initialImages.forEach(image => {
+      fetch(image.url)
+        .then(response => response.blob())
+        .then(blob => {
+          const file = new File([blob], image.url.split('/').pop() || '', { type: 'image/png' });
+          uploadAndDraw(file, image.id);
+        });
+    });
+  };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, position: 'front' | 'side' | 'top') => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
 
       switch (position) {
-        case 'front':
-          setFrontFile(file);
-          uploadAndDraw(file, 'frontCanvas');
-          break;
-        case 'side':
-          setSideFile(file);
-          uploadAndDraw(file, 'sideCanvas');
-          break;
-        case 'top':
-          setTopFile(file);
-          uploadAndDraw(file, 'topCanvas');
-          break;
+        case 'front': setFrontFile(file); uploadAndDraw(file, 'frontCanvas'); break;
+        case 'side': setSideFile(file); uploadAndDraw(file, 'sideCanvas'); break;
+        case 'top': setTopFile(file); uploadAndDraw(file, 'topCanvas'); break;
       }
     }
   };
@@ -34,9 +44,7 @@ export const ImageUploader: FunctionComponent = () => {
 
     fetch('http://localhost:5002/api/home', { method: 'POST', body: formData })
       .then((response) => response.text())
-      .then((binaryData) => {
-        drawCanvas(canvasId, binaryData);
-      })
+      .then((binaryData) => { drawCanvas(canvasId, binaryData); })
       .catch((err) => { console.log(err.message); });
   };
 
@@ -60,36 +68,32 @@ export const ImageUploader: FunctionComponent = () => {
     }
   };
 
+  const increasePixelSize = () => { setPixelSize(prevSize => prevSize + 1); };
+  const decreasePixelSize = () => { setPixelSize(prevSize => (prevSize > 1 ? prevSize - 1 : 1)); };
+
   return (
     <>
-      <h2>Image Uploader</h2>
+      <h1>Image Uploader</h1>
       <div>
-        <label>Pixel Size:</label>
-        <input
-          type="number"
-          value={pixelSize}
-          onChange={(event) => setPixelSize(parseInt(event.target.value, 10))}
-          min="1"
-          max="100"
-        />
+        <button onClick={decreasePixelSize}>-</button>
+        <h3>{pixelSize}</h3>
+        <button onClick={increasePixelSize}>+</button>
       </div>
+
       <div>
-        <label>Front Image:</label>
+        <h3>Front</h3>
         <input type="file" onChange={(event) => handleFileChange(event, 'front')} />
-      </div>
-      <div>
-        <label>Side Image:</label>
+        <h3>Side</h3>
         <input type="file" onChange={(event) => handleFileChange(event, 'side')} />
-      </div>
-      <div>
-        <label>Top Image:</label>
+        <h3>Top</h3>
         <input type="file" onChange={(event) => handleFileChange(event, 'top')} />
       </div>
-      <section className="pixels">
+
+      <div className="pixels">
         <canvas id="frontCanvas" className="pixel"></canvas>
         <canvas id="sideCanvas" className="pixel"></canvas>
         <canvas id="topCanvas" className="pixel"></canvas>
-      </section>
+      </div>
 
       <style>
         {`
