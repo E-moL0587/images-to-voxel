@@ -1,10 +1,10 @@
 import React from 'react';
-import { ArrayProcessor } from "./components/ArrayProcessor";
+import { ImageUploader } from "./components/ImageUploader";
 
 function App() {
   return (
     <>
-      <ArrayProcessor />
+      <ImageUploader />
     </>
   );
 }

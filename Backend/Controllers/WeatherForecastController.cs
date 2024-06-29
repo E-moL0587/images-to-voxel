@@ -4,25 +4,26 @@ namespace Frontend.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ArrayProcessorController : ControllerBase
+    public class ImageProcessorController : ControllerBase
     {
         [HttpPost]
-        public IActionResult ProcessArray([FromBody] int[][] array)
+        public async Task<IActionResult> ProcessImage([FromForm] IFormFile image)
         {
-            if (array == null || array.Length == 0)
+            if (image == null || image.Length == 0)
             {
-                return BadRequest("Array is null or empty");
+                return BadRequest("No image uploaded");
             }
 
-            for (int i = 0; i < array.Length; i++)
+            using (var memoryStream = new MemoryStream())
             {
-                for (int j = 0; j < array[i].Length; j++)
-                {
-                    array[i][j] += 1;
-                }
-            }
+                await image.CopyToAsync(memoryStream);
+                var imageBytes = memoryStream.ToArray();
 
-            return Ok(array);
+                // 画像の処理（例：ここで任意の画像処理を行う）
+                // 処理後の画像データをimageBytesに格納
+
+                return File(imageBytes, "image/jpeg"); // 必要に応じてMIMEタイプを変更
+            }
         }
     }
 }
