@@ -1,46 +1,40 @@
 ﻿import React, { FunctionComponent, useState } from "react";
 
 export const ImageUploader: FunctionComponent = () => {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files.length > 0) {
-            setSelectedFile(event.target.files[0]);
-        }
-    };
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      setSelectedFile(file);
+      const formData = new FormData();
+      formData.append("image", file);
+      fetch('http://localhost:5002/api/home', {
+        method: 'POST',
+        body: formData
+      })
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        setImageUrl(url);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    }
+  };
 
-    const handleUpload = () => {
-        if (selectedFile) {
-            const formData = new FormData();
-            formData.append("image", selectedFile);
-
-            fetch('http://localhost:5002/api/imageprocessor', {
-                method: 'POST',
-                body: formData
-            })
-            .then((response) => response.blob())
-            .then((blob) => {
-                const url = URL.createObjectURL(blob);
-                setImageUrl(url);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
-        }
-    };
-
-    return (
+  return (
+    <div>
+      <h2>Image Uploader</h2>
+      <input type="file" onChange={handleFileChange} />
+      {imageUrl && (
         <div>
-            <h2>Image Uploader</h2>
-            <input type="file" onChange={handleFileChange} />
-            <button onClick={handleUpload}>Upload</button>
-            {imageUrl && (
-                <div>
-                    <h3>Processed Image</h3>
-                    <img src={imageUrl} alt="Processed" />
-                </div>
-            )}
+          <h3>Processed Image</h3>
+          <img src={imageUrl} alt="Processed" />
         </div>
-    );
+      )}
+    </div>
+  );
 };

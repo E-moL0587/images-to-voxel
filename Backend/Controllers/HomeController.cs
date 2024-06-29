@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Frontend.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ImageProcessorController : ControllerBase
+    public class HomeController : ControllerBase
     {
         [HttpPost]
         public async Task<IActionResult> ProcessImage([FromForm] IFormFile image)

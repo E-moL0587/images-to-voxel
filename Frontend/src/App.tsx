@@ -1,27 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import {ImageUploader} from "./components/ImageUploader";
+import React, { useState } from 'react';
+import { ImageUploader } from './components/ImageUploader';
 
 function App() {
+  const [activePage, setActivePage] = useState<string>('title');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React XY
-        </a>
-      </header>
-      <ImageUploader />
-    </div>
+    <>
+      {activePage === 'title' && <ImageUploader />}
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c');
+          * { font-family: 'M PLUS Rounded 1c', sans-serif; }
+          ::-webkit-scrollbar { display: none; }
+        `}
+      </style>
+    </>
   );
 }
 
