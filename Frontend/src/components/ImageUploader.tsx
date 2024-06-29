@@ -10,23 +10,15 @@ export const ImageUploader: FunctionComponent = () => {
       setSelectedFile(file);
       const formData = new FormData();
       formData.append("image", file);
-      fetch('http://localhost:5002/api/home', {
-        method: 'POST',
-        body: formData
-      })
+      fetch('http://localhost:5002/api/home', { method: 'POST', body: formData })
       .then((response) => response.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob);
-        setImageUrl(url);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+      .then((blob) => { const url = URL.createObjectURL(blob); setImageUrl(url); })
+      .catch((err) => { console.log(err.message); });
     }
   };
 
   return (
-    <div>
+    <>
       <h2>Image Uploader</h2>
       <input type="file" onChange={handleFileChange} />
       {imageUrl && (
@@ -35,6 +27,6 @@ export const ImageUploader: FunctionComponent = () => {
           <img src={imageUrl} alt="Processed" />
         </div>
       )}
-    </div>
+    </>
   );
 };
