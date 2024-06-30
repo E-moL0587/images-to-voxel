@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export class ImagesToVoxel extends Component {
   state = {
     voxelData: null,
-    selectedImages: { front: '/images/front.png', side: '/images/side.png', top: '/images/top.png' },
+    selectedImages: { front: null, side: null, top: null },
     width: 20,
     binaryData: { front: null, side: null, top: null },
     color: { r: 255, g: 100, b: 255 },
@@ -37,13 +37,9 @@ export class ImagesToVoxel extends Component {
   }
 
   setImageFile = (file, id) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.setState((prevState) => ({
-        selectedImages: { ...prevState.selectedImages, [id]: e.target.result }
-      }));
-    };
-    reader.readAsDataURL(file);
+    this.setState((prevState) => ({
+      selectedImages: { ...prevState.selectedImages, [id]: file }
+    }));
   }
 
   processImages = async () => {
@@ -51,7 +47,7 @@ export class ImagesToVoxel extends Component {
     const { width } = this.state;
 
     const binaryData = await Promise.all(
-      [front, side, top].map((image) => this.binarizeImage(image, width))
+      [front, side, top].map((image) => this.uploadAndPixelizeImage(image, width))
     );
 
     const response = await fetch('weatherforecast/processtovoxel', {
@@ -64,31 +60,18 @@ export class ImagesToVoxel extends Component {
     this.setState({ voxelData, binaryData: { front: binaryData[0], side: binaryData[1], top: binaryData[2] } });
   }
 
-  binarizeImage = (imageSrc, width) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.src = imageSrc;
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = width;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, width);
-        const imageData = ctx.getImageData(0, 0, width, width);
-        let binaryString = '';
-        for (let i = 0; i < width; i++) {
-          for (let j = 0; j < width; j++) {
-            const index = (i * 4) * width + (j * 4);
-            const r = imageData.data[index];
-            const g = imageData.data[index + 1];
-            const b = imageData.data[index + 2];
-            const grayscale = (r + g + b) / 3;
-            binaryString += grayscale > 128 ? '0' : '1';
-          }
-        }
-        resolve(binaryString);
-      };
+  uploadAndPixelizeImage = async (imageFile, width) => {
+    const formData = new FormData();
+    formData.append('imageFile', imageFile);
+    formData.append('pixelSize', width);
+
+    const response = await fetch('weatherforecast/pixelize', {
+      method: 'POST',
+      body: formData
     });
+
+    const binaryData = await response.text();
+    return binaryData;
   }
 
   handleImageChange = (type) => (event) => {
