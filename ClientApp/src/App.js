@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { ImagesToVoxel } from './components/ImagesToVoxel';
+import { FetchData } from "./components/FetchData";
 
 export default class App extends Component {
   render() {
     return (
       <>
-        <ImagesToVoxel />
+        <FetchData />
       </>
     );
   }
