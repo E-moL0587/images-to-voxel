@@ -92,7 +92,7 @@ export class ImagesToVoxel extends Component {
         {binaryString.match(new RegExp(`.{1,${this.state.width}}`, 'g')).map((row, i) => (
           <div key={i} className="pixel-row">
             {row.split('').map((bit, j) => (
-              <div key={j} className="pixel" style={{ backgroundColor: bit === '1' ? color : '#f0f0f0' }}></div>
+              <div key={j} className="pixel" style={{ backgroundColor: bit === '0' ? color : '#f0f0f0' }}></div>
             ))}
           </div>
         ))}
