@@ -25,14 +25,11 @@ export class ImagesToVoxel extends Component {
       { id: 'side', url: '/images/side.png' },
       { id: 'top', url: '/images/top.png' },
     ];
-
     initialImages.forEach(image => {
-      fetch(image.url)
-        .then(response => response.blob())
-        .then(blob => {
-          const file = new File([blob], image.url.split('/').pop() || '', { type: 'image/png' });
-          this.setImageFile(file, image.id);
-        });
+      fetch(image.url).then(response => response.blob()).then(blob => {
+        const file = new File([blob], image.url.split('/').pop() || '', { type: 'image/png' });
+        this.setImageFile(file, image.id);
+      });
     });
   }
 
@@ -45,17 +42,14 @@ export class ImagesToVoxel extends Component {
   processImages = async () => {
     const { front, side, top } = this.state.selectedImages;
     const { width } = this.state;
-
     const binaryData = await Promise.all(
       [front, side, top].map((image) => this.uploadAndPixelizeImage(image, width))
     );
-
     const response = await fetch('weatherforecast/processtovoxel', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ frontData: binaryData[0], sideData: binaryData[1], topData: binaryData[2], width })
     });
-    
     const voxelData = await response.json();
     this.setState({ voxelData, binaryData: { front: binaryData[0], side: binaryData[1], top: binaryData[2] } });
   }
@@ -64,12 +58,10 @@ export class ImagesToVoxel extends Component {
     const formData = new FormData();
     formData.append('imageFile', imageFile);
     formData.append('pixelSize', width);
-
     const response = await fetch('weatherforecast/pixelize', {
       method: 'POST',
       body: formData
     });
-
     const binaryData = await response.text();
     return binaryData;
   }
@@ -112,7 +104,6 @@ export class ImagesToVoxel extends Component {
     const { front, side, top } = this.state.binaryData;
     const { r, g, b } = this.state.color;
     const { width } = this.state;
-
     return (
       <>
         <input type="file" onChange={this.handleImageChange('front')} />
