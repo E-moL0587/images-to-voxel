@@ -118,12 +118,12 @@ export class ImagesToVoxel extends Component {
         <input type="file" onChange={this.handleImageChange('front')} />
         <input type="file" onChange={this.handleImageChange('side')} />
         <input type="file" onChange={this.handleImageChange('top')} />
-        <button onClick={() => this.handleWidthChange(1)}>+</button>
-        <button onClick={() => this.handleWidthChange(-1)}>-</button>
+        <button onClick={() => this.handleWidthChange(1)}>＋</button>
+        <div>{width}</div>
+        <button onClick={() => this.handleWidthChange(-1)}>－</button>
         <input type="range" min="0" max="255" value={r} onChange={this.handleColorChange('r')} />
         <input type="range" min="0" max="255" value={g} onChange={this.handleColorChange('g')} />
         <input type="range" min="0" max="255" value={b} onChange={this.handleColorChange('b')} />
-        <div>Current width: {width}</div>
         <div className="pixels">
           {front && this.renderImage(front)}
           {side && this.renderImage(side)}
