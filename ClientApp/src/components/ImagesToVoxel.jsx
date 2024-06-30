@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { binarizeImage } from './ImagesToPixels';
 
 export class ImagesToVoxel extends Component {
   state = {
@@ -7,53 +6,105 @@ export class ImagesToVoxel extends Component {
     selectedImages: { front: '/images/front.png', side: '/images/side.png', top: '/images/top.png' },
     width: 20,
     binaryData: { front: null, side: null, top: null },
-    color: { r: 255, g: 100, b: 255 }
+    color: { r: 255, g: 100, b: 255 },
   };
 
-  componentDidMount() { this.processImages(); }
-  componentDidUpdate(prevState) {
+  componentDidMount() {
+    this.processInitialImages();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
     if (prevState.width !== this.state.width || prevState.selectedImages !== this.state.selectedImages) {
       this.processImages();
     }
   }
 
-  processImages = async () => {
-    const { front, side, top } = this.state.selectedImages;
-    const { width } = this.state;
-    const [frontBinary, sideBinary, topBinary] = await Promise.all(
-      [front, side, top].map(image => binarizeImage(image, width))
-    );
+  processInitialImages = () => {
+    const initialImages = [
+      { id: 'front', url: '/images/front.png' },
+      { id: 'side', url: '/images/side.png' },
+      { id: 'top', url: '/images/top.png' },
+    ];
 
-    const response = await fetch('weatherforecast/processtovoxel', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ frontData: frontBinary, sideData: sideBinary, topData: topBinary, width })
+    initialImages.forEach(image => {
+      fetch(image.url)
+        .then(response => response.blob())
+        .then(blob => {
+          const file = new File([blob], image.url.split('/').pop() || '', { type: 'image/png' });
+          this.setImageFile(file, image.id);
+        });
     });
-    const voxelData = await response.json();
-    this.setState({ voxelData, binaryData: { front: frontBinary, side: sideBinary, top: topBinary } });
   }
 
-  handleImageChange = (type) => (event) => {
-    const file = event.target.files[0];
+  setImageFile = (file, id) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      this.setState(prevState => ({
-        selectedImages: { ...prevState.selectedImages, [type]: e.target.result }
+      this.setState((prevState) => ({
+        selectedImages: { ...prevState.selectedImages, [id]: e.target.result }
       }));
     };
     reader.readAsDataURL(file);
   }
 
-  handleWidthChange = (delta) => {
-    this.setState(prevState => {
-      const newWidth = Math.max(5, Math.min(50, prevState.width + delta));
-      return { width: newWidth };
+  processImages = async () => {
+    const { front, side, top } = this.state.selectedImages;
+    const { width } = this.state;
+
+    const binaryData = await Promise.all(
+      [front, side, top].map((image) => this.binarizeImage(image, width))
+    );
+
+    const response = await fetch('weatherforecast/processtovoxel', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ frontData: binaryData[0], sideData: binaryData[1], topData: binaryData[2], width })
     });
+    
+    const voxelData = await response.json();
+    this.setState({ voxelData, binaryData: { front: binaryData[0], side: binaryData[1], top: binaryData[2] } });
+  }
+
+  binarizeImage = (imageSrc, width) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = imageSrc;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = width;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, width);
+        const imageData = ctx.getImageData(0, 0, width, width);
+        let binaryString = '';
+        for (let i = 0; i < width; i++) {
+          for (let j = 0; j < width; j++) {
+            const index = (i * 4) * width + (j * 4);
+            const r = imageData.data[index];
+            const g = imageData.data[index + 1];
+            const b = imageData.data[index + 2];
+            const grayscale = (r + g + b) / 3;
+            binaryString += grayscale > 128 ? '0' : '1';
+          }
+        }
+        resolve(binaryString);
+      };
+    });
+  }
+
+  handleImageChange = (type) => (event) => {
+    const file = event.target.files[0];
+    this.setImageFile(file, type);
+  }
+
+  handleWidthChange = (delta) => {
+    this.setState((prevState) => ({
+      width: Math.max(5, Math.min(50, prevState.width + delta))
+    }));
   }
 
   handleColorChange = (color) => (event) => {
     const value = parseInt(event.target.value, 10);
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       color: { ...prevState.color, [color]: value }
     }));
   }
@@ -77,6 +128,7 @@ export class ImagesToVoxel extends Component {
   render() {
     const { front, side, top } = this.state.binaryData;
     const { r, g, b } = this.state.color;
+    const { width } = this.state;
 
     return (
       <>
@@ -88,10 +140,11 @@ export class ImagesToVoxel extends Component {
         <input type="range" min="0" max="255" value={r} onChange={this.handleColorChange('r')} />
         <input type="range" min="0" max="255" value={g} onChange={this.handleColorChange('g')} />
         <input type="range" min="0" max="255" value={b} onChange={this.handleColorChange('b')} />
+        <div>Current width: {width}</div>
         <div className="pixels">
-          {this.renderImage(front)}
-          {this.renderImage(side)}
-          {this.renderImage(top)}
+          {front && this.renderImage(front)}
+          {side && this.renderImage(side)}
+          {top && this.renderImage(top)}
         </div>
         {this.state.voxelData && <div>{this.state.voxelData}</div>}
         <style>
