@@ -6,31 +6,23 @@ namespace ImagesToVoxel.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+    private static int _temperatureF = 32; // Initial temperature in Fahrenheit
 
     [HttpGet]
-    public IEnumerable<WeatherForecast> Get()
+    public ActionResult Get()
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+        return Ok(new { temperatureF = _temperatureF });
     }
 
-    public class WeatherForecast
+    [HttpPost("increment")]
+    public ActionResult Increment([FromBody] TemperatureRequest request)
     {
-        public DateOnly Date { get; set; }
+        _temperatureF = request.TemperatureF + 1;
+        return Ok(new { temperatureF = _temperatureF });
+    }
 
-        public int TemperatureC { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-
-        public string? Summary { get; set; }
+    public class TemperatureRequest
+    {
+        public int TemperatureF { get; set; }
     }
 }

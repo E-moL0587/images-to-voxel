@@ -5,55 +5,36 @@ export class FetchData extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { forecasts: [], loading: true };
+    this.state = { temperatureF: null };
   }
 
   componentDidMount() {
     this.populateWeatherData();
   }
 
-  static renderForecastsTable(forecasts) {
-    return (
-      <table className="table table-striped" aria-labelledby="tableLabel">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
-          </tr>
-        </thead>
-        <tbody>
-          {forecasts.map(forecast =>
-            <tr key={forecast.date}>
-              <td>{forecast.date}</td>
-              <td>{forecast.temperatureC}</td>
-              <td>{forecast.temperatureF}</td>
-              <td>{forecast.summary}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    );
-  }
-
-  render() {
-    let contents = this.state.loading
-      ? <p><em>Loading...</em></p>
-      : FetchData.renderForecastsTable(this.state.forecasts);
-
-    return (
-      <div>
-        <h1 id="tableLabel">Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
-        {contents}
-      </div>
-    );
-  }
-
   async populateWeatherData() {
     const response = await fetch('weatherforecast');
     const data = await response.json();
-    this.setState({ forecasts: data, loading: false });
+    this.setState({ temperatureF: data.temperatureF });
+  }
+
+  async incrementTemperature() {
+    const response = await fetch('weatherforecast/increment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ temperatureF: this.state.temperatureF })
+    });
+    const data = await response.json();
+    this.setState({ temperatureF: data.temperatureF });
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Temperature (F)</h1>
+        <p>{this.state.temperatureF !== null ? this.state.temperatureF : 'Loading...'}</p>
+        <button onClick={() => this.incrementTemperature()}>Increment</button>
+      </div>
+    );
   }
 }
