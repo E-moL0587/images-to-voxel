@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { ImagesToVoxel } from "./components/ImagesToVoxel";
+import { MainView } from "./components/MainView";
 
 export default class App extends Component {
   render() {
     return (
       <>
-        <ImagesToVoxel />
+        <MainView />
       </>
     );
   }
