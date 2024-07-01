@@ -9,6 +9,12 @@ export class ImagesToPixels extends Component {
 
   componentDidMount() { this.loadInitialImages(); }
 
+  componentDidUpdate(_prevProps, prevState) {
+    if (prevState.frontImageBinaryData !== this.state.frontImageBinaryData) { this.drawBinaryImage('frontCanvas', this.state.frontImageBinaryData); }
+    if (prevState.sideImageBinaryData !== this.state.sideImageBinaryData) { this.drawBinaryImage('sideCanvas', this.state.sideImageBinaryData); }
+    if (prevState.topImageBinaryData !== this.state.topImageBinaryData) { this.drawBinaryImage('topCanvas', this.state.topImageBinaryData); }
+  }
+
   loadInitialImages = async () => {
     await this.loadAndUploadInitialImage('/images/front.png', 'frontImageBinaryData');
     await this.loadAndUploadInitialImage('/images/side.png', 'sideImageBinaryData');
@@ -37,15 +43,30 @@ export class ImagesToPixels extends Component {
       body: JSON.stringify({ base64String })
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      this.setState({ [stateKey]: data.binaryData });
-    }
+    if (response.ok) { const data = await response.json(); this.setState({ [stateKey]: data.binaryData }); }
   };
 
   handleInputChange = async (event, stateKey) => {
     const file = event.target.files[0];
     if (file) { this.readFileAndUpload(file, stateKey); }
+  };
+
+  drawBinaryImage = (canvasId, binaryData) => {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    const size = 20;
+    const scale = canvas.clientWidth / size;
+    canvas.width = size * scale;
+    canvas.height = size * scale;
+
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const pixelIndex = y * size + x;
+        const color = binaryData[pixelIndex] === '0' ? '#0f0f0f' : '#f0f0f0';
+        ctx.fillStyle = color;
+        ctx.fillRect(x * scale, y * scale, scale, scale);
+      }
+    }
   };
 
   render() {
@@ -54,9 +75,9 @@ export class ImagesToPixels extends Component {
         <input type="file" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'frontImageBinaryData')} />
         <input type="file" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'sideImageBinaryData')} />
         <input type="file" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'topImageBinaryData')} />
-        {this.state.frontImageBinaryData && <pre>{this.state.frontImageBinaryData}</pre>}
-        {this.state.sideImageBinaryData && <pre>{this.state.sideImageBinaryData}</pre>}
-        {this.state.topImageBinaryData && <pre>{this.state.topImageBinaryData}</pre>}
+        <canvas id="frontCanvas"></canvas>
+        <canvas id="sideCanvas"></canvas>
+        <canvas id="topCanvas"></canvas>
       </>
     );
   }
