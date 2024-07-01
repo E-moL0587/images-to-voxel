@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/6f0d6d7a-e4ac-4824-b78b-344eaa2c2ca4/resourceGroups/images-to-voxel_group/providers/Microsoft.Web/sites/images-to-voxel",
+    "appService.deploySubpath": "publish"
+}
