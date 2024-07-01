@@ -6,7 +6,8 @@ export class ImagesToPixels extends Component {
     this.state = {
       binaryData: { front: '', side: '', top: '' },
       files: { front: null, side: null, top: null },
-      size: 20
+      size: 20,
+      voxelData: []
     };
     this.fileInputs = { front: React.createRef(), side: React.createRef(), top: React.createRef() };
   }
@@ -18,6 +19,10 @@ export class ImagesToPixels extends Component {
     if (prevState.binaryData.front !== binaryData.front) this.drawBinaryImage('frontCanvas', binaryData.front);
     if (prevState.binaryData.side !== binaryData.side) this.drawBinaryImage('sideCanvas', binaryData.side);
     if (prevState.binaryData.top !== binaryData.top) this.drawBinaryImage('topCanvas', binaryData.top);
+
+    if (prevState.binaryData.front !== binaryData.front || prevState.binaryData.side !== binaryData.side || prevState.binaryData.top !== binaryData.top) {
+      this.transformToVoxel();
+    }
   }
 
   loadInitialImages = async () => {
@@ -90,6 +95,25 @@ export class ImagesToPixels extends Component {
     }
   };
 
+  transformToVoxel = async () => {
+    const { binaryData, size } = this.state;
+    if (binaryData.front && binaryData.side && binaryData.top) {
+      const response = await fetch('weatherforecast/voxel', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          frontData: binaryData.front,
+          sideData: binaryData.side,
+          topData: binaryData.top,
+          width: size
+        })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        this.setState({ voxelData: data.voxelData });
+      }
+    }
+  };
+
   render() {
     return (
       <>
@@ -104,6 +128,7 @@ export class ImagesToPixels extends Component {
         <canvas id="frontCanvas"></canvas>
         <canvas id="sideCanvas"></canvas>
         <canvas id="topCanvas"></canvas>
+        <div>{this.state.voxelData}</div>
       </>
     );
   }
