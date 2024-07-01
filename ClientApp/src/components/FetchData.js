@@ -9,9 +9,7 @@ export class FetchData extends Component {
     this.topFileInput = React.createRef();
   }
 
-  componentDidMount() {
-    this.loadInitialImages();
-  }
+  componentDidMount() { this.loadInitialImages(); }
 
   loadInitialImages = async () => {
     await this.loadAndUploadInitialImage('/images/front.png', 'frontImageBinaryData');
@@ -24,27 +22,16 @@ export class FetchData extends Component {
     const blob = await response.blob();
     const reader = new FileReader();
 
-    reader.onloadend = async () => {
-      const base64String = reader.result.split(',')[1];
-      await this.uploadImage(base64String, stateKey);
-    };
-
+    reader.onloadend = async () => { const base64String = reader.result.split(',')[1]; await this.uploadImage(base64String, stateKey); };
     reader.readAsDataURL(blob);
   };
 
   uploadImage = async (base64String, stateKey) => {
     const response = await fetch('weatherforecast/upload', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ base64String })
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ base64String })
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      this.setState({ [stateKey]: data.binaryData });
-    } else {
-      alert('File upload failed');
-    }
+    if (response.ok) { const data = await response.json(); this.setState({ [stateKey]: data.binaryData }); }
   };
 
   handleInputChange = async (event, stateKey) => {
@@ -53,11 +40,7 @@ export class FetchData extends Component {
     if (file) {
       const reader = new FileReader();
 
-      reader.onloadend = async () => {
-        const base64String = reader.result.split(',')[1];
-        await this.uploadImage(base64String, stateKey);
-      };
-
+      reader.onloadend = async () => { const base64String = reader.result.split(',')[1]; await this.uploadImage(base64String, stateKey); };
       reader.readAsDataURL(file);
     }
   };
@@ -68,24 +51,9 @@ export class FetchData extends Component {
         <input type="file" ref={this.frontFileInput} onChange={(e) => this.handleInputChange(e, 'frontImageBinaryData')} />
         <input type="file" ref={this.sideFileInput} onChange={(e) => this.handleInputChange(e, 'sideImageBinaryData')} />
         <input type="file" ref={this.topFileInput} onChange={(e) => this.handleInputChange(e, 'topImageBinaryData')} />
-        {this.state.frontImageBinaryData && (
-          <div>
-            <h3>Front Image Binary Data:</h3>
-            <pre>{this.state.frontImageBinaryData}</pre>
-          </div>
-        )}
-        {this.state.sideImageBinaryData && (
-          <div>
-            <h3>Side Image Binary Data:</h3>
-            <pre>{this.state.sideImageBinaryData}</pre>
-          </div>
-        )}
-        {this.state.topImageBinaryData && (
-          <div>
-            <h3>Top Image Binary Data:</h3>
-            <pre>{this.state.topImageBinaryData}</pre>
-          </div>
-        )}
+        {this.state.frontImageBinaryData && <pre>{this.state.frontImageBinaryData}</pre>}
+        {this.state.sideImageBinaryData && <pre>{this.state.sideImageBinaryData}</pre>}
+        {this.state.topImageBinaryData && <pre>{this.state.topImageBinaryData}</pre>}
       </>
     );
   }
