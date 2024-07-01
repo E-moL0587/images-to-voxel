@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { FetchData } from "./components/FetchData";
+import { ImagesToPixels } from "./components/ImagesToPixels";
 
 export default class App extends Component {
   render() {
     return (
       <>
-        <FetchData />
+        <ImagesToPixels />
       </>
     );
   }
