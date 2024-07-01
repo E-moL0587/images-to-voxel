@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 export class ImagesToPixels extends Component {
   constructor(props) {
     super(props);
+    this.fileInputs = { front: React.createRef(), side: React.createRef(), top: React.createRef() };
     this.state = {
       binaryData: { front: '', side: '', top: '' },
       files: { front: null, side: null, top: null },
       size: 20,
-      voxelData: []
+      voxelData: null, meshData: null, smoothData: null
     };
-    this.fileInputs = { front: React.createRef(), side: React.createRef(), top: React.createRef() };
   }
 
   componentDidMount() { this.loadInitialImages(); }
@@ -40,10 +40,12 @@ export class ImagesToPixels extends Component {
 
   readFileAndUpload = (file, key) => {
     const reader = new FileReader();
+
     reader.onloadend = async () => {
       const base64String = reader.result.split(',')[1];
       await this.uploadImage(base64String, key);
     };
+
     reader.readAsDataURL(file);
   };
 
@@ -52,6 +54,7 @@ export class ImagesToPixels extends Component {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ base64String, size: this.state.size })
     });
+
     if (response.ok) {
       const data = await response.json();
       this.setState(prevState => ({ binaryData: { ...prevState.binaryData, [key]: data.binaryData } }));
@@ -60,6 +63,7 @@ export class ImagesToPixels extends Component {
 
   handleInputChange = async (event, key) => {
     const file = event.target.files[0];
+
     if (file) {
       this.setState(prevState => ({ files: { ...prevState.files, [key]: file } }));
       this.readFileAndUpload(file, key);
@@ -100,16 +104,11 @@ export class ImagesToPixels extends Component {
     if (binaryData.front && binaryData.side && binaryData.top) {
       const response = await fetch('weatherforecast/voxel', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          frontData: binaryData.front,
-          sideData: binaryData.side,
-          topData: binaryData.top,
-          width: size
-        })
+        body: JSON.stringify({ frontData: binaryData.front, sideData: binaryData.side, topData: binaryData.top, size })
       });
       if (response.ok) {
         const data = await response.json();
-        this.setState({ voxelData: data.voxelData });
+        this.setState({ voxelData: data.voxelData, meshData: data.meshData, smoothData: data.smoothData });
       }
     }
   };
@@ -129,6 +128,8 @@ export class ImagesToPixels extends Component {
         <canvas id="sideCanvas"></canvas>
         <canvas id="topCanvas"></canvas>
         <div>{this.state.voxelData}</div>
+        <div>{this.state.meshData}</div>
+        <div>{this.state.smoothData}</div>
       </>
     );
   }

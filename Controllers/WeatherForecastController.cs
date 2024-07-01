@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 namespace ImagesToVoxel.Controllers {
-
   [ApiController]
   [Route("[controller]")]
   public class WeatherForecastController : ControllerBase {
@@ -23,14 +22,21 @@ namespace ImagesToVoxel.Controllers {
 
     [HttpPost("voxel")]
     public ActionResult Voxel([FromBody] VoxelRequest request) {
-      if (string.IsNullOrEmpty(request.FrontData) || string.IsNullOrEmpty(request.SideData) || string.IsNullOrEmpty(request.TopData) || request.Width <= 0) {
-        return BadRequest("Invalid voxel data or width");
+      if (string.IsNullOrEmpty(request.FrontData) || string.IsNullOrEmpty(request.SideData) || string.IsNullOrEmpty(request.TopData) || request.Size <= 0) {
+        return BadRequest("Invalid voxel data or size");
       }
 
       try {
         var voxelProcessor = new PixelsToVoxel();
-        var voxelData = voxelProcessor.Voxel(request.FrontData, request.SideData, request.TopData, request.Width);
-        return Ok(new { voxelData });
+        var voxelData = voxelProcessor.Voxel(request.FrontData, request.SideData, request.TopData, request.Size);
+
+        var meshProcessor = new MarchingCubes();
+        var meshData = meshProcessor.Mesh(voxelData, request.Size, request.Size, request.Size);
+
+        var smoothProcessor = new LaplacianSmoothing();
+        var smoothData = smoothProcessor.Smooth(meshData);
+
+        return Ok(new { voxelData, meshData, smoothData });
       } catch (Exception ex) {
         return StatusCode(500, $"Internal server error: {ex.Message}");
       }
@@ -45,7 +51,7 @@ namespace ImagesToVoxel.Controllers {
       public string? FrontData { get; set; }
       public string? SideData { get; set; }
       public string? TopData { get; set; }
-      public int Width { get; set; }
+      public int Size { get; set; }
     }
   }
 }
