@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { PixelView } from './PixelView';
+import { DisplayData } from './DisplayData';
 
 export class MainView extends Component {
   constructor(props) {
@@ -8,6 +10,7 @@ export class MainView extends Component {
       binaryData: { front: '', side: '', top: '' },
       files: { front: null, side: null, top: null },
       size: 20,
+      displayType: 'voxel',
       voxelData: null, meshData: null, smoothData: null
     };
   }
@@ -16,11 +19,9 @@ export class MainView extends Component {
 
   componentDidUpdate(_prevProps, prevState) {
     const { binaryData } = this.state;
-    if (prevState.binaryData.front !== binaryData.front) this.drawBinaryImage('frontCanvas', binaryData.front);
-    if (prevState.binaryData.side !== binaryData.side) this.drawBinaryImage('sideCanvas', binaryData.side);
-    if (prevState.binaryData.top !== binaryData.top) this.drawBinaryImage('topCanvas', binaryData.top);
-
-    if (prevState.binaryData.front !== binaryData.front || prevState.binaryData.side !== binaryData.side || prevState.binaryData.top !== binaryData.top) {
+    if (prevState.binaryData.front !== binaryData.front ||
+        prevState.binaryData.side !== binaryData.side ||
+        prevState.binaryData.top !== binaryData.top) {
       this.transformToVoxel();
     }
   }
@@ -82,23 +83,6 @@ export class MainView extends Component {
     });
   };
 
-  drawBinaryImage = (canvasId, binaryData) => {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    const { size } = this.state;
-    const scale = canvas.clientWidth / size;
-    canvas.width = size * scale;
-    canvas.height = size * scale;
-    for (let y = 0; y < size; y++) {
-      for (let x = 0; x < size; x++) {
-        const pixelIndex = y * size + x;
-        const color = binaryData[pixelIndex] === '0' ? '#0f0f0f' : '#f0f0f0';
-        ctx.fillStyle = color;
-        ctx.fillRect(x * scale, y * scale, scale, scale);
-      }
-    }
-  };
-
   transformToVoxel = async () => {
     const { binaryData, size } = this.state;
     if (binaryData.front && binaryData.side && binaryData.top) {
@@ -113,23 +97,30 @@ export class MainView extends Component {
     }
   };
 
+  setDisplayType = (type) => { this.setState({ displayType: type }); };
+
   render() {
+    const { binaryData, size, displayType, voxelData, meshData, smoothData } = this.state;
+
     return (
       <>
         <div>
           <button onClick={() => this.handleSizeChange(-1)}>-</button>
-          <span>{this.state.size}</span>
+          <span>{size}</span>
           <button onClick={() => this.handleSizeChange(1)}>+</button>
         </div>
         <input type="file" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'front')} />
         <input type="file" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'side')} />
         <input type="file" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'top')} />
-        <canvas id="frontCanvas"></canvas>
-        <canvas id="sideCanvas"></canvas>
-        <canvas id="topCanvas"></canvas>
-        <div>{this.state.voxelData}</div>
-        <div>{this.state.meshData}</div>
-        <div>{this.state.smoothData}</div>
+        <PixelView canvasId="frontCanvas" binaryData={binaryData.front} size={size} />
+        <PixelView canvasId="sideCanvas" binaryData={binaryData.side} size={size} />
+        <PixelView canvasId="topCanvas" binaryData={binaryData.top} size={size} />
+        <div>
+          <button onClick={() => this.setDisplayType('voxel')}>Voxel</button>
+          <button onClick={() => this.setDisplayType('mesh')}>Mesh</button>
+          <button onClick={() => this.setDisplayType('smooth')}>Smooth</button>
+        </div>
+        <DisplayData displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} />
       </>
     );
   }
