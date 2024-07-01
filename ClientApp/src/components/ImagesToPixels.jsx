@@ -4,8 +4,8 @@ export class ImagesToPixels extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      frontImageBinaryData: '', sideImageBinaryData: '', topImageBinaryData: '',
-      frontImageFile: null, sideImageFile: null, topImageFile: null,
+      binaryData: { front: '', side: '', top: '' },
+      files: { front: null, side: null, top: null },
       size: 20
     };
     this.fileInputs = { front: React.createRef(), side: React.createRef(), top: React.createRef() };
@@ -14,49 +14,50 @@ export class ImagesToPixels extends Component {
   componentDidMount() { this.loadInitialImages(); }
 
   componentDidUpdate(_prevProps, prevState) {
-    if (prevState.frontImageBinaryData !== this.state.frontImageBinaryData) this.drawBinaryImage('frontCanvas', this.state.frontImageBinaryData);
-    if (prevState.sideImageBinaryData !== this.state.sideImageBinaryData) this.drawBinaryImage('sideCanvas', this.state.sideImageBinaryData);
-    if (prevState.topImageBinaryData !== this.state.topImageBinaryData) this.drawBinaryImage('topCanvas', this.state.topImageBinaryData);
+    const { binaryData } = this.state;
+    if (prevState.binaryData.front !== binaryData.front) this.drawBinaryImage('frontCanvas', binaryData.front);
+    if (prevState.binaryData.side !== binaryData.side) this.drawBinaryImage('sideCanvas', binaryData.side);
+    if (prevState.binaryData.top !== binaryData.top) this.drawBinaryImage('topCanvas', binaryData.top);
   }
 
   loadInitialImages = async () => {
-    await this.loadAndUploadInitialImage('/images/front.png', 'frontImageBinaryData', 'frontImageFile');
-    await this.loadAndUploadInitialImage('/images/side.png', 'sideImageBinaryData', 'sideImageFile');
-    await this.loadAndUploadInitialImage('/images/top.png', 'topImageBinaryData', 'topImageFile');
+    await this.loadAndUploadInitialImage('/images/front.png', 'front');
+    await this.loadAndUploadInitialImage('/images/side.png', 'side');
+    await this.loadAndUploadInitialImage('/images/top.png', 'top');
   };
 
-  loadAndUploadInitialImage = async (filePath, dataKey, fileKey) => {
+  loadAndUploadInitialImage = async (filePath, key) => {
     const response = await fetch(filePath);
     const blob = await response.blob();
-    this.setState({ [fileKey]: blob });
-    this.readFileAndUpload(blob, dataKey);
+    this.setState(prevState => ({ files: { ...prevState.files, [key]: blob } }));
+    this.readFileAndUpload(blob, key);
   };
 
-  readFileAndUpload = (file, dataKey) => {
+  readFileAndUpload = (file, key) => {
     const reader = new FileReader();
     reader.onloadend = async () => {
       const base64String = reader.result.split(',')[1];
-      await this.uploadImage(base64String, dataKey);
+      await this.uploadImage(base64String, key);
     };
     reader.readAsDataURL(file);
   };
 
-  uploadImage = async (base64String, dataKey) => {
+  uploadImage = async (base64String, key) => {
     const response = await fetch('weatherforecast/upload', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ base64String, size: this.state.size })
     });
     if (response.ok) {
       const data = await response.json();
-      this.setState({ [dataKey]: data.binaryData });
+      this.setState(prevState => ({ binaryData: { ...prevState.binaryData, [key]: data.binaryData } }));
     }
   };
 
-  handleInputChange = async (event, dataKey, fileKey) => {
+  handleInputChange = async (event, key) => {
     const file = event.target.files[0];
     if (file) {
-      this.setState({ [fileKey]: file });
-      this.readFileAndUpload(file, dataKey);
+      this.setState(prevState => ({ files: { ...prevState.files, [key]: file } }));
+      this.readFileAndUpload(file, key);
     }
   };
 
@@ -65,16 +66,17 @@ export class ImagesToPixels extends Component {
       const newSize = Math.max(1, prevState.size + change);
       return { size: newSize };
     }, async () => {
-      if (this.state.frontImageFile) this.readFileAndUpload(this.state.frontImageFile, 'frontImageBinaryData');
-      if (this.state.sideImageFile) this.readFileAndUpload(this.state.sideImageFile, 'sideImageBinaryData');
-      if (this.state.topImageFile) this.readFileAndUpload(this.state.topImageFile, 'topImageBinaryData');
+      const { files } = this.state;
+      if (files.front) this.readFileAndUpload(files.front, 'front');
+      if (files.side) this.readFileAndUpload(files.side, 'side');
+      if (files.top) this.readFileAndUpload(files.top, 'top');
     });
   };
 
   drawBinaryImage = (canvasId, binaryData) => {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
-    const size = this.state.size;
+    const { size } = this.state;
     const scale = canvas.clientWidth / size;
     canvas.width = size * scale;
     canvas.height = size * scale;
@@ -96,9 +98,9 @@ export class ImagesToPixels extends Component {
           <span>{this.state.size}</span>
           <button onClick={() => this.handleSizeChange(1)}>+</button>
         </div>
-        <input type="file" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'frontImageBinaryData', 'frontImageFile')} />
-        <input type="file" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'sideImageBinaryData', 'sideImageFile')} />
-        <input type="file" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'topImageBinaryData', 'topImageFile')} />
+        <input type="file" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'front')} />
+        <input type="file" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'side')} />
+        <input type="file" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'top')} />
         <canvas id="frontCanvas"></canvas>
         <canvas id="sideCanvas"></canvas>
         <canvas id="topCanvas"></canvas>
