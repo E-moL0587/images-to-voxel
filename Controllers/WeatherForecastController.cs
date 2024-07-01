@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.IO;
-
 namespace ImagesToVoxel.Controllers {
+
   [ApiController]
   [Route("[controller]")]
   public class WeatherForecastController : ControllerBase {
+
     [HttpPost("upload")]
-    public ActionResult Upload([FromBody] Base64StringRequest request) {
-      return Ok(new { base64String = request.Base64String });
-    }
-    public class Base64StringRequest {
-      public string? Base64String { get; set; }
-    }
+    public ActionResult Upload([FromBody] Base64StringRequest request) { return Ok(new { base64String = request.Base64String }); }
+    public class Base64StringRequest { public string? Base64String { get; set; } }
   }
 }
