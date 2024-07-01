@@ -10,8 +10,10 @@ namespace ImagesToVoxel.Controllers {
             int sideIndex = y * size + z;
             int topIndex = x * size + z;
 
-            if (frontData[frontIndex] == '0' && sideData[sideIndex] == '0' && topData[topIndex] == '0') {
-              voxelData.Add(new int[] { x, y, z });
+            if (frontIndex < frontData.Length && sideIndex < sideData.Length && topIndex < topData.Length) {
+              if (frontData[frontIndex] == '0' && sideData[sideIndex] == '0' && topData[topIndex] == '0') {
+                voxelData.Add(new int[] { x, y, z });
+              }
             }
           }
         }
