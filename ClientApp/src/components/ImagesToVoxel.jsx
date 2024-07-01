@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export class ImagesToPixels extends Component {
+export class ImagesToVoxel extends Component {
   constructor(props) {
     super(props);
     this.fileInputs = { front: React.createRef(), side: React.createRef(), top: React.createRef() };
