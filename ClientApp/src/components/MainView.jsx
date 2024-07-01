@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { PixelView } from './PixelView';
-import { DisplayData } from './DisplayData';
+import { BinaryView } from './BinaryView';
+import { DisplayView } from './DisplayView';
 
 export class MainView extends Component {
   constructor(props) {
@@ -112,15 +112,15 @@ export class MainView extends Component {
         <input type="file" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'front')} />
         <input type="file" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'side')} />
         <input type="file" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'top')} />
-        <PixelView canvasId="frontCanvas" binaryData={binaryData.front} size={size} />
-        <PixelView canvasId="sideCanvas" binaryData={binaryData.side} size={size} />
-        <PixelView canvasId="topCanvas" binaryData={binaryData.top} size={size} />
+        <BinaryView canvasId="frontCanvas" binaryData={binaryData.front} size={size} />
+        <BinaryView canvasId="sideCanvas" binaryData={binaryData.side} size={size} />
+        <BinaryView canvasId="topCanvas" binaryData={binaryData.top} size={size} />
         <div>
           <button onClick={() => this.setDisplayType('voxel')}>Voxel</button>
           <button onClick={() => this.setDisplayType('mesh')}>Mesh</button>
           <button onClick={() => this.setDisplayType('smooth')}>Smooth</button>
         </div>
-        <DisplayData displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} />
+        <DisplayView displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} />
       </>
     );
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export class PixelView extends Component {
+export class BinaryView extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.binaryData !== this.props.binaryData) { this.drawBinaryImage(); }
   }

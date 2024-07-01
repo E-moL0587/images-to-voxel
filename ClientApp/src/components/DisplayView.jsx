@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const DisplayData = ({ displayType, voxelData, meshData, smoothData }) => {
+export const DisplayView = ({ displayType, voxelData, meshData, smoothData }) => {
   let displayContent;
 
   if (displayType === 'voxel') { displayContent = <div>{voxelData}</div>; }
