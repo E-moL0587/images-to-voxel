@@ -3,16 +3,29 @@ import React, { Component } from 'react';
 export class ImagesToPixels extends Component {
   constructor(props) {
     super(props);
-    this.state = { frontImageBinaryData: '', sideImageBinaryData: '', topImageBinaryData: '' };
+    this.state = { frontImageBinaryData: '', sideImageBinaryData: '', topImageBinaryData: '', voxelData: [], voxelWidth: 20 };
     this.fileInputs = { front: React.createRef(), side: React.createRef(), top: React.createRef() };
   }
 
   componentDidMount() { this.loadInitialImages(); }
 
   componentDidUpdate(_prevProps, prevState) {
-    if (prevState.frontImageBinaryData !== this.state.frontImageBinaryData) { this.drawBinaryImage('frontCanvas', this.state.frontImageBinaryData); }
-    if (prevState.sideImageBinaryData !== this.state.sideImageBinaryData) { this.drawBinaryImage('sideCanvas', this.state.sideImageBinaryData); }
-    if (prevState.topImageBinaryData !== this.state.topImageBinaryData) { this.drawBinaryImage('topCanvas', this.state.topImageBinaryData); }
+    if (prevState.frontImageBinaryData !== this.state.frontImageBinaryData) {
+      this.drawBinaryImage('frontCanvas', this.state.frontImageBinaryData);
+    }
+    if (prevState.sideImageBinaryData !== this.state.sideImageBinaryData) {
+      this.drawBinaryImage('sideCanvas', this.state.sideImageBinaryData);
+    }
+    if (prevState.topImageBinaryData !== this.state.topImageBinaryData) {
+      this.drawBinaryImage('topCanvas', this.state.topImageBinaryData);
+    }
+    if (
+      prevState.frontImageBinaryData !== this.state.frontImageBinaryData ||
+      prevState.sideImageBinaryData !== this.state.sideImageBinaryData ||
+      prevState.topImageBinaryData !== this.state.topImageBinaryData
+    ) {
+      this.convertToVoxels();
+    }
   }
 
   loadInitialImages = async () => {
@@ -43,12 +56,40 @@ export class ImagesToPixels extends Component {
       body: JSON.stringify({ base64String })
     });
 
-    if (response.ok) { const data = await response.json(); this.setState({ [stateKey]: data.binaryData }); }
+    if (response.ok) {
+      const data = await response.json();
+      this.setState({ [stateKey]: data.binaryData });
+    }
   };
 
   handleInputChange = async (event, stateKey) => {
     const file = event.target.files[0];
-    if (file) { this.readFileAndUpload(file, stateKey); }
+    if (file) {
+      this.readFileAndUpload(file, stateKey);
+    }
+  };
+
+  handleVoxelSizeChange = (event) => { this.setState({ voxelWidth: event.target.value }); };
+
+  convertToVoxels = async () => {
+    const { frontImageBinaryData, sideImageBinaryData, topImageBinaryData, voxelWidth } = this.state;
+    if (!frontImageBinaryData || !sideImageBinaryData || !topImageBinaryData) return;
+
+    const response = await fetch('weatherforecast/convert', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        frontData: frontImageBinaryData,
+        sideData: sideImageBinaryData,
+        topData: topImageBinaryData,
+        width: voxelWidth
+      })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      this.setState({ voxelData: data.voxelData });
+    }
   };
 
   drawBinaryImage = (canvasId, binaryData) => {
@@ -78,6 +119,8 @@ export class ImagesToPixels extends Component {
         <canvas id="frontCanvas"></canvas>
         <canvas id="sideCanvas"></canvas>
         <canvas id="topCanvas"></canvas>
+        <input type="number" value={this.state.voxelWidth} onChange={this.handleVoxelSizeChange} />
+        <pre>{this.state.voxelData}</pre>
       </>
     );
   }
