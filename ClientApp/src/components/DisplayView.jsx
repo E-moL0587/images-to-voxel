@@ -6,6 +6,7 @@ export class DisplayView extends Component {
   constructor(props) {
     super(props);
     this.canvasRef = createRef();
+    this.material = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
   }
 
   componentDidMount() {
@@ -19,41 +20,17 @@ export class DisplayView extends Component {
   initThree() {
     const width = this.canvasRef.current.clientWidth;
     const height = this.canvasRef.current.clientHeight;
-
-    // Scene
     this.scene = new THREE.Scene();
-
-    // Camera
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     this.camera.position.z = 20;
-
-    // Renderer
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvasRef.current });
     this.renderer.setSize(width, height);
-
-    // Controls
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
-    this.scene.add(ambientLight);
-
-    const directionalLight1 = new THREE.DirectionalLight(0xffffff, 2.0);
-    directionalLight1.position.set(10, 5, 10);
-    this.scene.add(directionalLight1);
-
-    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 2.0);
-    directionalLight2.position.set(-10, 5, 10);
-    this.scene.add(directionalLight2);
-
-    const directionalLight3 = new THREE.DirectionalLight(0xffffff, 2.0);
-    directionalLight3.position.set(0, 5, -10);
-    this.scene.add(directionalLight3);
-
-    // Initial render
+    this.scene.add(new THREE.AmbientLight(0xffffff, 1.0));
+    this.addDirectionalLight(10, 5, 10);
+    this.addDirectionalLight(-10, 5, 10);
+    this.addDirectionalLight(0, 5, -10);
     this.updateThree();
-
-    // Animation loop
     this.animate();
   }
 
@@ -64,45 +41,38 @@ export class DisplayView extends Component {
   };
 
   updateThree() {
-    // Clear previous objects
-    while (this.scene.children.length > 4) {
-      this.scene.remove(this.scene.children[4]);
-    }
-
+    while (this.scene.children.length > 4) this.scene.remove(this.scene.children[4]);
     const { displayType, voxelData, meshData, smoothData, color } = this.props;
-
-    if (displayType === 'voxel') {
-      this.addVoxels(voxelData, color);
-    } else if (displayType === 'mesh') {
-      this.addMesh(meshData, color);
-    } else if (displayType === 'smooth') {
-      this.addMesh(smoothData, color);
-    }
+    this.material.color.set(color);
+    if (displayType === 'voxel') this.addVoxels(voxelData);
+    else if (displayType === 'mesh' || displayType === 'smooth') this.addMesh(displayType === 'mesh' ? meshData : smoothData);
   }
 
-  addVoxels(data, color) {
+  addDirectionalLight(x, y, z) {
+    const light = new THREE.DirectionalLight(0xffffff, 2.0);
+    light.position.set(x, y, z);
+    this.scene.add(light);
+  }
+
+  addVoxels(data) {
     const surfaceVoxels = this.getSurfaceVoxels(data);
     const center = this.computeBoundingBox(surfaceVoxels).getCenter(new THREE.Vector3());
-
-    surfaceVoxels.forEach(([x, y, z], i) => {
-      const geometry = new THREE.BoxGeometry(1, 1, 1);
-      const material = new THREE.MeshPhongMaterial({ color, side: THREE.DoubleSide });
-      const cube = new THREE.Mesh(geometry, material);
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    surfaceVoxels.forEach(([x, y, z]) => {
+      const cube = new THREE.Mesh(geometry, this.material);
       cube.position.set(-x + center.x, -y + center.y, -z + center.z);
       this.scene.add(cube);
     });
   }
 
-  addMesh(data, color) {
+  addMesh(data) {
     if (!data) return;
-
     const center = this.computeBoundingBox(data).getCenter(new THREE.Vector3());
-    const vertices = new Float32Array(data.map(([x, y, z]) => [-x + center.x, -y + center.y, -z + center.z]).flat());
+    const vertices = new Float32Array(data.flatMap(([x, y, z]) => [-x + center.x, -y + center.y, -z + center.z]));
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
     geometry.computeVertexNormals();
-    const material = new THREE.MeshPhongMaterial({ color, side: THREE.DoubleSide });
-    const mesh = new THREE.Mesh(geometry, material);
+    const mesh = new THREE.Mesh(geometry, this.material);
     this.scene.add(mesh);
   }
 
