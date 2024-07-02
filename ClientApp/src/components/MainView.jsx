@@ -107,31 +107,33 @@ export class MainView extends Component {
 
     return (
       <>
-        <div>
+        <div style={{ backgroundColor: '#0f0f0f' }}>
+          <DisplayView className="displayView" displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
+          <div style={{ display: 'flex' }}>
+            <BinaryView className="binaryView" canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
+            <BinaryView className="binaryView" canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
+            <BinaryView className="binaryView" canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
+          </div>
           <button onClick={() => this.handleSizeChange(-1)}>-</button>
           <span>{size}</span>
           <button onClick={() => this.handleSizeChange(1)}>+</button>
-        </div>
-        <input type="file" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'front')} />
-        <input type="file" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'side')} />
-        <input type="file" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'top')} />
-        <BinaryView canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
-        <BinaryView canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
-        <BinaryView canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
-        <div>
+          <input type="file" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'front')} />
+          <input type="file" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'side')} />
+          <input type="file" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'top')} />
           <button onClick={() => this.setDisplayType('voxel')}>Voxel</button>
           <button onClick={() => this.setDisplayType('mesh')}>Mesh</button>
           <button onClick={() => this.setDisplayType('smooth')}>Smooth</button>
-        </div>
-        <DisplayView displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
-        <div>
-          <label>Red</label>
           <input type="range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', e.target.value)} />
-          <label>Green</label>
           <input type="range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', e.target.value)} />
-          <label>Blue</label>
           <input type="range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', e.target.value)} />
         </div>
+
+        <style>
+          {`
+            .binaryView {  }
+            .displayView {  }
+          `}
+        </style>
       </>
     );
   }
