@@ -1,12 +1,109 @@
 import React, { Component, createRef } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export class DisplayView extends Component {
   constructor(props) {
     super(props);
     this.canvasRef = createRef();
+  }
+
+  componentDidMount() {
+    this.initThree();
+  }
+
+  componentDidUpdate() {
+    this.updateThree();
+  }
+
+  initThree() {
+    const width = this.canvasRef.current.clientWidth;
+    const height = this.canvasRef.current.clientHeight;
+
+    // Scene
+    this.scene = new THREE.Scene();
+
+    // Camera
+    this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    this.camera.position.z = 20;
+
+    // Renderer
+    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvasRef.current });
+    this.renderer.setSize(width, height);
+
+    // Controls
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+    this.scene.add(ambientLight);
+
+    const directionalLight1 = new THREE.DirectionalLight(0xffffff, 2.0);
+    directionalLight1.position.set(10, 5, 10);
+    this.scene.add(directionalLight1);
+
+    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 2.0);
+    directionalLight2.position.set(-10, 5, 10);
+    this.scene.add(directionalLight2);
+
+    const directionalLight3 = new THREE.DirectionalLight(0xffffff, 2.0);
+    directionalLight3.position.set(0, 5, -10);
+    this.scene.add(directionalLight3);
+
+    // Initial render
+    this.updateThree();
+
+    // Animation loop
+    this.animate();
+  }
+
+  animate = () => {
+    requestAnimationFrame(this.animate);
+    this.controls.update();
+    this.renderer.render(this.scene, this.camera);
+  };
+
+  updateThree() {
+    // Clear previous objects
+    while (this.scene.children.length > 4) {
+      this.scene.remove(this.scene.children[4]);
+    }
+
+    const { displayType, voxelData, meshData, smoothData, color } = this.props;
+
+    if (displayType === 'voxel') {
+      this.addVoxels(voxelData, color);
+    } else if (displayType === 'mesh') {
+      this.addMesh(meshData, color);
+    } else if (displayType === 'smooth') {
+      this.addMesh(smoothData, color);
+    }
+  }
+
+  addVoxels(data, color) {
+    const surfaceVoxels = this.getSurfaceVoxels(data);
+    const center = this.computeBoundingBox(surfaceVoxels).getCenter(new THREE.Vector3());
+
+    surfaceVoxels.forEach(([x, y, z], i) => {
+      const geometry = new THREE.BoxGeometry(1, 1, 1);
+      const material = new THREE.MeshPhongMaterial({ color, side: THREE.DoubleSide });
+      const cube = new THREE.Mesh(geometry, material);
+      cube.position.set(-x + center.x, -y + center.y, -z + center.z);
+      this.scene.add(cube);
+    });
+  }
+
+  addMesh(data, color) {
+    if (!data) return;
+
+    const center = this.computeBoundingBox(data).getCenter(new THREE.Vector3());
+    const vertices = new Float32Array(data.map(([x, y, z]) => [-x + center.x, -y + center.y, -z + center.z]).flat());
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+    geometry.computeVertexNormals();
+    const material = new THREE.MeshPhongMaterial({ color, side: THREE.DoubleSide });
+    const mesh = new THREE.Mesh(geometry, material);
+    this.scene.add(mesh);
   }
 
   getSurfaceVoxels(data) {
@@ -21,54 +118,7 @@ export class DisplayView extends Component {
     return box;
   }
 
-  VoxelScene = ({ data, color }) => {
-    const surfaceVoxels = this.getSurfaceVoxels(data);
-    const center = this.computeBoundingBox(surfaceVoxels).getCenter(new THREE.Vector3());
-    return (
-      <group>
-        {surfaceVoxels.map(([x, y, z], i) => (
-          <mesh key={i} position={[-x + center.x, -y + center.y, -z + center.z]}>
-            <boxGeometry args={[1, 1, 1]} />
-            <meshPhongMaterial color={color} side={THREE.DoubleSide} />
-          </mesh>
-        ))}
-      </group>
-    );
-  };
-
-  MeshScene = ({ data, color }) => {
-    if (!data) return null;
-    const center = this.computeBoundingBox(data).getCenter(new THREE.Vector3());
-    const vertices = new Float32Array(data.map(([x, y, z]) => [-x + center.x, -y + center.y, -z + center.z]).flat());
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-    geometry.computeVertexNormals();
-    return (
-      <mesh geometry={geometry}>
-        <meshPhongMaterial color={color} side={THREE.DoubleSide} />
-      </mesh>
-    );
-  };
-
-  SceneWrapper = ({ displayType, voxelData, meshData, smoothData, color }) => (
-    <>
-      {displayType === 'voxel' && <this.VoxelScene data={voxelData} color={color} />}
-      {displayType === 'mesh' && <this.MeshScene data={meshData} color={color} />}
-      {displayType === 'smooth' && <this.MeshScene data={smoothData} color={color} />}
-    </>
-  );
-
   render() {
-    const { displayType, voxelData, meshData, smoothData, color } = this.props;
-    return (
-      <Canvas ref={this.canvasRef} camera={{ position: [0, 0, 20] }}>
-        <ambientLight intensity={1.0} />
-        <directionalLight position={[10, 5, 10]} intensity={2.0} />
-        <directionalLight position={[-10, 5, 10]} intensity={2.0} />
-        <directionalLight position={[0, 5, -10]} intensity={2.0} />
-        <OrbitControls />
-        <this.SceneWrapper displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={color} />
-      </Canvas>
-    );
+    return <canvas ref={this.canvasRef} style={{ width: '100%', height: '100%' }} />;
   }
 }
