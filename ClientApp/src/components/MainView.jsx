@@ -72,7 +72,7 @@ export class MainView extends Component {
 
   handleSizeChange = async (change) => {
     this.setState(prevState => {
-      const newSize = Math.max(1, prevState.size + change);
+      const newSize = Math.min(50, Math.max(5, prevState.size + change));
       return { size: newSize };
     }, async () => {
       const { files } = this.state;

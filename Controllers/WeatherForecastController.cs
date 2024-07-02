@@ -11,13 +11,9 @@ namespace ImagesToVoxel.Controllers {
         return BadRequest("Invalid image data or size");
       }
 
-      try {
-        var imageProcessor = new ImagesToPixels();
-        var binaryData = imageProcessor.Pixel(request.Base64String, request.Size);
-        return Ok(new { binaryData });
-      } catch (Exception ex) {
-        return StatusCode(500, $"Internal server error: {ex.Message}");
-      }
+      var imageProcessor = new ImagesToPixels();
+      var binaryData = imageProcessor.Pixel(request.Base64String, request.Size);
+      return Ok(new { binaryData });
     }
 
     [HttpPost("voxel")]
@@ -26,20 +22,16 @@ namespace ImagesToVoxel.Controllers {
         return BadRequest("Invalid voxel data or size");
       }
 
-      try {
-        var voxelProcessor = new PixelsToVoxel();
-        var voxelData = voxelProcessor.Voxel(request.FrontData, request.SideData, request.TopData, request.Size);
+      var voxelProcessor = new PixelsToVoxel();
+      var voxelData = voxelProcessor.Voxel(request.FrontData, request.SideData, request.TopData, request.Size);
 
-        var meshProcessor = new MarchingCubes();
-        var meshData = meshProcessor.Mesh(voxelData, request.Size, request.Size, request.Size);
+      var meshProcessor = new MarchingCubes();
+      var meshData = meshProcessor.Mesh(voxelData, request.Size, request.Size, request.Size);
 
-        var smoothProcessor = new LaplacianSmoothing();
-        var smoothData = smoothProcessor.Smooth(meshData);
+      var smoothProcessor = new LaplacianSmoothing();
+      var smoothData = smoothProcessor.Smooth(meshData);
 
-        return Ok(new { voxelData, meshData, smoothData });
-      } catch (Exception ex) {
-        return StatusCode(500, $"Internal server error: {ex.Message}");
-      }
+      return Ok(new { voxelData, meshData, smoothData });
     }
 
     public class ImageUploadRequest {
