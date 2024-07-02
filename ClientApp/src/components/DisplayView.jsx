@@ -24,7 +24,16 @@ export class DisplayView extends Component {
   VoxelScene = ({ data, color }) => {
     const surfaceVoxels = this.getSurfaceVoxels(data);
     const center = this.computeBoundingBox(surfaceVoxels).getCenter(new THREE.Vector3());
-    return <group>{surfaceVoxels.map(([x, y, z], i) => <mesh key={i} position={[-x + center.x, -y + center.y, -z + center.z]}><boxGeometry args={[1, 1, 1]} /><meshPhongMaterial color={color} /></mesh>)}</group>;
+    return (
+      <group>
+        {surfaceVoxels.map(([x, y, z], i) => (
+          <mesh key={i} position={[-x + center.x, -y + center.y, -z + center.z]}>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshPhongMaterial color={color} side={THREE.DoubleSide} />
+          </mesh>
+        ))}
+      </group>
+    );
   };
 
   MeshScene = ({ data, color }) => {
@@ -34,7 +43,11 @@ export class DisplayView extends Component {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
     geometry.computeVertexNormals();
-    return <mesh geometry={geometry}><meshPhongMaterial color={color} /></mesh>;
+    return (
+      <mesh geometry={geometry}>
+        <meshPhongMaterial color={color} side={THREE.DoubleSide} />
+      </mesh>
+    );
   };
 
   SceneWrapper = ({ displayType, voxelData, meshData, smoothData, color }) => (
