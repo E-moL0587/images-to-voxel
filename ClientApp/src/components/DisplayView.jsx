@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-export const DisplayView = ({ displayType, voxelData, meshData, smoothData }) => {
+export const DisplayView = ({ displayType, voxelData, meshData, smoothData, color }) => {
   const canvasRef = useRef(null);
   const scenes = useRef({
     voxel: new THREE.Scene(),
@@ -41,13 +41,12 @@ export const DisplayView = ({ displayType, voxelData, meshData, smoothData }) =>
     const center = new THREE.Vector3();
     boundingBox.getCenter(center);
 
+    const material = new THREE.MeshPhongMaterial({ color: new THREE.Color(color) });
+
     if (isVoxel) {
       const surfaceData = getSurfaceVoxels(data);
       surfaceData.forEach(([x, y, z]) => {
-        const voxelMesh = new THREE.Mesh(
-          new THREE.BoxGeometry(1, 1, 1),
-          new THREE.MeshPhongMaterial({ color: new THREE.Color(1, 150 / 255, 1) })
-        );
+        const voxelMesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);
         voxelMesh.position.set(-(x - center.x), -(y - center.y), -(z - center.z));
         scene.add(voxelMesh);
       });
@@ -59,11 +58,10 @@ export const DisplayView = ({ displayType, voxelData, meshData, smoothData }) =>
       });
       geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
       geometry.computeVertexNormals();
-      const material = new THREE.MeshPhongMaterial({ color: new THREE.Color(1, 150 / 255, 1), side: THREE.DoubleSide });
       const mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
     }
-  }, [getSurfaceVoxels]);
+  }, [getSurfaceVoxels, color]);
 
   const initScenes = useCallback(() => {
     initScene(scenes.voxel, voxelData, true);

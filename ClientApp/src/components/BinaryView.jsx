@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 
 export class BinaryView extends Component {
   componentDidUpdate(prevProps) {
-    if (prevProps.binaryData !== this.props.binaryData) { this.drawBinaryImage(); }
+    if (prevProps.binaryData !== this.props.binaryData || prevProps.color !== this.props.color) {
+      this.drawBinaryImage();
+    }
   }
 
   drawBinaryImage = () => {
-    const { canvasId, binaryData, size } = this.props;
+    const { canvasId, binaryData, size, color } = this.props;
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
     const scale = canvas.clientWidth / size;
@@ -15,8 +17,8 @@ export class BinaryView extends Component {
     for (let y = 0; y < size; y++) {
       for (let x = 0; x < size; x++) {
         const pixelIndex = y * size + x;
-        const color = binaryData[pixelIndex] === '0' ? '#0f0f0f' : '#f0f0f0';
-        ctx.fillStyle = color;
+        const pixelColor = binaryData[pixelIndex] === '0' ? color : '#f0f0f0';
+        ctx.fillStyle = pixelColor;
         ctx.fillRect(x * scale, y * scale, scale, scale);
       }
     }

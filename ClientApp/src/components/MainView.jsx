@@ -11,7 +11,8 @@ export class MainView extends Component {
       files: { front: null, side: null, top: null },
       size: 20,
       displayType: 'voxel',
-      voxelData: null, meshData: null, smoothData: null
+      voxelData: null, meshData: null, smoothData: null,
+      red: 255, green: 200, blue: 255
     };
   }
 
@@ -41,12 +42,10 @@ export class MainView extends Component {
 
   readFileAndUpload = (file, key) => {
     const reader = new FileReader();
-
     reader.onloadend = async () => {
       const base64String = reader.result.split(',')[1];
       await this.uploadImage(base64String, key);
     };
-
     reader.readAsDataURL(file);
   };
 
@@ -99,8 +98,12 @@ export class MainView extends Component {
 
   setDisplayType = (type) => { this.setState({ displayType: type }); };
 
+  handleColorChange = (color, value) => {
+    this.setState({ [color]: value });
+  };
+
   render() {
-    const { binaryData, size, displayType, voxelData, meshData, smoothData } = this.state;
+    const { binaryData, size, displayType, voxelData, meshData, smoothData, red, green, blue } = this.state;
 
     return (
       <>
@@ -112,15 +115,23 @@ export class MainView extends Component {
         <input type="file" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'front')} />
         <input type="file" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'side')} />
         <input type="file" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'top')} />
-        <BinaryView canvasId="frontCanvas" binaryData={binaryData.front} size={size} />
-        <BinaryView canvasId="sideCanvas" binaryData={binaryData.side} size={size} />
-        <BinaryView canvasId="topCanvas" binaryData={binaryData.top} size={size} />
+        <BinaryView canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
+        <BinaryView canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
+        <BinaryView canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
         <div>
           <button onClick={() => this.setDisplayType('voxel')}>Voxel</button>
           <button onClick={() => this.setDisplayType('mesh')}>Mesh</button>
           <button onClick={() => this.setDisplayType('smooth')}>Smooth</button>
         </div>
-        <DisplayView displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} />
+        <DisplayView displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
+        <div>
+          <label>Red</label>
+          <input type="range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', e.target.value)} />
+          <label>Green</label>
+          <input type="range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', e.target.value)} />
+          <label>Blue</label>
+          <input type="range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', e.target.value)} />
+        </div>
       </>
     );
   }
