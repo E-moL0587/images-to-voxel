@@ -102,42 +102,61 @@ export class MainView extends Component {
     this.setState({ [color]: value });
   };
 
+  handleCanvasClick = (key) => {
+    this.fileInputs[key].current.click();
+  };
+
   render() {
     const { binaryData, size, displayType, voxelData, meshData, smoothData, red, green, blue } = this.state;
 
     return (
       <>
         <div className="mainContainer">
-        <div className="displayContainer">
-          <DisplayView displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
-        </div>
-        <div className="binaryContainer">
-          <BinaryView canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
-          <BinaryView canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
-          <BinaryView canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
-        </div>
-        <div className="controls">
-          <button onClick={() => this.handleSizeChange(-1)}>-</button>
-          <span>{size}</span>
-          <button onClick={() => this.handleSizeChange(1)}>+</button>
-          <input type="file" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'front')} />
-          <input type="file" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'side')} />
-          <input type="file" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'top')} />
-          <button onClick={() => this.setDisplayType('voxel')}>Voxel</button>
-          <button onClick={() => this.setDisplayType('mesh')}>Mesh</button>
-          <button onClick={() => this.setDisplayType('smooth')}>Smooth</button>
-          <input type="range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', e.target.value)} />
-          <input type="range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', e.target.value)} />
-          <input type="range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', e.target.value)} />
-        </div>
+          <div className="displayContainer">
+            <DisplayView displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
+          </div>
+
+          <div className="binaryContainer">
+            <BinaryView canvasId="frontCanvas" onClick={() => this.handleCanvasClick('front')} binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
+            <BinaryView canvasId="sideCanvas" onClick={() => this.handleCanvasClick('side')} binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
+            <BinaryView canvasId="topCanvas" onClick={() => this.handleCanvasClick('top')} binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
+          </div>
+
+          <div className="controls">
+            <div className="colorControls">
+              <input type="range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', e.target.value)} />
+              <input type="range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', e.target.value)} />
+              <input type="range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', e.target.value)} />
+            </div>
+
+            <div>
+              <div className="sizeControls">
+                <button onClick={() => this.handleSizeChange(-1)}>-</button>
+                <span>{size}</span>
+                <button onClick={() => this.handleSizeChange(1)}>+</button>
+              </div>
+
+              <div className="displayButtons">
+                <button onClick={() => this.setDisplayType('voxel')}>Voxel</button>
+                <button onClick={() => this.setDisplayType('mesh')}>Mesh</button>
+                <button onClick={() => this.setDisplayType('smooth')}>Smooth</button>
+              </div>
+            </div>
+
+            <input type="file" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'front')} style={{ display: 'none' }} />
+            <input type="file" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'side')} style={{ display: 'none' }} />
+            <input type="file" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'top')} style={{ display: 'none' }} />
+          </div>
         </div>
         
         <style>
           {`
-            .mainContainer { position: fixed; }
-            .displayContainer { position: fixed; top: 0; }
-            .binaryContainer { position: fixed; display: flex; }
-            .controls { position: fixed; }
+            .mainContainer { position: fixed; width: 100%; height: 100%; background-color: #f00ff0; }
+            .displayContainer { position: fixed; top: 5vw; }
+            .binaryContainer { position: fixed; top: 110vw; display: flex; justify-content: space-around; width: 100%; }
+            .controls { position: absolute; top: 150vw; width: 100%; display: flex; justify-content: space-between; }
+            .colorControls { display: flex; flex-direction: column; }
+            .sizeControls, .displayButtons {}
           `}
         </style>
       </>
