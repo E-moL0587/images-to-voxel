@@ -89,6 +89,6 @@ export class DisplayView extends Component {
   }
 
   render() {
-    return <canvas ref={this.canvasRef} style={{ width: '100%', height: '100%' }} />;
+    return <canvas ref={this.canvasRef} style={{ width: '100vw', height: '100vw' }} />;
   }
 }

@@ -107,13 +107,16 @@ export class MainView extends Component {
 
     return (
       <>
-        <div style={{ backgroundColor: '#0f0f0f' }}>
-          <DisplayView className="displayView" displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
-          <div style={{ display: 'flex' }}>
-            <BinaryView className="binaryView" canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
-            <BinaryView className="binaryView" canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
-            <BinaryView className="binaryView" canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
-          </div>
+        <div className="mainContainer">
+        <div className="displayContainer">
+          <DisplayView displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
+        </div>
+        <div className="binaryContainer">
+          <BinaryView canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
+          <BinaryView canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
+          <BinaryView canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
+        </div>
+        <div className="controls">
           <button onClick={() => this.handleSizeChange(-1)}>-</button>
           <span>{size}</span>
           <button onClick={() => this.handleSizeChange(1)}>+</button>
@@ -127,11 +130,14 @@ export class MainView extends Component {
           <input type="range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', e.target.value)} />
           <input type="range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', e.target.value)} />
         </div>
-
+        </div>
+        
         <style>
           {`
-            .binaryView {  }
-            .displayView {  }
+            .mainContainer { position: fixed; }
+            .displayContainer { position: fixed; top: 0; }
+            .binaryContainer { position: fixed; display: flex; }
+            .controls { position: fixed; }
           `}
         </style>
       </>
