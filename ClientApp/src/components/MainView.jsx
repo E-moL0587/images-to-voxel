@@ -12,7 +12,7 @@ export class MainView extends Component {
       size: 20,
       displayType: 'voxel',
       voxelData: null, meshData: null, smoothData: null,
-      red: 255, green: 200, blue: 255
+      red: 0, green: 128, blue: 255
     };
   }
 

@@ -48,9 +48,10 @@ export class DisplayView extends Component {
   render() {
     const { displayType, voxelData, meshData, smoothData, color } = this.props;
     return (
-      <Canvas ref={this.canvasRef} style={{ width: '100vw', height: '100vw', background: '#000' }}>
+      <Canvas ref={this.canvasRef} camera={{ position: [0, 0, 20] }} style={{ width: '100vw', height: '100vw', background: '#000' }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 10]} intensity={1.5} />
+        <directionalLight position={[-10, 10, 10]} intensity={1.5} />
         <OrbitControls />
         <this.SceneWrapper displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={color} />
       </Canvas>
