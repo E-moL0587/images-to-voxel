@@ -9,18 +9,48 @@ export class Mibrim extends Component {
     super(props);
     this.state = {
       points: this.centerPoints(pointsArray[0]),
-      currentIndex: 0
+      randomPoints: this.generateRandomPoints(pointsArray[0]),
+      currentIndex: 0,
+      interpolationProgress: 0,
+      initialInterpolationDone: false
     };
     this.switchInterval = 100;
+    this.interpolationDuration = 3000;
+    this.startTime = null;
+    this.animationFrameId = null;
   }
 
   componentDidMount() {
-    this.interval = setInterval(this.switchPoints, this.switchInterval);
+    this.startTime = performance.now();
+    this.animationFrameId = requestAnimationFrame(this.interpolatePoints);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
+    cancelAnimationFrame(this.animationFrameId);
   }
+
+  generateRandomPoints = (points) => {
+    if (!points || points.length === 0) return points;
+    return points.map(() => [
+      (Math.random() - 0.5) * 40,
+      (Math.random() - 0.5) * 40,
+      (Math.random() - 0.5) * 40
+    ]);
+  };
+
+  interpolatePoints = (timestamp) => {
+    if (!this.startTime) this.startTime = timestamp;
+    const progress = (timestamp - this.startTime) / this.interpolationDuration;
+
+    if (progress < 1) {
+      this.setState({ interpolationProgress: progress });
+      this.animationFrameId = requestAnimationFrame(this.interpolatePoints);
+    } else {
+      this.setState({ interpolationProgress: 1, initialInterpolationDone: true });
+      this.interval = setInterval(this.switchPoints, this.switchInterval);
+    }
+  };
 
   switchPoints = () => {
     this.setState((prevState) => {
@@ -43,19 +73,25 @@ export class Mibrim extends Component {
   };
 
   renderPoints = () => {
-    const { points } = this.state;
-    if (points.length === 0) return null;
+    const { points, randomPoints, interpolationProgress, initialInterpolationDone } = this.state;
+    if (points.length === 0 || randomPoints.length === 0) return null;
 
-    const vertices = points.map(p => new THREE.Vector3(...p));
+    const displayPoints = initialInterpolationDone ? points : points.map((p, i) => [
+      randomPoints[i][0] * (1 - interpolationProgress) + p[0] * interpolationProgress,
+      randomPoints[i][1] * (1 - interpolationProgress) + p[1] * interpolationProgress,
+      randomPoints[i][2] * (1 - interpolationProgress) + p[2] * interpolationProgress,
+    ]);
+
+    const vertices = displayPoints.map(p => new THREE.Vector3(...p));
     const geometry = new THREE.BufferGeometry().setFromPoints(vertices);
-    const material = new THREE.PointsMaterial({ size: 0.1, color: '#ff0000' });
+    const material = new THREE.PointsMaterial({ size: 0.05, color: '#ff00ff' });
     return <points geometry={geometry} material={material} />;
   };
 
   render() {
     return (
-      <div>
-        <Canvas camera={{ position: [5, 0, 10] }}>
+      <>
+        <Canvas style={{ width: '100vw', height: '100vh', background: '#0f0f0f' }} camera={{ position: [5, 0, 10] }}>
           <ambientLight intensity={1.0} />
           <directionalLight position={[10, 5, 10]} intensity={1.0} />
           <directionalLight position={[-10, 5, 10]} intensity={1.0} />
@@ -63,7 +99,7 @@ export class Mibrim extends Component {
           <OrbitControls />
           {this.renderPoints()}
         </Canvas>
-      </div>
+      </>
     );
   }
 }
