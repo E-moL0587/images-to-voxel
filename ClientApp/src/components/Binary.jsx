@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export class BinaryView extends Component {
+export class Binary extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.binaryData !== this.props.binaryData || prevProps.color !== this.props.color) {
       this.drawBinaryImage();

@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
-export class DisplayView extends Component {
+export class Display extends Component {
   constructor(props) {
     super(props);
     this.state = { points: [], transitionPoints: [], transitionInProgress: false };

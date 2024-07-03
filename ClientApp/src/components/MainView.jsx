@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { BinaryView } from './BinaryView';
-import { DisplayView } from './DisplayView';
+import { Binary } from './Binary';
+import { Display } from './Display';
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 
@@ -134,13 +134,15 @@ export class MainView extends Component {
       <>
         <div className="mainContainer">
           <div className="displayContainer">
-            <DisplayView ref={this.displayRef} displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
+            <Display ref={this.displayRef} displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
           </div>
 
+          <textarea value={JSON.stringify(smoothData)} readOnly />
+
           <div className="binaryContainer">
-            <BinaryView canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
-            <BinaryView canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
-            <BinaryView canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
+            <Binary canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
+            <Binary canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
+            <Binary canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
           </div>
 
           <div className="controls">
