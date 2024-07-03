@@ -15,7 +15,7 @@ export class DisplayView extends Component {
     this.meshes = [];
     this.materialRef = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
     this.startTransitionTime = null;
-    this.transitionDuration = 1000;
+    this.transitionDuration = 500;
   }
 
   componentDidMount() {
