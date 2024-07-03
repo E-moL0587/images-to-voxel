@@ -7,8 +7,9 @@ import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 export class DisplayView extends Component {
   constructor(props) {
     super(props);
-    this.materialRef = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
     this.sceneRef = createRef();
+    this.meshes = [];
+    this.materialRef = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
   }
 
   componentDidMount() {
@@ -25,11 +26,18 @@ export class DisplayView extends Component {
     if (!data) return [];
     const surfaceVoxels = this.getSurfaceVoxels(data);
     const center = this.computeBoundingBox(surfaceVoxels).getCenter(new THREE.Vector3());
-    return surfaceVoxels.map(([x, y, z], index) => (
-      <mesh key={index} position={[-x + center.x, -y + center.y, -z + center.z]} material={this.materialRef}>
-        <boxGeometry args={[1, 1, 1]} />
-      </mesh>
-    ));
+    return surfaceVoxels.map(([x, y, z], index) => {
+      const position = new THREE.Vector3(-x + center.x, -y + center.y, -z + center.z);
+      const mesh = new THREE.Mesh(
+        new THREE.BoxGeometry(1, 1, 1),
+        this.materialRef
+      );
+      mesh.position.copy(position);
+      this.meshes.push(mesh);
+      return (
+        <primitive object={mesh} key={index} />
+      );
+    });
   };
 
   addMesh = (data) => {
@@ -39,9 +47,9 @@ export class DisplayView extends Component {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
     geometry.computeVertexNormals();
-    return (
-      <mesh geometry={geometry} material={this.materialRef} />
-    );
+    const mesh = new THREE.Mesh(geometry, this.materialRef);
+    this.meshes.push(mesh);
+    return <primitive object={mesh} />;
   };
 
   getSurfaceVoxels = (data) => {
@@ -66,7 +74,9 @@ export class DisplayView extends Component {
       if (window.confirm('Do you want to export the 3D model?')) {
         const exporter = new GLTFExporter();
         const options = { binary: true };
-        exporter.parse(this.sceneRef.current, (result) => {
+        const scene = new THREE.Scene();
+        this.meshes.forEach(mesh => scene.add(mesh));
+        exporter.parse(scene, (result) => {
           if (result instanceof ArrayBuffer) {
             const blob = new Blob([result], { type: 'model/gltf-binary' });
             const url = URL.createObjectURL(blob);
@@ -89,6 +99,7 @@ export class DisplayView extends Component {
 
   render() {
     const { displayType, voxelData, meshData, smoothData } = this.props;
+    this.meshes = [];
     return (
       <>
         <Canvas style={{ width: '100vw', height: '100vw' }} ref={this.sceneRef}>
