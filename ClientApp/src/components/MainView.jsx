@@ -156,12 +156,18 @@ export class MainView extends Component {
               <button onClick={() => this.setDisplayType('smooth')} disabled={displayType === 'smooth'}>Smooth</button>
             </div>
 
-            <button onClick={this.exportGLB}>Export GLB</button>
+            <button onClick={this.exportGLB}>Export</button>
             <input type="file" accept="image/*" ref={this.fileInputs.front} onChange={(event) => this.handleInputChange(event, 'front')} />
             <input type="file" accept="image/*" ref={this.fileInputs.side} onChange={(event) => this.handleInputChange(event, 'side')} />
             <input type="file" accept="image/*" ref={this.fileInputs.top} onChange={(event) => this.handleInputChange(event, 'top')} />
           </div>
         </div>
+
+        <style>
+          {`
+            .mainContainer
+          `}
+        </style>
       </>
     );
   }
