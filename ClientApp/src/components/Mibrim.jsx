@@ -55,7 +55,7 @@ export class Mibrim extends Component {
   render() {
     return (
       <div>
-        <Canvas>
+        <Canvas camera={{ position: [5, 0, 10] }}>
           <ambientLight intensity={1.0} />
           <directionalLight position={[10, 5, 10]} intensity={1.0} />
           <directionalLight position={[-10, 5, 10]} intensity={1.0} />
