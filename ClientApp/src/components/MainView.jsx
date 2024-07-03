@@ -137,13 +137,15 @@ export class MainView extends Component {
             <Display ref={this.displayRef} displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
           </div>
 
-          <textarea value={JSON.stringify(smoothData)} readOnly />
+          {/* <textarea value={JSON.stringify(smoothData)} readOnly /> */}
 
           <div className="binaryContainer">
             <Binary canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
             <Binary canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
             <Binary canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
           </div>
+
+          <button onClick={this.props.switchToTitle}>もどる</button>
 
           <div className="controls">
             <div className="colorControls">
