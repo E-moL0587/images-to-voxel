@@ -8,11 +8,14 @@ export class DisplayView extends Component {
     super(props);
     this.state = {
       points: [],
+      transitionPoints: [],
       transitionInProgress: false,
     };
     this.sceneRef = createRef();
     this.meshes = [];
     this.materialRef = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
+    this.startTransitionTime = null;
+    this.transitionDuration = 1000;
   }
 
   componentDidMount() {
@@ -39,10 +42,29 @@ export class DisplayView extends Component {
     }
 
     this.setState({ points: newPoints, transitionInProgress: true }, () => {
-      setTimeout(() => {
-        this.setState({ transitionInProgress: false });
-      }, 1000);
+      this.startTransitionTime = Date.now();
+      this.animateTransition();
     });
+  };
+
+  animateTransition = () => {
+    const { points, transitionPoints } = this.state;
+    const now = Date.now();
+    const elapsed = now - this.startTransitionTime;
+    const t = Math.min(elapsed / this.transitionDuration, 1);
+
+    const newTransitionPoints = points.map((point, index) => {
+      const start = transitionPoints[index] || new THREE.Vector3();
+      return new THREE.Vector3().lerpVectors(start, point, t);
+    });
+
+    if (t < 1) {
+      this.setState({ transitionPoints: newTransitionPoints }, () => {
+        requestAnimationFrame(this.animateTransition);
+      });
+    } else {
+      this.setState({ transitionInProgress: false });
+    }
   };
 
   convertToPoints = (data) => {
@@ -97,10 +119,10 @@ export class DisplayView extends Component {
   };
 
   renderPoints = () => {
-    const { points } = this.state;
-    if (points.length === 0) return null;
+    const { transitionPoints } = this.state;
+    if (transitionPoints.length === 0) return null;
 
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const geometry = new THREE.BufferGeometry().setFromPoints(transitionPoints);
     const material = new THREE.PointsMaterial({ size: 0.1, color: this.props.color });
     return <points geometry={geometry} material={material} />;
   };
