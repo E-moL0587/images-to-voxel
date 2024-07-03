@@ -134,11 +134,11 @@ export class DisplayView extends Component {
 
     return (
       <>
-        <Canvas style={{ width: '50vw', height: '50vw' }} ref={this.sceneRef}>
+        <Canvas style={{ width: '100vw', height: '100vw' }} ref={this.sceneRef}>
           <ambientLight intensity={1.0} />
-          <directionalLight position={[10, 5, 10]} intensity={2.0} />
-          <directionalLight position={[-10, 5, 10]} intensity={2.0} />
-          <directionalLight position={[0, 5, -10]} intensity={2.0} />
+          <directionalLight position={[10, 5, 10]} intensity={1.0} />
+          <directionalLight position={[-10, 5, 10]} intensity={1.0} />
+          <directionalLight position={[0, 5, -10]} intensity={1.0} />
           <OrbitControls />
           {transitionInProgress ? (
             this.renderPoints()
