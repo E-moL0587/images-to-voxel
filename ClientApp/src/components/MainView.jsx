@@ -12,15 +12,10 @@ export class MainView extends Component {
     this.state = {
       binaryData: { front: '', side: '', top: '' },
       files: { front: null, side: null, top: null },
-      size: 20,
-      iterations: 2,
-      lambda: 0.5,
+      size: 20, iterations: 2, lambda: 0.5,
       displayType: 'voxel',
       voxelData: null, meshData: null, smoothData: null,
-      red: 0, green: 128, blue: 255,
-      tempSize: 20,
-      tempIterations: 2,
-      tempLambda: 0.5
+      red: 0, green: 128, blue: 255
     };
   }
 
@@ -28,9 +23,7 @@ export class MainView extends Component {
 
   componentDidUpdate(_prevProps, prevState) {
     const { binaryData } = this.state;
-    if (prevState.binaryData.front !== binaryData.front ||
-        prevState.binaryData.side !== binaryData.side ||
-        prevState.binaryData.top !== binaryData.top) {
+    if (prevState.binaryData.front !== binaryData.front || prevState.binaryData.side !== binaryData.side || prevState.binaryData.top !== binaryData.top) {
       this.transformToVoxel();
     }
   }
@@ -78,36 +71,13 @@ export class MainView extends Component {
     }
   };
 
-  handleSizeChange = (e) => { this.setState({ tempSize: parseInt(e.target.value, 10) }); };
-  
-  handleIterationsChange = (e) => { this.setState({ tempIterations: parseInt(e.target.value, 10) }); };
-  
-  handleLambdaChange = (e) => { this.setState({ tempLambda: parseFloat(e.target.value) }); };
-
-  applyChanges = async () => {
-    this.setState(
-      { size: this.state.tempSize, iterations: this.state.tempIterations, lambda: this.state.tempLambda },
-      () => {
-        const { files } = this.state;
-        if (files.front) this.readFileAndUpload(files.front, 'front');
-        if (files.side) this.readFileAndUpload(files.side, 'side');
-        if (files.top) this.readFileAndUpload(files.top, 'top');
-      }
-    );
-  };
-
   transformToVoxel = async () => {
     const { binaryData, size, iterations, lambda } = this.state;
     if (binaryData.front && binaryData.side && binaryData.top) {
       const response = await fetch('weatherforecast/voxel', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          frontData: binaryData.front,
-          sideData: binaryData.side,
-          topData: binaryData.top,
-          size,
-          iterations,
-          lambda
+          frontData: binaryData.front, sideData: binaryData.side, topData: binaryData.top, size, iterations, lambda
         })
       });
       if (response.ok) {
@@ -121,8 +91,6 @@ export class MainView extends Component {
 
   handleColorChange = (color, value) => { this.setState({ [color]: value }); };
 
-  handleCanvasClick = (key) => { this.fileInputs[key].current.click(); };
-
   exportGLB = () => {
     if (this.displayRef.current) {
       if (window.confirm('Do you want to export the 3D model?')) {
@@ -133,9 +101,7 @@ export class MainView extends Component {
         this.displayRef.current.meshes.forEach(mesh => {
           const clonedMesh = mesh.clone();
           clonedMesh.material = new THREE.MeshStandardMaterial({
-            color: mesh.material.color,
-            roughness: 1,
-            metalness: 0
+            color: mesh.material.color, roughness: 1, metalness: 0
           });
           scene.add(clonedMesh);
         });
@@ -162,26 +128,19 @@ export class MainView extends Component {
   };
 
   render() {
-    const { binaryData, size, displayType, voxelData, meshData, smoothData, red, green, blue, tempSize, tempIterations, tempLambda } = this.state;
+    const { binaryData, size, displayType, voxelData, meshData, smoothData, red, green, blue } = this.state;
 
     return (
       <>
         <div className="mainContainer">
           <div className="displayContainer">
-            <DisplayView
-              ref={this.displayRef}
-              displayType={displayType}
-              voxelData={voxelData}
-              meshData={meshData}
-              smoothData={smoothData}
-              color={`rgb(${red},${green},${blue})`}
-            />
+            <DisplayView ref={this.displayRef} displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
           </div>
 
           <div className="binaryContainer">
-            <BinaryView canvasId="frontCanvas" onClick={() => this.handleCanvasClick('front')} binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
-            <BinaryView canvasId="sideCanvas" onClick={() => this.handleCanvasClick('side')} binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
-            <BinaryView canvasId="topCanvas" onClick={() => this.handleCanvasClick('top')} binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
+            <BinaryView canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
+            <BinaryView canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
+            <BinaryView canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
           </div>
 
           <div className="controls">
@@ -190,23 +149,6 @@ export class MainView extends Component {
               <input type="range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', parseInt(e.target.value))} />
               <input type="range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', parseInt(e.target.value))} />
             </div>
-
-            <div className="sizeControls">
-              <label>Size: {tempSize}</label>
-              <input type="range" min="5" max="50" value={tempSize} onChange={this.handleSizeChange} />
-            </div>
-
-            <div className="iterationControls">
-              <label>Iterations: {tempIterations}</label>
-              <input type="range" min="1" max="10" value={tempIterations} onChange={this.handleIterationsChange} />
-            </div>
-
-            <div className="lambdaControls">
-              <label>Lambda: {tempLambda}</label>
-              <input type="range" min="0.1" max="1.0" step="0.1" value={tempLambda} onChange={this.handleLambdaChange} />
-            </div>
-
-            <button onClick={this.applyChanges}>Update</button>
 
             <div className="displayControls">
               <button onClick={() => this.setDisplayType('voxel')} disabled={displayType === 'voxel'}>Voxel</button>
