@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { BinaryView } from './BinaryView';
 import { DisplayView } from './DisplayView';
+import * as THREE from 'three';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 
 export class MainView extends Component {
   constructor(props) {
     super(props);
     this.fileInputs = { front: React.createRef(), side: React.createRef(), top: React.createRef() };
+    this.displayRef = React.createRef();
     this.state = {
       binaryData: { front: '', side: '', top: '' },
       files: { front: null, side: null, top: null },
@@ -98,12 +101,46 @@ export class MainView extends Component {
 
   setDisplayType = (type) => { this.setState({ displayType: type }); };
 
-  handleColorChange = (color, value) => {
-    this.setState({ [color]: value });
-  };
+  handleColorChange = (color, value) => { this.setState({ [color]: value }); };
 
-  handleCanvasClick = (key) => {
-    this.fileInputs[key].current.click();
+  handleCanvasClick = (key) => { this.fileInputs[key].current.click(); };
+
+  exportGLB = () => {
+    if (this.displayRef.current) {
+      if (window.confirm('Do you want to export the 3D model?')) {
+        const exporter = new GLTFExporter();
+        const options = { binary: true };
+        const scene = new THREE.Scene();
+
+        this.displayRef.current.meshes.forEach(mesh => {
+          const clonedMesh = mesh.clone();
+          clonedMesh.material = new THREE.MeshStandardMaterial({
+            color: mesh.material.color,
+            roughness: 1,
+            metalness: 0
+          });
+          scene.add(clonedMesh);
+        });
+
+        exporter.parse(scene, (result) => {
+          if (result instanceof ArrayBuffer) {
+            const blob = new Blob([result], { type: 'model/gltf-binary' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'model.glb';
+            a.click();
+            URL.revokeObjectURL(url);
+          } else {
+            console.error('GLTF Export Error: Result is not an ArrayBuffer.');
+          }
+        }, (error) => {
+          console.error('GLTF Export Error:', error);
+        }, options);
+      }
+    } else {
+      console.error('DisplayView reference is not available.');
+    }
   };
 
   render() {
@@ -113,7 +150,14 @@ export class MainView extends Component {
       <>
         <div className="mainContainer">
           <div className="displayContainer">
-            <DisplayView displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
+            <DisplayView
+              ref={this.displayRef}
+              displayType={displayType}
+              voxelData={voxelData}
+              meshData={meshData}
+              smoothData={smoothData}
+              color={`rgb(${red},${green},${blue})`}
+            />
           </div>
 
           <div className="binaryContainer">
@@ -141,24 +185,17 @@ export class MainView extends Component {
                 <button onClick={() => this.setDisplayType('mesh')}>Mesh</button>
                 <button onClick={() => this.setDisplayType('smooth')}>Smooth</button>
               </div>
-            </div>
 
-            <input type="file" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'front')} style={{ display: 'none' }} />
-            <input type="file" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'side')} style={{ display: 'none' }} />
-            <input type="file" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'top')} style={{ display: 'none' }} />
+              <div className="exportButton">
+                <button onClick={this.exportGLB}>Export</button>
+              </div>
+            </div>
           </div>
+
+          <input type="file" accept="image/*" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'front')} style={{ display: 'none' }} />
+          <input type="file" accept="image/*" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'side')} style={{ display: 'none' }} />
+          <input type="file" accept="image/*" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'top')} style={{ display: 'none' }} />
         </div>
-        
-        <style>
-          {`
-            .mainContainer { position: fixed; width: 100%; height: 100%; background-color: #f00ff0; }
-            .displayContainer { position: fixed; top: 5vw; }
-            .binaryContainer { position: fixed; top: 110vw; display: flex; justify-content: space-around; width: 100%; }
-            .controls { position: absolute; top: 150vw; width: 100%; display: flex; justify-content: space-between; }
-            .colorControls { display: flex; flex-direction: column; }
-            .sizeControls, .displayButtons {}
-          `}
-        </style>
       </>
     );
   }

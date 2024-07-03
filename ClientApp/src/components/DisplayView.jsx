@@ -2,7 +2,6 @@ import React, { Component, createRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
-import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 
 export class DisplayView extends Component {
   constructor(props) {
@@ -69,34 +68,6 @@ export class DisplayView extends Component {
     return box;
   };
 
-  exportGLB = () => {
-    if (this.sceneRef.current) {
-      if (window.confirm('Do you want to export the 3D model?')) {
-        const exporter = new GLTFExporter();
-        const options = { binary: true };
-        const scene = new THREE.Scene();
-        this.meshes.forEach(mesh => scene.add(mesh));
-        exporter.parse(scene, (result) => {
-          if (result instanceof ArrayBuffer) {
-            const blob = new Blob([result], { type: 'model/gltf-binary' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'model.glb';
-            a.click();
-            URL.revokeObjectURL(url);
-          } else {
-            console.error('GLTF Export Error: Result is not an ArrayBuffer.');
-          }
-        }, (error) => {
-          console.error('GLTF Export Error:', error);
-        }, options);
-      }
-    } else {
-      console.error('Scene reference is not available.');
-    }
-  };
-
   render() {
     const { displayType, voxelData, meshData, smoothData } = this.props;
     this.meshes = [];
@@ -111,7 +82,6 @@ export class DisplayView extends Component {
           {displayType === 'voxel' && this.addVoxels(voxelData)}
           {(displayType === 'mesh' || displayType === 'smooth') && this.addMesh(displayType === 'mesh' ? meshData : smoothData)}
         </Canvas>
-        <button onClick={this.exportGLB} style={{ position: 'absolute', top: '10px', right: '10px' }}>Export GLB</button>
       </>
     );
   }
