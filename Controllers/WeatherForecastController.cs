@@ -28,7 +28,7 @@ namespace ImagesToVoxel.Controllers {
       var meshProcessor = new MarchingCubes();
       var meshData = meshProcessor.Mesh(voxelData, request.Size, request.Size, request.Size);
 
-      var smoothProcessor = new LaplacianSmoothing();
+      var smoothProcessor = new LaplacianSmoothing(request.Iterations, request.Lambda);
       var smoothData = smoothProcessor.Smooth(meshData);
 
       return Ok(new { voxelData, meshData, smoothData });
@@ -44,6 +44,8 @@ namespace ImagesToVoxel.Controllers {
       public string? SideData { get; set; }
       public string? TopData { get; set; }
       public int Size { get; set; }
+      public int Iterations { get; set; }
+      public float Lambda { get; set; }
     }
   }
 }

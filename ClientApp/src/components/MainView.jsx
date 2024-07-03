@@ -13,9 +13,14 @@ export class MainView extends Component {
       binaryData: { front: '', side: '', top: '' },
       files: { front: null, side: null, top: null },
       size: 20,
+      iterations: 2,
+      lambda: 0.5,
       displayType: 'voxel',
       voxelData: null, meshData: null, smoothData: null,
-      red: 0, green: 128, blue: 255
+      red: 0, green: 128, blue: 255,
+      tempSize: 20,
+      tempIterations: 2,
+      tempLambda: 0.5
     };
   }
 
@@ -73,24 +78,37 @@ export class MainView extends Component {
     }
   };
 
-  handleSizeChange = async (change) => {
-    this.setState(prevState => {
-      const newSize = Math.min(50, Math.max(5, prevState.size + change));
-      return { size: newSize };
-    }, async () => {
-      const { files } = this.state;
-      if (files.front) this.readFileAndUpload(files.front, 'front');
-      if (files.side) this.readFileAndUpload(files.side, 'side');
-      if (files.top) this.readFileAndUpload(files.top, 'top');
-    });
+  handleSizeChange = (e) => { this.setState({ tempSize: parseInt(e.target.value, 10) }); };
+  
+  handleIterationsChange = (e) => { this.setState({ tempIterations: parseInt(e.target.value, 10) }); };
+  
+  handleLambdaChange = (e) => { this.setState({ tempLambda: parseFloat(e.target.value) }); };
+
+  applyChanges = async () => {
+    this.setState(
+      { size: this.state.tempSize, iterations: this.state.tempIterations, lambda: this.state.tempLambda },
+      () => {
+        const { files } = this.state;
+        if (files.front) this.readFileAndUpload(files.front, 'front');
+        if (files.side) this.readFileAndUpload(files.side, 'side');
+        if (files.top) this.readFileAndUpload(files.top, 'top');
+      }
+    );
   };
 
   transformToVoxel = async () => {
-    const { binaryData, size } = this.state;
+    const { binaryData, size, iterations, lambda } = this.state;
     if (binaryData.front && binaryData.side && binaryData.top) {
       const response = await fetch('weatherforecast/voxel', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ frontData: binaryData.front, sideData: binaryData.side, topData: binaryData.top, size })
+        body: JSON.stringify({
+          frontData: binaryData.front,
+          sideData: binaryData.side,
+          topData: binaryData.top,
+          size,
+          iterations,
+          lambda
+        })
       });
       if (response.ok) {
         const data = await response.json();
@@ -144,7 +162,7 @@ export class MainView extends Component {
   };
 
   render() {
-    const { binaryData, size, displayType, voxelData, meshData, smoothData, red, green, blue } = this.state;
+    const { binaryData, size, displayType, voxelData, meshData, smoothData, red, green, blue, tempSize, tempIterations, tempLambda } = this.state;
 
     return (
       <>
@@ -168,33 +186,39 @@ export class MainView extends Component {
 
           <div className="controls">
             <div className="colorControls">
-              <input type="range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', e.target.value)} />
-              <input type="range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', e.target.value)} />
-              <input type="range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', e.target.value)} />
+              <input type="range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', parseInt(e.target.value))} />
+              <input type="range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', parseInt(e.target.value))} />
+              <input type="range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', parseInt(e.target.value))} />
             </div>
 
-            <div>
-              <div className="sizeControls">
-                <button onClick={() => this.handleSizeChange(-1)}>-</button>
-                <span>{size}</span>
-                <button onClick={() => this.handleSizeChange(1)}>+</button>
-              </div>
-
-              <div className="displayButtons">
-                <button onClick={() => this.setDisplayType('voxel')}>Voxel</button>
-                <button onClick={() => this.setDisplayType('mesh')}>Mesh</button>
-                <button onClick={() => this.setDisplayType('smooth')}>Smooth</button>
-              </div>
-
-              <div className="exportButton">
-                <button onClick={this.exportGLB}>Export</button>
-              </div>
+            <div className="sizeControls">
+              <label>Size: {tempSize}</label>
+              <input type="range" min="5" max="50" value={tempSize} onChange={this.handleSizeChange} />
             </div>
+
+            <div className="iterationControls">
+              <label>Iterations: {tempIterations}</label>
+              <input type="range" min="1" max="10" value={tempIterations} onChange={this.handleIterationsChange} />
+            </div>
+
+            <div className="lambdaControls">
+              <label>Lambda: {tempLambda}</label>
+              <input type="range" min="0.1" max="1.0" step="0.1" value={tempLambda} onChange={this.handleLambdaChange} />
+            </div>
+
+            <button onClick={this.applyChanges}>Update</button>
+
+            <div className="displayControls">
+              <button onClick={() => this.setDisplayType('voxel')} disabled={displayType === 'voxel'}>Voxel</button>
+              <button onClick={() => this.setDisplayType('mesh')} disabled={displayType === 'mesh'}>Mesh</button>
+              <button onClick={() => this.setDisplayType('smooth')} disabled={displayType === 'smooth'}>Smooth</button>
+            </div>
+
+            <button onClick={this.exportGLB}>Export GLB</button>
+            <input type="file" accept="image/*" ref={this.fileInputs.front} style={{ display: 'none' }} onChange={(event) => this.handleInputChange(event, 'front')} />
+            <input type="file" accept="image/*" ref={this.fileInputs.side} style={{ display: 'none' }} onChange={(event) => this.handleInputChange(event, 'side')} />
+            <input type="file" accept="image/*" ref={this.fileInputs.top} style={{ display: 'none' }} onChange={(event) => this.handleInputChange(event, 'top')} />
           </div>
-
-          <input type="file" accept="image/*" ref={this.fileInputs.front} onChange={(e) => this.handleInputChange(e, 'front')} style={{ display: 'none' }} />
-          <input type="file" accept="image/*" ref={this.fileInputs.side} onChange={(e) => this.handleInputChange(e, 'side')} style={{ display: 'none' }} />
-          <input type="file" accept="image/*" ref={this.fileInputs.top} onChange={(e) => this.handleInputChange(e, 'top')} style={{ display: 'none' }} />
         </div>
       </>
     );

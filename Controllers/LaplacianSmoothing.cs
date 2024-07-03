@@ -3,7 +3,7 @@ namespace ImagesToVoxel.Controllers {
     private int iterations;
     private float lambda;
 
-    public LaplacianSmoothing(int iterations = 2, float lambda = 0.5f) {
+    public LaplacianSmoothing(int iterations, float lambda) {
       this.iterations = iterations;
       this.lambda = lambda;
     }
