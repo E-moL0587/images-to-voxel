@@ -1,6 +1,13 @@
 import React, { Component, createRef } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+
+// Function component to load and render a GLB model using useGLTF
+function GLBModel({ url }) {
+  const { scene } = useGLTF(url);
+  return <primitive object={scene} />;
+}
 
 export class DisplayView extends Component {
   constructor(props) {
@@ -25,7 +32,6 @@ export class DisplayView extends Component {
     this.camera.position.z = 20;
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvasRef.current });
     this.renderer.setSize(width, height);
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.scene.add(new THREE.AmbientLight(0xffffff, 1.0));
     this.addDirectionalLight(10, 5, 10);
     this.addDirectionalLight(-10, 5, 10);
@@ -36,13 +42,12 @@ export class DisplayView extends Component {
 
   animate = () => {
     requestAnimationFrame(this.animate);
-    this.controls.update();
     this.renderer.render(this.scene, this.camera);
   };
 
   updateThree() {
     while (this.scene.children.length > 4) this.scene.remove(this.scene.children[4]);
-    const { displayType, voxelData, meshData, smoothData, color } = this.props;
+    const { displayType, voxelData, meshData, smoothData, color, glbUrl } = this.props;
     this.material.color.set(color);
     if (displayType === 'voxel') this.addVoxels(voxelData);
     else if (displayType === 'mesh' || displayType === 'smooth') this.addMesh(displayType === 'mesh' ? meshData : smoothData);
@@ -89,6 +94,19 @@ export class DisplayView extends Component {
   }
 
   render() {
-    return <canvas ref={this.canvasRef} style={{ width: '100vw', height: '100vw' }} />;
+    const { displayType, glbUrl } = this.props;
+    return (
+      <Canvas ref={this.canvasRef} style={{ width: '100vw', height: '100vw' }}>
+        <ambientLight intensity={1.0} />
+        <directionalLight position={[10, 5, 10]} intensity={2.0} />
+        <directionalLight position={[-10, 5, 10]} intensity={2.0} />
+        <directionalLight position={[0, 5, -10]} intensity={2.0} />
+        <OrbitControls />
+        {displayType === 'glb' && glbUrl && <GLBModel url={glbUrl} />}
+        {displayType !== 'glb' && (
+          <primitive object={this.scene} />
+        )}
+      </Canvas>
+    );
   }
 }
