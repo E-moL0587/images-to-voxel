@@ -33,9 +33,9 @@ export class Mibrim extends Component {
   generateRandomPoints = (points) => {
     if (!points || points.length === 0) return points;
     return points.map(() => [
-      (Math.random() - 0.5) * 40,
-      (Math.random() - 0.5) * 40,
-      (Math.random() - 0.5) * 40
+      (Math.random() - 0.5) * 60,
+      (Math.random() - 0.5) * 60,
+      (Math.random() - 0.5) * 60
     ]);
   };
 
@@ -84,14 +84,14 @@ export class Mibrim extends Component {
 
     const vertices = displayPoints.map(p => new THREE.Vector3(...p));
     const geometry = new THREE.BufferGeometry().setFromPoints(vertices);
-    const material = new THREE.PointsMaterial({ size: 0.05, color: '#ff00ff' });
+    const material = new THREE.PointsMaterial({ size: 0.1, color: '#ff00ff' });
     return <points geometry={geometry} material={material} />;
   };
 
   render() {
     return (
       <>
-        <Canvas style={{ width: '100vw', height: '100vh', background: '#0f0f0f' }} camera={{ position: [5, 0, 10] }}>
+        <Canvas style={{ width: '100vw', height: '100vh', background: '#0f0f0f' }} camera={{ position: [10, 0, 20] }}>
           <ambientLight intensity={1.0} />
           <directionalLight position={[10, 5, 10]} intensity={1.0} />
           <directionalLight position={[-10, 5, 10]} intensity={1.0} />
