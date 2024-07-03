@@ -11,7 +11,7 @@ export class Mibrim extends Component {
       points: this.centerPoints(pointsArray[0]),
       currentIndex: 0
     };
-    this.switchInterval = 5000;
+    this.switchInterval = 100;
   }
 
   componentDidMount() {
@@ -39,7 +39,7 @@ export class Mibrim extends Component {
     const boundingBox = new THREE.Box3().setFromPoints(vectors);
     const center = boundingBox.getCenter(new THREE.Vector3());
 
-    return points.map(([x, y, z]) => [x - center.x, y - center.y, z - center.z]);
+    return points.map(([x, y, z]) => [-x + center.x, -y + center.y, -z + center.z]);
   };
 
   renderPoints = () => {
