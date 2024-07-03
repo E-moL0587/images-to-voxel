@@ -6,6 +6,10 @@ import * as THREE from 'three';
 export class DisplayView extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      points: [],
+      transitionInProgress: false,
+    };
     this.sceneRef = createRef();
     this.meshes = [];
     this.materialRef = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
@@ -19,7 +23,33 @@ export class DisplayView extends Component {
     if (prevProps.color !== this.props.color) {
       this.materialRef.color.set(this.props.color);
     }
+    if (prevProps.displayType !== this.props.displayType) {
+      this.startTransition();
+    }
   }
+
+  startTransition = () => {
+    const { displayType, voxelData, meshData, smoothData } = this.props;
+    let newPoints = [];
+
+    if (displayType === 'voxel') {
+      newPoints = this.convertToPoints(this.getSurfaceVoxels(voxelData));
+    } else if (displayType === 'mesh' || displayType === 'smooth') {
+      newPoints = this.convertToPoints(displayType === 'mesh' ? meshData : smoothData);
+    }
+
+    this.setState({ points: newPoints, transitionInProgress: true }, () => {
+      setTimeout(() => {
+        this.setState({ transitionInProgress: false });
+      }, 1000);
+    });
+  };
+
+  convertToPoints = (data) => {
+    if (!data) return [];
+    const center = this.computeBoundingBox(data).getCenter(new THREE.Vector3());
+    return data.map(([x, y, z]) => new THREE.Vector3(-x + center.x, -y + center.y, -z + center.z));
+  };
 
   addVoxels = (data) => {
     if (!data) return [];
@@ -33,9 +63,7 @@ export class DisplayView extends Component {
       );
       mesh.position.copy(position);
       this.meshes.push(mesh);
-      return (
-        <primitive object={mesh} key={index} />
-      );
+      return <primitive object={mesh} key={index} />;
     });
   };
 
@@ -68,19 +96,36 @@ export class DisplayView extends Component {
     return box;
   };
 
+  renderPoints = () => {
+    const { points } = this.state;
+    if (points.length === 0) return null;
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.PointsMaterial({ size: 0.1, color: this.props.color });
+    return <points geometry={geometry} material={material} />;
+  };
+
   render() {
     const { displayType, voxelData, meshData, smoothData } = this.props;
+    const { transitionInProgress } = this.state;
     this.meshes = [];
+
     return (
       <>
-        <Canvas style={{ width: '100vw', height: '100vw' }} ref={this.sceneRef}>
+        <Canvas style={{ width: '50vw', height: '50vw' }} ref={this.sceneRef}>
           <ambientLight intensity={1.0} />
           <directionalLight position={[10, 5, 10]} intensity={2.0} />
           <directionalLight position={[-10, 5, 10]} intensity={2.0} />
           <directionalLight position={[0, 5, -10]} intensity={2.0} />
           <OrbitControls />
-          {displayType === 'voxel' && this.addVoxels(voxelData)}
-          {(displayType === 'mesh' || displayType === 'smooth') && this.addMesh(displayType === 'mesh' ? meshData : smoothData)}
+          {transitionInProgress ? (
+            this.renderPoints()
+          ) : (
+            <>
+              {displayType === 'voxel' && this.addVoxels(voxelData)}
+              {(displayType === 'mesh' || displayType === 'smooth') && this.addMesh(displayType === 'mesh' ? meshData : smoothData)}
+            </>
+          )}
         </Canvas>
       </>
     );
