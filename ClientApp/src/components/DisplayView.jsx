@@ -6,11 +6,7 @@ import * as THREE from 'three';
 export class DisplayView extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      points: [],
-      transitionPoints: [],
-      transitionInProgress: false,
-    };
+    this.state = { points: [], transitionPoints: [], transitionInProgress: false };
     this.sceneRef = createRef();
     this.meshes = [];
     this.materialRef = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
@@ -18,28 +14,19 @@ export class DisplayView extends Component {
     this.transitionDuration = 500;
   }
 
-  componentDidMount() {
-    this.materialRef.color.set(this.props.color);
-  }
+  componentDidMount() { this.materialRef.color.set(this.props.color); }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.color !== this.props.color) {
-      this.materialRef.color.set(this.props.color);
-    }
-    if (prevProps.displayType !== this.props.displayType) {
-      this.startTransition();
-    }
+    if (prevProps.color !== this.props.color) { this.materialRef.color.set(this.props.color); }
+    if (prevProps.displayType !== this.props.displayType) { this.startTransition(); }
   }
 
   startTransition = () => {
     const { displayType, voxelData, meshData, smoothData } = this.props;
     let newPoints = [];
 
-    if (displayType === 'voxel') {
-      newPoints = this.convertToPoints(this.getSurfaceVoxels(voxelData));
-    } else if (displayType === 'mesh' || displayType === 'smooth') {
-      newPoints = this.convertToPoints(displayType === 'mesh' ? meshData : smoothData);
-    }
+    if (displayType === 'voxel') { newPoints = this.convertToPoints(this.getSurfaceVoxels(voxelData)); }
+    else if (displayType === 'mesh' || displayType === 'smooth') { newPoints = this.convertToPoints(displayType === 'mesh' ? meshData : smoothData); }
 
     this.setState({ points: newPoints, transitionInProgress: true }, () => {
       this.startTransitionTime = Date.now();
@@ -62,9 +49,7 @@ export class DisplayView extends Component {
       this.setState({ transitionPoints: newTransitionPoints }, () => {
         requestAnimationFrame(this.animateTransition);
       });
-    } else {
-      this.setState({ transitionInProgress: false });
-    }
+    } else { this.setState({ transitionInProgress: false }); }
   };
 
   convertToPoints = (data) => {
@@ -79,10 +64,7 @@ export class DisplayView extends Component {
     const center = this.computeBoundingBox(surfaceVoxels).getCenter(new THREE.Vector3());
     return surfaceVoxels.map(([x, y, z], index) => {
       const position = new THREE.Vector3(-x + center.x, -y + center.y, -z + center.z);
-      const mesh = new THREE.Mesh(
-        new THREE.BoxGeometry(1, 1, 1),
-        this.materialRef
-      );
+      const mesh = new THREE.Mesh( new THREE.BoxGeometry(1, 1, 1), this.materialRef );
       mesh.position.copy(position);
       this.meshes.push(mesh);
       return <primitive object={mesh} key={index} />;
