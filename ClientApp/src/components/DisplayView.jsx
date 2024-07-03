@@ -11,7 +11,7 @@ export class DisplayView extends Component {
     this.meshes = [];
     this.materialRef = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
     this.startTransitionTime = null;
-    this.transitionDuration = 500;
+    this.transitionDuration = 400;
   }
 
   componentDidMount() { this.materialRef.color.set(this.props.color); }
@@ -117,7 +117,7 @@ export class DisplayView extends Component {
 
     return (
       <>
-        <Canvas style={{ width: '100vw', height: '100vw' }} ref={this.sceneRef}>
+        <Canvas ref={this.sceneRef}>
           <ambientLight intensity={1.0} />
           <directionalLight position={[10, 5, 10]} intensity={1.0} />
           <directionalLight position={[-10, 5, 10]} intensity={1.0} />

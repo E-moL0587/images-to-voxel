@@ -26,6 +26,6 @@ export class BinaryView extends Component {
 
   render() {
     const { canvasId } = this.props;
-    return <canvas id={canvasId} style={{ width: '30vw', height: '30vw' }}></canvas>;
+    return <canvas id={canvasId}></canvas>;
   }
 }
