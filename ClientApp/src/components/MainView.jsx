@@ -215,9 +215,9 @@ export class MainView extends Component {
             </div>
 
             <button onClick={this.exportGLB}>Export GLB</button>
-            <input type="file" accept="image/*" ref={this.fileInputs.front} style={{ display: 'none' }} onChange={(event) => this.handleInputChange(event, 'front')} />
-            <input type="file" accept="image/*" ref={this.fileInputs.side} style={{ display: 'none' }} onChange={(event) => this.handleInputChange(event, 'side')} />
-            <input type="file" accept="image/*" ref={this.fileInputs.top} style={{ display: 'none' }} onChange={(event) => this.handleInputChange(event, 'top')} />
+            <input type="file" accept="image/*" ref={this.fileInputs.front} onChange={(event) => this.handleInputChange(event, 'front')} />
+            <input type="file" accept="image/*" ref={this.fileInputs.side} onChange={(event) => this.handleInputChange(event, 'side')} />
+            <input type="file" accept="image/*" ref={this.fileInputs.top} onChange={(event) => this.handleInputChange(event, 'top')} />
           </div>
         </div>
       </>

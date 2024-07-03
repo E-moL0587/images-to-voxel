@@ -102,12 +102,13 @@ export class DisplayView extends Component {
   };
 
   getSurfaceVoxels = (data) => {
-    const directions = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [-1, 0], [0, 0, 1], [0, 0, -1]];
+    if (!data) return [];
+    const voxelSet = new Set(data.map(([x, y, z]) => `${x},${y},${z}`));
+    const directions = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];
+
     return data.filter(([x, y, z]) =>
       directions.some(([dx, dy, dz]) =>
-        !data.some(([nx, ny, nz]) =>
-          nx === x + dx && ny === y + dy && nz === z + dz
-        )
+        !voxelSet.has(`${x + dx},${y + dy},${z + dz}`)
       )
     );
   };
