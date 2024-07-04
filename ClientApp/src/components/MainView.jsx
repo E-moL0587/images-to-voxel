@@ -12,7 +12,7 @@ export class MainView extends Component {
     this.state = {
       binaryData: { front: '', side: '', top: '' },
       files: { front: null, side: null, top: null },
-      size: 24, iterations: 2, lambda: 0.5,
+      size: 50, iterations: 2, lambda: 0.5,
       displayType: 'voxel',
       voxelData: null, meshData: null, smoothData: null,
       red: 0, green: 128, blue: 255
@@ -137,7 +137,9 @@ export class MainView extends Component {
             <Display ref={this.displayRef} displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
           </div>
 
-          <textarea value={JSON.stringify(smoothData)} readOnly />
+          {/* <textarea value={JSON.stringify(voxelData)} readOnly />
+          <textarea value={JSON.stringify(meshData)} readOnly />
+          <textarea value={JSON.stringify(smoothData)} readOnly /> */}
 
           <div className="binaryContainer">
             <Binary canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
