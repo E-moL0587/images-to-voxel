@@ -164,7 +164,6 @@ export class Particle extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.handleBurst} style={{ position: 'absolute', zIndex: 1 }}>Burst</button>
         <Canvas style={{ width: '100vw', height: '100vh' }} camera={{ position: [0, 0, 50] }}>
           <ambientLight intensity={1.0} />
           <directionalLight position={[10, 5, 10]} intensity={1.0} />
