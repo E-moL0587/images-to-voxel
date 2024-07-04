@@ -34,6 +34,12 @@ export class Particle extends Component {
     cancelAnimationFrame(this.animationFrameId);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.initialInterpolationDone && prevState.currentIndex !== this.state.currentIndex) {
+      this.startSmoothTransition(prevState.points, this.state.points);
+    }
+  }
+
   generateRandomPoints = (points) => {
     if (!points || points.length === 0) return points;
     return points.map(() => [
@@ -61,7 +67,6 @@ export class Particle extends Component {
       const nextIndex = (prevState.currentIndex + 1) % pointsArray.length;
       const nextPoints = this.centerPoints(pointsArray[nextIndex]);
       const updatedNextPoints = this.matchPointCounts(prevState.points, nextPoints);
-      this.startSmoothTransition(prevState.points, updatedNextPoints);
       return {
         points: updatedNextPoints,
         currentIndex: nextIndex
