@@ -3,9 +3,7 @@ import { Particle } from './Particle';
 
 export class TitleView extends Component {
   handleStartClick = () => {
-    setTimeout(() => {
-      this.props.switchToMain();
-    }, 2000);
+    setTimeout(() => { this.props.switchToMain(); }, 2000);
     this.particleRef.handleBurst();
   };
 
