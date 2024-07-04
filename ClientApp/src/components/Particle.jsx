@@ -13,10 +13,13 @@ export class Particle extends Component {
       currentPoints: this.centerPoints(pointsArray[0]),
       currentIndex: 0,
       interpolationProgress: 0,
-      initialInterpolationDone: false
+      initialInterpolationDone: false,
+      burstPoints: [],
+      burstProgress: 0
     };
     this.switchInterval = 4000;
-    this.interpolationDuration = 3000;
+    this.interpolationDuration = 2000;
+    this.burstDuration = 2000;
     this.startTime = null;
     this.animationFrameId = null;
   }
@@ -119,31 +122,58 @@ export class Particle extends Component {
   };
 
   renderPoints = () => {
-    const { currentPoints, randomPoints, interpolationProgress, initialInterpolationDone } = this.state;
+    const { currentPoints, randomPoints, interpolationProgress, initialInterpolationDone, burstPoints, burstProgress } = this.state;
     if (currentPoints.length === 0 || randomPoints.length === 0) return null;
 
-    const displayPoints = initialInterpolationDone ? currentPoints : currentPoints.map((p, i) => [
-      randomPoints[i][0] * (1 - interpolationProgress) + p[0] * interpolationProgress,
-      randomPoints[i][1] * (1 - interpolationProgress) + p[1] * interpolationProgress,
-      randomPoints[i][2] * (1 - interpolationProgress) + p[2] * interpolationProgress,
-    ]);
+    let displayPoints;
+    if (burstPoints.length > 0) {
+      displayPoints = burstPoints.map((p, i) => [
+        p[0] * (1 - burstProgress) + (Math.random() - 0.5) * 200 * burstProgress,
+        p[1] * (1 - burstProgress) + (Math.random() - 0.5) * 200 * burstProgress,
+        p[2] * (1 - burstProgress) + (Math.random() - 0.5) * 200 * burstProgress,
+      ]);
+    } else {
+      displayPoints = initialInterpolationDone ? currentPoints : currentPoints.map((p, i) => [
+        randomPoints[i][0] * (1 - interpolationProgress) + p[0] * interpolationProgress,
+        randomPoints[i][1] * (1 - interpolationProgress) + p[1] * interpolationProgress,
+        randomPoints[i][2] * (1 - interpolationProgress) + p[2] * interpolationProgress,
+      ]);
+    }
 
     const vertices = displayPoints.map(p => new THREE.Vector3(...p));
     const geometry = new THREE.BufferGeometry().setFromPoints(vertices);
-    const material = new THREE.PointsMaterial({ size: 0.2, color: '#ff00ff' });
+    const material = new THREE.PointsMaterial({ size: 0.2, color: '#ff00ff', opacity: burstPoints.length > 0 ? 1 - burstProgress : 1, transparent: true });
     return <points geometry={geometry} material={material} />;
+  };
+
+  handleBurst = () => {
+    this.setState({ burstPoints: this.state.currentPoints, burstProgress: 0 });
+    const startBurstTime = performance.now();
+    const animateBurst = (timestamp) => {
+      const burstProgress = (timestamp - startBurstTime) / this.burstDuration;
+      if (burstProgress < 1) {
+        this.setState({ burstProgress });
+        this.animationFrameId = requestAnimationFrame(animateBurst);
+      } else {
+        this.setState({ burstPoints: [] });
+      }
+    };
+    this.animationFrameId = requestAnimationFrame(animateBurst);
   };
 
   render() {
     return (
-      <Canvas style={{ width: '100vw', height: '100vh', background: '#0f0f0f' }} camera={{ position: [0, 0, 50] }}>
-        <ambientLight intensity={1.0} />
-        <directionalLight position={[10, 5, 10]} intensity={1.0} />
-        <directionalLight position={[-10, 5, 10]} intensity={1.0} />
-        <directionalLight position={[0, 5, -10]} intensity={1.0} />
-        <OrbitControls />
-        {this.renderPoints()}
-      </Canvas>
+      <div>
+        <button onClick={this.handleBurst} style={{ position: 'absolute', zIndex: 1 }}>Burst</button>
+        <Canvas style={{ width: '100vw', height: '100vh' }} camera={{ position: [0, 0, 50] }}>
+          <ambientLight intensity={1.0} />
+          <directionalLight position={[10, 5, 10]} intensity={1.0} />
+          <directionalLight position={[-10, 5, 10]} intensity={1.0} />
+          <directionalLight position={[0, 5, -10]} intensity={1.0} />
+          <OrbitControls />
+          {this.renderPoints()}
+        </Canvas>
+      </div>
     );
   }
 }
