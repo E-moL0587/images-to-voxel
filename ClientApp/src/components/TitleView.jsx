@@ -13,7 +13,7 @@ export class TitleView extends Component {
         <div className="title-container">
           <Particle className="background" ref={ref => this.particleRef = ref} />
           <h1 className="title">Images to Voxel</h1>
-          <button className="start-button cyber-button" onClick={this.handleStartClick}>Tap to Start</button>
+          <button className="start-button" onClick={this.handleStartClick}>Tap to Start</button>
         </div>
 
         <style>
