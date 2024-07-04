@@ -133,7 +133,7 @@ export class MainView extends Component {
     return (
       <>
         <div className="mainContainer">
-          <div className="leftContainer">
+          <div className="leftContainer border">
             <div className="binaryContainer">
               <Binary canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
               <Binary canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
@@ -167,20 +167,21 @@ export class MainView extends Component {
 
                 <button className="cyber-button" onClick={this.exportGLB}>Export</button>
 
-                <input className="cyber-upload" type="file" accept="image/*" ref={this.fileInputs.front} onChange={(event) => this.handleInputChange(event, 'front')} />
-                <input className="cyber-upload" type="file" accept="image/*" ref={this.fileInputs.side} onChange={(event) => this.handleInputChange(event, 'side')} />
-                <input className="cyber-upload" type="file" accept="image/*" ref={this.fileInputs.top} onChange={(event) => this.handleInputChange(event, 'top')} />
+                <label className="cyber-upload"><span>Front</span><input type="file" accept="image/*" ref={this.fileInputs.front} onChange={(event) => this.handleInputChange(event, 'front')} /></label>
+                <label className="cyber-upload"><span>Side</span><input type="file" accept="image/*" ref={this.fileInputs.side} onChange={(event) => this.handleInputChange(event, 'side')} /></label>
+                <label className="cyber-upload"><span>Top</span><input type="file" accept="image/*" ref={this.fileInputs.top} onChange={(event) => this.handleInputChange(event, 'top')} /></label>
               </div>
             </div>
           </div>
 
-          <div className="rightContainer">
+          <div className="rightContainer border">
             <Display ref={this.displayRef} displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
           </div>
         </div>
 
         <style>
           {`
+            .border { border: 2px solid #00ffff; border-radius: 10px; box-shadow: inset 0 0 50px #ff00ff; margin: 1%; }
             .mainContainer { display: flex; flex-direction: row; width: 100vw; height: 100vh; }
             .leftContainer { display: flex; flex-direction: column; width: 50%; }
             .binaryContainer { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; }

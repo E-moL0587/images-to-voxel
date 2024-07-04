@@ -11,22 +11,31 @@ export class Display extends Component {
     this.meshes = [];
     this.materialRef = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
     this.startTransitionTime = null;
-    this.transitionDuration = 400;
+    this.transitionDuration = 1000; // 4 seconds for transition
   }
 
-  componentDidMount() { this.materialRef.color.set(this.props.color); }
+  componentDidMount() {
+    this.materialRef.color.set(this.props.color);
+  }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.color !== this.props.color) { this.materialRef.color.set(this.props.color); }
-    if (prevProps.displayType !== this.props.displayType) { this.startTransition(); }
+    if (prevProps.color !== this.props.color) {
+      this.materialRef.color.set(this.props.color);
+    }
+    if (prevProps.displayType !== this.props.displayType) {
+      this.startTransition();
+    }
   }
 
   startTransition = () => {
     const { displayType, voxelData, meshData, smoothData } = this.props;
     let newPoints = [];
 
-    if (displayType === 'voxel') { newPoints = this.convertToPoints(this.getSurfaceVoxels(voxelData)); }
-    else if (displayType === 'mesh' || displayType === 'smooth') { newPoints = this.convertToPoints(displayType === 'mesh' ? meshData : smoothData); }
+    if (displayType === 'voxel') {
+      newPoints = this.convertToPoints(this.getSurfaceVoxels(voxelData));
+    } else if (displayType === 'mesh' || displayType === 'smooth') {
+      newPoints = this.convertToPoints(displayType === 'mesh' ? meshData : smoothData);
+    }
 
     this.setState({ points: newPoints, transitionInProgress: true }, () => {
       this.startTransitionTime = Date.now();
@@ -39,17 +48,24 @@ export class Display extends Component {
     const now = Date.now();
     const elapsed = now - this.startTransitionTime;
     const t = Math.min(elapsed / this.transitionDuration, 1);
+    const easeT = this.easeInOutQuad(t); // Use easing function
 
     const newTransitionPoints = points.map((point, index) => {
       const start = transitionPoints[index] || new THREE.Vector3();
-      return new THREE.Vector3().lerpVectors(start, point, t);
+      return new THREE.Vector3().lerpVectors(start, point, easeT);
     });
 
     if (t < 1) {
       this.setState({ transitionPoints: newTransitionPoints }, () => {
         requestAnimationFrame(this.animateTransition);
       });
-    } else { this.setState({ transitionInProgress: false }); }
+    } else {
+      this.setState({ transitionInProgress: false });
+    }
+  };
+
+  easeInOutQuad = (t) => {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
   };
 
   convertToPoints = (data) => {
@@ -64,7 +80,7 @@ export class Display extends Component {
     const center = this.computeBoundingBox(surfaceVoxels).getCenter(new THREE.Vector3());
     return surfaceVoxels.map(([x, y, z], index) => {
       const position = new THREE.Vector3(-x + center.x, -y + center.y, -z + center.z);
-      const mesh = new THREE.Mesh( new THREE.BoxGeometry(1, 1, 1), this.materialRef );
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), this.materialRef);
       mesh.position.copy(position);
       this.meshes.push(mesh);
       return <primitive object={mesh} key={index} />;
@@ -117,7 +133,7 @@ export class Display extends Component {
 
     return (
       <>
-        <Canvas ref={this.sceneRef}>
+        <Canvas ref={this.sceneRef} camera={{ position: [0, 0, 20] }}>
           <ambientLight intensity={1.0} />
           <directionalLight position={[10, 5, 10]} intensity={1.0} />
           <directionalLight position={[-10, 5, 10]} intensity={1.0} />
