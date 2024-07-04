@@ -4,7 +4,7 @@ import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import pointsArray from './pointsArray';
 
-export class Mibrim extends Component {
+export class Particle extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,7 +14,7 @@ export class Mibrim extends Component {
       interpolationProgress: 0,
       initialInterpolationDone: false
     };
-    this.switchInterval = 100;
+    this.switchInterval = 4000;
     this.interpolationDuration = 3000;
     this.startTime = null;
     this.animationFrameId = null;
@@ -33,9 +33,9 @@ export class Mibrim extends Component {
   generateRandomPoints = (points) => {
     if (!points || points.length === 0) return points;
     return points.map(() => [
-      (Math.random() - 0.5) * 60,
-      (Math.random() - 0.5) * 60,
-      (Math.random() - 0.5) * 60
+      (Math.random() - 0.5) * 100,
+      (Math.random() - 0.5) * 100,
+      (Math.random() - 0.5) * 100
     ]);
   };
 
@@ -84,14 +84,14 @@ export class Mibrim extends Component {
 
     const vertices = displayPoints.map(p => new THREE.Vector3(...p));
     const geometry = new THREE.BufferGeometry().setFromPoints(vertices);
-    const material = new THREE.PointsMaterial({ size: 0.1, color: '#ff00ff' });
+    const material = new THREE.PointsMaterial({ size: 0.2, color: '#ff00ff' });
     return <points geometry={geometry} material={material} />;
   };
 
   render() {
     return (
       <>
-        <Canvas style={{ width: '100vw', height: '100vh', background: '#0f0f0f' }} camera={{ position: [10, 0, 20] }}>
+        <Canvas style={{ width: '100vw', height: '100vh', background: '#0f0f0f' }} camera={{ position: [0, 0, 50] }}>
           <ambientLight intensity={1.0} />
           <directionalLight position={[10, 5, 10]} intensity={1.0} />
           <directionalLight position={[-10, 5, 10]} intensity={1.0} />

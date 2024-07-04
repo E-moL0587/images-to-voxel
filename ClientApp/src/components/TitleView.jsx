@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Mibrim } from './Mibrim';
+import { Particle } from './Particle';
 
 export class TitleView extends Component {
   render() {
     return (
       <>
         <div className="title-container">
-          <Mibrim className="background" />
+          <Particle className="background" />
           <h1 className="title">Images to Voxel</h1>
           <button className="start-button" onClick={this.props.switchToMain}>Tap to Start</button>
         </div>
