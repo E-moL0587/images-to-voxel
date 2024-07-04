@@ -11,21 +11,26 @@ export default class App extends Component {
 
   switchToTitle = () => { this.setState({ view: 'title' }); };
   switchToMain = () => { this.setState({ view: 'main' }); };
-
   finishIntro = () => { this.setState({ view: 'title' }); };
 
   render() {
     const { view } = this.state;
-
     return (
       <>
-        {view === 'intro' ? (
-          <LogoIntro onFinish={this.finishIntro} />
-        ) : view === 'title' ? (
-          <TitleView switchToMain={this.switchToMain} />
-        ) : (
-          <MainView switchToTitle={this.switchToTitle} />
-        )}
+        <div>
+          {view === 'intro' ? <LogoIntro onFinish={this.finishIntro} /> : null}
+          {view === 'title' ? <TitleView switchToMain={this.switchToMain} /> : null}
+          {view === 'main' ? <MainView switchToTitle={this.switchToTitle} /> : null}
+        </div>
+
+        <style>
+          {`
+            @import url('https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c');
+            * { font-family: 'M PLUS Rounded 1c', sans-serif; }
+            ::-webkit-scrollbar { display: none; }
+            body { background-color: #0f0f0f; }
+          `}
+        </style>
       </>
     );
   }

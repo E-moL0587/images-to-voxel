@@ -12,13 +12,8 @@ export default class LogoIntro extends Component {
     this.state = { currentLogo: 0 };
   }
 
-  componentDidMount() {
-    this.interval = setInterval(this.showNextLogo, 2000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+  componentDidMount() { this.interval = setInterval(this.showNextLogo, 2000); }
+  componentWillUnmount() { clearInterval(this.interval); }
 
   showNextLogo = () => {
     this.setState((prevState) => {
@@ -32,24 +27,22 @@ export default class LogoIntro extends Component {
     });
   }
 
-  handleSkip = () => {
-    this.showNextLogo();
-  }
+  handleSkip = () => { this.showNextLogo(); }
 
   render() {
     const { currentLogo } = this.state;
     return (
-      <div onClick={this.handleSkip} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <img
-          key={currentLogo}
-          src={logos[currentLogo]}
-          alt="Logo"
-          style={{ width: '200px', height: '200px', animation: 'fade 2s ease-in-out' }}
-        />
-        <style>{`
-          @keyframes fade { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
-        `}</style>
-      </div>
+      <>
+        <div onClick={this.handleSkip} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#f0f0f0' }}>
+          <img key={currentLogo} src={logos[currentLogo]} alt="Logo" style={{ width: '200px', height: '200px', animation: 'fade 2s ease-in-out' }} />
+        </div>
+
+        <style>
+          {`
+            @keyframes fade { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+          `}
+        </style>
+      </>
     );
   }
 }
