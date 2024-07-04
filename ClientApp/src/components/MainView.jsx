@@ -133,45 +133,64 @@ export class MainView extends Component {
     return (
       <>
         <div className="mainContainer">
-          <div className="displayContainer">
+          <div className="leftContainer">
+            <div className="binaryContainer">
+              <Binary canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
+              <Binary canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
+              <Binary canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
+            </div>
+
+            <div className="controlsContainer">
+              <button className="cyber-button" onClick={this.props.switchToTitle}>もどる</button>
+
+              <div>
+                <div className="cyber-slider">
+                  <div className="color-indicator" style={{ '--color': '#ff0000' }} />
+                  <input className="cyber-slide" type="range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', parseInt(e.target.value))} />
+                </div>
+
+                <div className="cyber-slider">
+                  <div className="color-indicator" style={{ '--color': '#00ff00' }} />
+                  <input className="cyber-slide" type="range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', parseInt(e.target.value))} />
+                </div>
+
+                <div className="cyber-slider">
+                  <div className="color-indicator" style={{ '--color': '#0000ff' }} />
+                  <input className="cyber-slide" type="range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', parseInt(e.target.value))} />
+                </div>
+
+                <div className="displayControls">
+                  <button className="cyber-button" onClick={() => this.setDisplayType('voxel')} disabled={displayType === 'voxel'}>Voxel</button>
+                  <button className="cyber-button" onClick={() => this.setDisplayType('mesh')} disabled={displayType === 'mesh'}>Mesh</button>
+                  <button className="cyber-button" onClick={() => this.setDisplayType('smooth')} disabled={displayType === 'smooth'}>Smooth</button>
+                </div>
+
+                <button className="cyber-button" onClick={this.exportGLB}>Export</button>
+
+                <input className="cyber-upload" type="file" accept="image/*" ref={this.fileInputs.front} onChange={(event) => this.handleInputChange(event, 'front')} />
+                <input className="cyber-upload" type="file" accept="image/*" ref={this.fileInputs.side} onChange={(event) => this.handleInputChange(event, 'side')} />
+                <input className="cyber-upload" type="file" accept="image/*" ref={this.fileInputs.top} onChange={(event) => this.handleInputChange(event, 'top')} />
+              </div>
+            </div>
+          </div>
+
+          <div className="rightContainer">
             <Display ref={this.displayRef} displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
-          </div>
-
-          {/* <textarea value={JSON.stringify(voxelData)} readOnly />
-          <textarea value={JSON.stringify(meshData)} readOnly />
-          <textarea value={JSON.stringify(smoothData)} readOnly /> */}
-
-          <div className="binaryContainer">
-            <Binary canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
-            <Binary canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
-            <Binary canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
-          </div>
-
-          <button onClick={this.props.switchToTitle}>もどる</button>
-
-          <div className="controls">
-            <div className="colorControls">
-              <input type="range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', parseInt(e.target.value))} />
-              <input type="range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', parseInt(e.target.value))} />
-              <input type="range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', parseInt(e.target.value))} />
-            </div>
-
-            <div className="displayControls">
-              <button onClick={() => this.setDisplayType('voxel')} disabled={displayType === 'voxel'}>Voxel</button>
-              <button onClick={() => this.setDisplayType('mesh')} disabled={displayType === 'mesh'}>Mesh</button>
-              <button onClick={() => this.setDisplayType('smooth')} disabled={displayType === 'smooth'}>Smooth</button>
-            </div>
-
-            <button onClick={this.exportGLB}>Export</button>
-            <input type="file" accept="image/*" ref={this.fileInputs.front} onChange={(event) => this.handleInputChange(event, 'front')} />
-            <input type="file" accept="image/*" ref={this.fileInputs.side} onChange={(event) => this.handleInputChange(event, 'side')} />
-            <input type="file" accept="image/*" ref={this.fileInputs.top} onChange={(event) => this.handleInputChange(event, 'top')} />
           </div>
         </div>
 
         <style>
           {`
-            .mainContainer
+            .mainContainer { display: flex; flex-direction: row; width: 100vw; height: 100vh; }
+            .leftContainer { display: flex; flex-direction: column; width: 50%; }
+            .binaryContainer { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; }
+            .controlsContainer { display: flex; flex-direction: column; justify-content: center; align-items: center; }
+            .rightContainer { display: flex; justify-content: center; align-items: center; width: 50%; }
+            @media (max-width: 768px) {
+              .mainContainer { flex-direction: column; }
+              .leftContainer { width: 100%; height: 50%; }
+              .rightContainer { width: 100%; height: 50%; }
+            }
           `}
         </style>
       </>

@@ -26,6 +26,6 @@ export class Binary extends Component {
 
   render() {
     const { canvasId } = this.props;
-    return <canvas id={canvasId}></canvas>;
+    return <canvas id={canvasId} style={{ width: '30%', height: 'auto' }}></canvas>;
   }
 }
