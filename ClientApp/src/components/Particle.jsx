@@ -10,6 +10,7 @@ export class Particle extends Component {
     this.state = {
       points: this.centerPoints(pointsArray[0]),
       randomPoints: this.generateRandomPoints(pointsArray[0]),
+      currentPoints: this.centerPoints(pointsArray[0]),
       currentIndex: 0,
       interpolationProgress: 0,
       initialInterpolationDone: false
@@ -55,11 +56,56 @@ export class Particle extends Component {
   switchPoints = () => {
     this.setState((prevState) => {
       const nextIndex = (prevState.currentIndex + 1) % pointsArray.length;
+      const nextPoints = this.centerPoints(pointsArray[nextIndex]);
+      const updatedNextPoints = this.matchPointCounts(prevState.points, nextPoints);
+      this.startSmoothTransition(prevState.points, updatedNextPoints);
       return {
-        points: this.centerPoints(pointsArray[nextIndex]),
+        points: updatedNextPoints,
         currentIndex: nextIndex
       };
     });
+  };
+
+  matchPointCounts = (currentPoints, newPoints) => {
+    const currentCount = currentPoints.length;
+    const newCount = newPoints.length;
+
+    if (currentCount === newCount) return newPoints;
+
+    const updatedPoints = [...newPoints];
+    if (currentCount > newCount) {
+      while (updatedPoints.length < currentCount) {
+        const randomIndex = Math.floor(Math.random() * newCount);
+        updatedPoints.push(newPoints[randomIndex]);
+      }
+    } else {
+      while (updatedPoints.length > currentCount) {
+        updatedPoints.pop();
+      }
+    }
+    return updatedPoints;
+  };
+
+  startSmoothTransition = (startPoints, endPoints) => {
+    this.startTime = performance.now();
+    this.setState({ currentPoints: startPoints, interpolationProgress: 0 });
+    const interpolate = (timestamp) => {
+      const progress = (timestamp - this.startTime) / this.interpolationDuration;
+      if (progress < 1) {
+        this.setState({
+          currentPoints: startPoints.map((p, i) => [
+            p[0] * (1 - progress) + endPoints[i][0] * progress,
+            p[1] * (1 - progress) + endPoints[i][1] * progress,
+            p[2] * (1 - progress) + endPoints[i][2] * progress,
+          ]),
+          interpolationProgress: progress
+        });
+        this.animationFrameId = requestAnimationFrame(interpolate);
+      } else {
+        this.setState({ currentPoints: endPoints, interpolationProgress: 1 });
+      }
+    };
+    this.animationFrameId = requestAnimationFrame(interpolate);
   };
 
   centerPoints = (points) => {
@@ -73,10 +119,10 @@ export class Particle extends Component {
   };
 
   renderPoints = () => {
-    const { points, randomPoints, interpolationProgress, initialInterpolationDone } = this.state;
-    if (points.length === 0 || randomPoints.length === 0) return null;
+    const { currentPoints, randomPoints, interpolationProgress, initialInterpolationDone } = this.state;
+    if (currentPoints.length === 0 || randomPoints.length === 0) return null;
 
-    const displayPoints = initialInterpolationDone ? points : points.map((p, i) => [
+    const displayPoints = initialInterpolationDone ? currentPoints : currentPoints.map((p, i) => [
       randomPoints[i][0] * (1 - interpolationProgress) + p[0] * interpolationProgress,
       randomPoints[i][1] * (1 - interpolationProgress) + p[1] * interpolationProgress,
       randomPoints[i][2] * (1 - interpolationProgress) + p[2] * interpolationProgress,
@@ -90,16 +136,14 @@ export class Particle extends Component {
 
   render() {
     return (
-      <>
-        <Canvas style={{ width: '100vw', height: '100vh', background: '#0f0f0f' }} camera={{ position: [0, 0, 50] }}>
-          <ambientLight intensity={1.0} />
-          <directionalLight position={[10, 5, 10]} intensity={1.0} />
-          <directionalLight position={[-10, 5, 10]} intensity={1.0} />
-          <directionalLight position={[0, 5, -10]} intensity={1.0} />
-          <OrbitControls />
-          {this.renderPoints()}
-        </Canvas>
-      </>
+      <Canvas style={{ width: '100vw', height: '100vh', background: '#0f0f0f' }} camera={{ position: [0, 0, 50] }}>
+        <ambientLight intensity={1.0} />
+        <directionalLight position={[10, 5, 10]} intensity={1.0} />
+        <directionalLight position={[-10, 5, 10]} intensity={1.0} />
+        <directionalLight position={[0, 5, -10]} intensity={1.0} />
+        <OrbitControls />
+        {this.renderPoints()}
+      </Canvas>
     );
   }
 }
