@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import LogoIntro from './LogoIntro';
 import { MainView } from './components/MainView';
 import { TitleView } from './components/TitleView';
+import './Styles/StartButton.css';
+import './Styles/CyberButton.css';
+import './Styles/CyberSlider.css';
 
 export default class App extends Component {
   constructor(props) {
