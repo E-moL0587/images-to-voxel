@@ -131,40 +131,59 @@ export class MainView extends Component {
     const { binaryData, size, displayType, voxelData, meshData, smoothData, red, green, blue } = this.state;
 
     return (
-      <>
-        <div className="mainContainer">
-          <div className="displayContainer">
-            <Display ref={this.displayRef} displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
+      <div className="container mt-4">
+        <div className="row">
+          <div className="col-md-8">
+            <div className="card mb-4">
+              <div className="card-body">
+                <Display ref={this.displayRef} displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
+              </div>
+            </div>
           </div>
 
-          <div className="binaryContainer">
-            <Binary canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
-            <Binary canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
-            <Binary canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
-          </div>
-
-          <button onClick={this.props.switchToTitle}>もどる</button>
-
-          <div className="controls">
-            <div className="colorControls">
-              <input type="range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', parseInt(e.target.value))} />
-              <input type="range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', parseInt(e.target.value))} />
-              <input type="range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', parseInt(e.target.value))} />
+          <div className="col-md-4">
+            <div className="card mb-4">
+              <div className="card-body">
+                <h5 className="card-title">Binary Images</h5>
+                <div className="d-flex justify-content-around">
+                  <Binary canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
+                  <Binary canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
+                  <Binary canvasId="topCanvas" binaryData={binaryData.top} size={size} color={`rgb(${red},${green},${blue})`} />
+                </div>
+              </div>
             </div>
 
-            <div className="displayControls">
-              <button onClick={() => this.setDisplayType('voxel')} disabled={displayType === 'voxel'}>Voxel</button>
-              <button onClick={() => this.setDisplayType('mesh')} disabled={displayType === 'mesh'}>Mesh</button>
-              <button onClick={() => this.setDisplayType('smooth')} disabled={displayType === 'smooth'}>Smooth</button>
+            <div className="card mb-4">
+              <div className="card-body">
+                <h5 className="card-title">Controls</h5>
+                <div className="mb-3">
+                  <label className="form-label">Color Controls</label>
+                  <input type="range" className="form-range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', parseInt(e.target.value))} />
+                  <input type="range" className="form-range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', parseInt(e.target.value))} />
+                  <input type="range" className="form-range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', parseInt(e.target.value))} />
+                </div>
+
+                <div className="btn-group mb-3" role="group" aria-label="Display Type">
+                  <button type="button" className={`btn btn-outline-primary ${displayType === 'voxel' ? 'active' : ''}`} onClick={() => this.setDisplayType('voxel')}>Voxel</button>
+                  <button type="button" className={`btn btn-outline-primary ${displayType === 'mesh' ? 'active' : ''}`} onClick={() => this.setDisplayType('mesh')}>Mesh</button>
+                  <button type="button" className={`btn btn-outline-primary ${displayType === 'smooth' ? 'active' : ''}`} onClick={() => this.setDisplayType('smooth')}>Smooth</button>
+                </div>
+
+                <button type="button" className="btn btn-success mb-3" onClick={this.exportGLB}>Export</button>
+
+                <div className="mb-3">
+                  <label className="form-label">Upload Images</label>
+                  <input type="file" className="form-control mb-2" accept="image/*" ref={this.fileInputs.front} onChange={(event) => this.handleInputChange(event, 'front')} />
+                  <input type="file" className="form-control mb-2" accept="image/*" ref={this.fileInputs.side} onChange={(event) => this.handleInputChange(event, 'side')} />
+                  <input type="file" className="form-control" accept="image/*" ref={this.fileInputs.top} onChange={(event) => this.handleInputChange(event, 'top')} />
+                </div>
+              </div>
             </div>
 
-            <button onClick={this.exportGLB}>Export</button>
-            <input type="file" accept="image/*" ref={this.fileInputs.front} onChange={(event) => this.handleInputChange(event, 'front')} />
-            <input type="file" accept="image/*" ref={this.fileInputs.side} onChange={(event) => this.handleInputChange(event, 'side')} />
-            <input type="file" accept="image/*" ref={this.fileInputs.top} onChange={(event) => this.handleInputChange(event, 'top')} />
+            <button type="button" className="btn btn-secondary" onClick={this.props.switchToTitle}>もどる</button>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }
