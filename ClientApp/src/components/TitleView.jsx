@@ -42,7 +42,7 @@ export class TitleView extends Component {
             .background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
             .title { position: absolute; font-size: 3em; font-weight: bold; top: 20%; left: 50%; transform: translate(-50%, -50%); color: #f0f0f0; }
             .subtitle { position: absolute; font-size: 1.5em; font-weight: bold; bottom: 10%; left: 50%; transform: translate(-50%, -50%); color: #f0f0f0; }
-            .start-button { position: absolute; bottom: 30%; left: 50%; transform: translate(-50%, 50%); }
+            .start-button { position: absolute; bottom: 30%; left: 50%; transform: translate(-50%, -50%); }
           `}
         </style>
       </>
