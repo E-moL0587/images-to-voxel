@@ -131,18 +131,18 @@ export class MainView extends Component {
     const { binaryData, size, displayType, voxelData, meshData, smoothData, red, green, blue } = this.state;
 
     return (
-      <div className="container mt-4">
-        <div className="row">
-          <div className="col-md-8 d-flex flex-column align-items-center justify-content-center">
-            <div className="card mb-4" style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <div className="card-body">
+      <div className="container-fluid no-padding full-height">
+        <div className="row no-margin full-height">
+          <div className="col-md-8 no-padding full-height">
+            <div className="card no-margin full-height">
+              <div className="card-body no-padding full-height">
                 <Display ref={this.displayRef} displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
               </div>
             </div>
           </div>
 
-          <div className="col-md-4">
-            <div className="card mb-4">
+          <div className="col-md-4 no-padding overflow-auto full-height">
+            <div className="card no-margin mb-4">
               <div className="card-body">
                 <h5 className="card-title">Binary Images</h5>
                 <div className="d-flex justify-content-around">
@@ -153,7 +153,7 @@ export class MainView extends Component {
               </div>
             </div>
 
-            <div className="card mb-4">
+            <div className="card no-margin mb-4">
               <div className="card-body">
                 <h5 className="card-title">Controls</h5>
                 <div className="mb-3">
@@ -183,6 +183,25 @@ export class MainView extends Component {
             <button type="button" className="btn btn-secondary" onClick={this.props.switchToTitle}>もどる</button>
           </div>
         </div>
+
+        <style>
+          {`
+            .no-padding {
+              padding: 0 !important;
+            }
+            .no-margin {
+              margin: 0 !important;
+            }
+            .full-height {
+              height: 100vh;
+              display: flex;
+              flex-direction: column;
+            }
+            .overflow-auto {
+              overflow-y: auto;
+            }
+          `}
+        </style>
       </div>
     );
   }
