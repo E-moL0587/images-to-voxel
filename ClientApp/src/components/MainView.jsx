@@ -133,13 +133,13 @@ export class MainView extends Component {
     return (
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-8">
+          <div className="col-12 col-md-8">
             <div className="card full-height">
               <Display ref={this.displayRef} displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
             </div>
           </div>
 
-          <div className="col-md-4 overflow-auto full-height">
+          <div className="col-12 col-md-4 overflow-auto full-height">
             <div className="card mb-4">
               <div className="card-body">
                 <h5 className="card-title">ピクセル画像（2値化）</h5>
@@ -180,7 +180,7 @@ export class MainView extends Component {
               </div>
             </div>
 
-            <button type="button" className="btn btn-secondary" onClick={this.props.switchToTitle}>タイトルへもどる</button>
+            <button type="button" className="btn btn-secondary w-100" onClick={this.props.switchToTitle}>タイトルへもどる</button>
           </div>
         </div>
 
@@ -188,6 +188,9 @@ export class MainView extends Component {
           {`
             .full-height { height: 100vh; display: flex; flex-direction: column; }
             .overflow-auto { overflow-y: auto; }
+            @media (max-width: 768px) {
+              .full-height { height: 50vh; }
+            }
           `}
         </style>
       </div>
