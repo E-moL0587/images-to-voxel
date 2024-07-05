@@ -163,13 +163,15 @@ export class MainView extends Component {
                   <input type="range" className="form-range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', parseInt(e.target.value))} />
                 </div>
 
-                <div className="btn-group mb-3" role="group" aria-label="Display Type">
-                  <button type="button" className={`btn btn-outline-primary ${displayType === 'voxel' ? 'active' : ''}`} onClick={() => this.setDisplayType('voxel')}>Voxel</button>
-                  <button type="button" className={`btn btn-outline-primary ${displayType === 'mesh' ? 'active' : ''}`} onClick={() => this.setDisplayType('mesh')}>Mesh</button>
-                  <button type="button" className={`btn btn-outline-primary ${displayType === 'smooth' ? 'active' : ''}`} onClick={() => this.setDisplayType('smooth')}>Smooth</button>
-                </div>
+                <div className="d-flex justify-content-between mb-3">
+                  <div className="btn-group" role="group" aria-label="Display Type">
+                    <button type="button" className={`btn btn-outline-primary ${displayType === 'voxel' ? 'active' : ''}`} onClick={() => this.setDisplayType('voxel')}>Voxel</button>
+                    <button type="button" className={`btn btn-outline-primary ${displayType === 'mesh' ? 'active' : ''}`} onClick={() => this.setDisplayType('mesh')}>Mesh</button>
+                    <button type="button" className={`btn btn-outline-primary ${displayType === 'smooth' ? 'active' : ''}`} onClick={() => this.setDisplayType('smooth')}>Smooth</button>
+                  </div>
 
-                <button type="button" className="btn btn-success mb-3" onClick={this.exportGLB}>Export</button>
+                  <button type="button" className="btn btn-success" onClick={this.exportGLB}>Export</button>
+                </div>
 
                 <div className="mb-3">
                   <label className="form-label">Upload Images</label>
