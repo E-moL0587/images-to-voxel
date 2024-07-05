@@ -53,7 +53,7 @@ export class Display extends Component {
     const now = Date.now();
     const elapsed = now - this.startTransitionTime;
     const t = Math.min(elapsed / this.transitionDuration, 1);
-    const easeT = this.easeInOutQuad(t); // イージング関数を使用
+    const easeT = this.easeInOutQuad(t);
 
     const newTransitionPoints = points.map((point, index) => {
       const start = transitionPoints[index] || new THREE.Vector3();
