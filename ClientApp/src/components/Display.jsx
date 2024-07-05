@@ -11,7 +11,12 @@ export class Display extends Component {
     this.meshes = [];
     this.materialRef = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
     this.startTransitionTime = null;
-    this.transitionDuration = 1000; // 4 seconds for transition
+    this.transitionDuration = 1000; // 1秒間のトランジション
+
+    // ポイント用のバッファを作成
+    this.pointsGeometry = new THREE.BufferGeometry();
+    this.pointsMaterial = new THREE.PointsMaterial({ size: 0.1, color: props.color });
+    this.pointsMesh = new THREE.Points(this.pointsGeometry, this.pointsMaterial);
   }
 
   componentDidMount() {
@@ -21,6 +26,7 @@ export class Display extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.color !== this.props.color) {
       this.materialRef.color.set(this.props.color);
+      this.pointsMaterial.color.set(this.props.color);
     }
     if (prevProps.displayType !== this.props.displayType) {
       this.startTransition();
@@ -37,7 +43,7 @@ export class Display extends Component {
       newPoints = this.convertToPoints(displayType === 'mesh' ? meshData : smoothData);
     }
 
-    this.setState({ points: newPoints, transitionInProgress: true }, () => {
+    this.setState({ points: newPoints, transitionInProgress: true, transitionPoints: [] }, () => {
       this.startTransitionTime = Date.now();
       this.animateTransition();
     });
@@ -48,12 +54,22 @@ export class Display extends Component {
     const now = Date.now();
     const elapsed = now - this.startTransitionTime;
     const t = Math.min(elapsed / this.transitionDuration, 1);
-    const easeT = this.easeInOutQuad(t); // Use easing function
+    const easeT = this.easeInOutQuad(t); // イージング関数を使用
 
     const newTransitionPoints = points.map((point, index) => {
       const start = transitionPoints[index] || new THREE.Vector3();
       return new THREE.Vector3().lerpVectors(start, point, easeT);
     });
+
+    const positions = new Float32Array(newTransitionPoints.length * 3);
+    newTransitionPoints.forEach((point, index) => {
+      positions[index * 3] = point.x;
+      positions[index * 3 + 1] = point.y;
+      positions[index * 3 + 2] = point.z;
+    });
+
+    this.pointsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    this.pointsGeometry.attributes.position.needsUpdate = true;
 
     if (t < 1) {
       this.setState({ transitionPoints: newTransitionPoints }, () => {
@@ -75,16 +91,21 @@ export class Display extends Component {
   };
 
   addVoxels = (data) => {
-    if (!data) return [];
+    if (!data) return null;
     const surfaceVoxels = this.getSurfaceVoxels(data);
     const center = this.computeBoundingBox(surfaceVoxels).getCenter(new THREE.Vector3());
-    return surfaceVoxels.map(([x, y, z], index) => {
+    const instancedMesh = new THREE.InstancedMesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      this.materialRef,
+      surfaceVoxels.length
+    );
+    surfaceVoxels.forEach(([x, y, z], index) => {
       const position = new THREE.Vector3(-x + center.x, -y + center.y, -z + center.z);
-      const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), this.materialRef);
-      mesh.position.copy(position);
-      this.meshes.push(mesh);
-      return <primitive object={mesh} key={index} />;
+      const matrix = new THREE.Matrix4().makeTranslation(position.x, position.y, position.z);
+      instancedMesh.setMatrixAt(index, matrix);
     });
+    this.meshes.push(instancedMesh);
+    return <primitive object={instancedMesh} />;
   };
 
   addMesh = (data) => {
@@ -118,12 +139,7 @@ export class Display extends Component {
   };
 
   renderPoints = () => {
-    const { transitionPoints } = this.state;
-    if (transitionPoints.length === 0) return null;
-
-    const geometry = new THREE.BufferGeometry().setFromPoints(transitionPoints);
-    const material = new THREE.PointsMaterial({ size: 0.1, color: this.props.color });
-    return <points geometry={geometry} material={material} />;
+    return <primitive object={this.pointsMesh} />;
   };
 
   render() {
