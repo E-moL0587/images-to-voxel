@@ -93,7 +93,7 @@ export class MainView extends Component {
 
   exportGLB = () => {
     if (this.displayRef.current) {
-      if (window.confirm('Do you want to export the 3D model?')) {
+      if (window.confirm('3Dモデルを出力しますか？')) {
         const exporter = new GLTFExporter();
         const options = { binary: true };
         const scene = new THREE.Scene();
