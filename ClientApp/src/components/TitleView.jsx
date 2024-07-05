@@ -15,11 +15,11 @@ export class TitleView extends Component {
   }
 
   handleStartClick = () => {
+    this.particleRef.handleBurst();
     this.setState({ fadeOut: true });
     setTimeout(() => {
       this.props.switchToMain();
     }, 2000);
-    this.particleRef.handleBurst();
   };
 
   render() {

@@ -63,9 +63,9 @@ export class Particle extends Component {
 
   animate = () => {
     if (this.mesh) {
-      this.mesh.rotation.x += 0.005;
-      this.mesh.rotation.y += 0.005;
-      this.mesh.rotation.z += 0.005;
+      this.mesh.rotation.x += 0.002;
+      this.mesh.rotation.y += 0.002;
+      this.mesh.rotation.z += 0.002;
     }
     this.animationFrameId = requestAnimationFrame(this.animate);
   };
@@ -168,7 +168,7 @@ export class Particle extends Component {
 
     const vertices = displayPoints.map(p => new THREE.Vector3(...p));
     const geometry = new THREE.BufferGeometry().setFromPoints(vertices);
-    const material = new THREE.PointsMaterial({ size: 0.2, color: '#ff00ff', opacity: burstPoints.length > 0 ? 1 - burstProgress : 1, transparent: true });
+    const material = new THREE.PointsMaterial({ size: 0.2, color: '#ff00ff', transparent: true });
 
     return (
       <points ref={mesh => { this.mesh = mesh; }} geometry={geometry} material={material} />
