@@ -168,11 +168,11 @@ export class MainView extends Component {
                     <button type="button" className={`btn btn-outline-primary ${displayType === 'smooth' ? 'active' : ''}`} onClick={() => this.setDisplayType('smooth')}>スムーズ</button>
                   </div>
 
-                  <button type="button" className="btn btn-success" onClick={this.exportGLB}>GLBに出力</button>
+                  <button type="button" className="btn btn-success" onClick={this.exportGLB}>出力</button>
                 </div>
 
                 <div className="mb-4">
-                  <label className="form-label">画像の変更</label>
+                  <label className="form-label">画像の変更（入力）</label>
                   <input type="file" className="form-control mb-2" accept="image/*" ref={this.fileInputs.front} onChange={(event) => this.handleInputChange(event, 'front')} />
                   <input type="file" className="form-control mb-2" accept="image/*" ref={this.fileInputs.side} onChange={(event) => this.handleInputChange(event, 'side')} />
                   <input type="file" className="form-control" accept="image/*" ref={this.fileInputs.top} onChange={(event) => this.handleInputChange(event, 'top')} />
