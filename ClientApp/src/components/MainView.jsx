@@ -92,19 +92,31 @@ export class MainView extends Component {
   handleColorChange = (color, value) => { this.setState({ [color]: value }); };
 
   exportGLB = () => {
+    const { displayType, voxelData } = this.state;
+
     if (this.displayRef.current) {
       if (window.confirm('3Dモデルを出力しますか？')) {
         const exporter = new GLTFExporter();
         const options = { binary: true };
         const scene = new THREE.Scene();
 
-        this.displayRef.current.meshes.forEach(mesh => {
-          const clonedMesh = mesh.clone();
-          clonedMesh.material = new THREE.MeshStandardMaterial({
-            color: mesh.material.color, roughness: 1, metalness: 0
+        if (displayType === 'voxel' && voxelData) {
+          voxelData.forEach(([x, y, z]) => {
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.position.set(-x, -y, -z);
+            scene.add(cube);
           });
-          scene.add(clonedMesh);
-        });
+        } else {
+          this.displayRef.current.meshes.forEach(mesh => {
+            const clonedMesh = mesh.clone();
+            clonedMesh.material = new THREE.MeshStandardMaterial({
+              color: mesh.material.color, roughness: 1, metalness: 0
+            });
+            scene.add(clonedMesh);
+          });
+        }
 
         exporter.parse(scene, (result) => {
           if (result instanceof ArrayBuffer) {
