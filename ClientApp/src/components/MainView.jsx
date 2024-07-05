@@ -144,7 +144,7 @@ export class MainView extends Component {
           <div className="col-md-4 no-padding overflow-auto full-height">
             <div className="card no-margin mb-4">
               <div className="card-body">
-                <h5 className="card-title">ピクセル画像</h5>
+                <h5 className="card-title">ピクセル画像（2値化）</h5>
                 <div className="d-flex justify-content-around">
                   <Binary canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
                   <Binary canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
@@ -157,7 +157,7 @@ export class MainView extends Component {
               <div className="card-body">
                 <h5 className="card-title">コントロールパネル</h5>
                 <div className="mb-3">
-                  <label className="form-label">Color Controls</label>
+                  <label className="form-label">色の変更</label>
                   <input type="range" className="form-range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', parseInt(e.target.value))} />
                   <input type="range" className="form-range" min="0" max="255" value={green} onChange={(e) => this.handleColorChange('green', parseInt(e.target.value))} />
                   <input type="range" className="form-range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', parseInt(e.target.value))} />
@@ -165,16 +165,16 @@ export class MainView extends Component {
 
                 <div className="d-flex justify-content-between mb-3">
                   <div className="btn-group" role="group" aria-label="Display Type">
-                    <button type="button" className={`btn btn-outline-primary ${displayType === 'voxel' ? 'active' : ''}`} onClick={() => this.setDisplayType('voxel')}>Voxel</button>
-                    <button type="button" className={`btn btn-outline-primary ${displayType === 'mesh' ? 'active' : ''}`} onClick={() => this.setDisplayType('mesh')}>Mesh</button>
-                    <button type="button" className={`btn btn-outline-primary ${displayType === 'smooth' ? 'active' : ''}`} onClick={() => this.setDisplayType('smooth')}>Smooth</button>
+                    <button type="button" className={`btn btn-outline-primary ${displayType === 'voxel' ? 'active' : ''}`} onClick={() => this.setDisplayType('voxel')}>ボクセル</button>
+                    <button type="button" className={`btn btn-outline-primary ${displayType === 'mesh' ? 'active' : ''}`} onClick={() => this.setDisplayType('mesh')}>メッシュ</button>
+                    <button type="button" className={`btn btn-outline-primary ${displayType === 'smooth' ? 'active' : ''}`} onClick={() => this.setDisplayType('smooth')}>スムーズ</button>
                   </div>
 
-                  <button type="button" className="btn btn-success" onClick={this.exportGLB}>Export</button>
+                  <button type="button" className="btn btn-success" onClick={this.exportGLB}>GLBに出力</button>
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label">Upload Images</label>
+                  <label className="form-label">画像の変更</label>
                   <input type="file" className="form-control mb-2" accept="image/*" ref={this.fileInputs.front} onChange={(event) => this.handleInputChange(event, 'front')} />
                   <input type="file" className="form-control mb-2" accept="image/*" ref={this.fileInputs.side} onChange={(event) => this.handleInputChange(event, 'side')} />
                   <input type="file" className="form-control" accept="image/*" ref={this.fileInputs.top} onChange={(event) => this.handleInputChange(event, 'top')} />
@@ -182,7 +182,7 @@ export class MainView extends Component {
               </div>
             </div>
 
-            <button type="button" className="btn btn-secondary" onClick={this.props.switchToTitle}>もどる</button>
+            <button type="button" className="btn btn-secondary" onClick={this.props.switchToTitle}>タイトルへもどる</button>
           </div>
         </div>
 
