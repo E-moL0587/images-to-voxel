@@ -13,30 +13,25 @@ export default class LogoIntro extends Component {
     this.animationTimeout = null;
   }
 
-  componentDidMount() {
-    this.animateLogos();
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.animationTimeout);
-  }
+  componentDidMount() { this.animateLogos(); }
+  componentWillUnmount() { clearTimeout(this.animationTimeout); }
 
   animateLogos = () => {
     this.animationTimeout = setTimeout(() => {
       const nextLogo = this.state.currentLogo + 1;
       if (nextLogo === logos.length) {
-        this.props.onFinish(); // 終了時の処理を実行
+        this.props.onFinish();
       } else {
         this.setState({ currentLogo: nextLogo }, this.animateLogos);
       }
-    }, 2000); // 2秒ごとに次のロゴを表示
+    }, 2000);
   };
 
   handleSkip = () => {
-    clearTimeout(this.animationTimeout); // タイマーをクリア
+    clearTimeout(this.animationTimeout);
     const nextLogo = this.state.currentLogo + 1;
     if (nextLogo === logos.length) {
-      this.props.onFinish(); // 終了時の処理を実行
+      this.props.onFinish();
     } else {
       this.setState({ currentLogo: nextLogo }, this.animateLogos);
     }
@@ -44,19 +39,16 @@ export default class LogoIntro extends Component {
 
   render() {
     const { currentLogo } = this.state;
+
     return (
       <>
         <div onClick={this.handleSkip} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#f0f0f0' }}>
-          <img key={currentLogo} src={logos[currentLogo]} alt="Logo" style={{ width: '200px', height: '200px', opacity: 1, transition: 'opacity 1s ease-in-out' }} />
+          <img key={currentLogo} src={logos[currentLogo]} alt="Logo" style={{ width: '200px', height: '200px', opacity: 0, animation: 'fade 2s ease-in-out' }} />
         </div>
 
         <style>
           {`
-            @keyframes fade {
-              0% { opacity: 0; }
-              50% { opacity: 1; }
-              100% { opacity: 0; }
-            }
+            @keyframes fade { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
           `}
         </style>
       </>
