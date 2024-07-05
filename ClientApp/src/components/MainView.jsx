@@ -161,14 +161,13 @@ export class MainView extends Component {
                   <input type="range" className="form-range" min="0" max="255" value={blue} onChange={(e) => this.handleColorChange('blue', parseInt(e.target.value))} />
                 </div>
 
-                <div className="d-flex justify-content-between mb-4">
-                  <div className="btn-group" role="group" aria-label="Display Type">
+                <div className="btn-group d-flex flex-column mb-4" role="group" aria-label="Display Type">
+                  <div className="d-flex justify-content-between">
                     <button type="button" className={`btn btn-outline-primary ${displayType === 'voxel' ? 'active' : ''}`} onClick={() => this.setDisplayType('voxel')}>ボクセル</button>
                     <button type="button" className={`btn btn-outline-primary ${displayType === 'mesh' ? 'active' : ''}`} onClick={() => this.setDisplayType('mesh')}>メッシュ</button>
                     <button type="button" className={`btn btn-outline-primary ${displayType === 'smooth' ? 'active' : ''}`} onClick={() => this.setDisplayType('smooth')}>スムーズ</button>
                   </div>
-
-                  <button type="button" className="btn btn-success" onClick={this.exportGLB}>出力</button>
+                  <button type="button" className="btn btn-success mt-2" onClick={this.exportGLB}>GLB形式で出力</button>
                 </div>
 
                 <div className="mb-4">
