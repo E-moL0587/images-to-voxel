@@ -30,7 +30,7 @@ export class TitleView extends Component {
         <div className={`title-container ${fadeIn ? 'fade-in' : ''} ${fadeOut ? 'fade-out' : ''}`}>
           <Particle className="background" ref={ref => this.particleRef = ref} />
           <h1 className="title">Images to Voxel</h1>
-          <h3 className="subtitle">技育博2024 vol.3 / エモル</h3>
+          <h3 className="subtitle">技育博2024 Vol.3 / エモル</h3>
           <button className="btn btn-primary start-button" onClick={this.handleStartClick}>はじめる</button>
         </div>
 
