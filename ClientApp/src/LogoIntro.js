@@ -10,36 +10,53 @@ export default class LogoIntro extends Component {
   constructor(props) {
     super(props);
     this.state = { currentLogo: 0 };
+    this.animationTimeout = null;
   }
 
-  componentDidMount() { this.interval = setInterval(this.showNextLogo, 2000); }
-  componentWillUnmount() { clearInterval(this.interval); }
+  componentDidMount() {
+    this.animateLogos();
+  }
 
-  showNextLogo = () => {
-    this.setState((prevState) => {
-      const nextLogo = prevState.currentLogo + 1;
+  componentWillUnmount() {
+    clearTimeout(this.animationTimeout);
+  }
+
+  animateLogos = () => {
+    this.animationTimeout = setTimeout(() => {
+      const nextLogo = this.state.currentLogo + 1;
       if (nextLogo === logos.length) {
-        clearInterval(this.interval);
-        this.props.onFinish();
-        return { currentLogo: prevState.currentLogo };
+        this.props.onFinish(); // 終了時の処理を実行
+      } else {
+        this.setState({ currentLogo: nextLogo }, this.animateLogos);
       }
-      return { currentLogo: nextLogo };
-    });
-  }
+    }, 2000); // 2秒ごとに次のロゴを表示
+  };
 
-  handleSkip = () => { this.showNextLogo(); }
+  handleSkip = () => {
+    clearTimeout(this.animationTimeout); // タイマーをクリア
+    const nextLogo = this.state.currentLogo + 1;
+    if (nextLogo === logos.length) {
+      this.props.onFinish(); // 終了時の処理を実行
+    } else {
+      this.setState({ currentLogo: nextLogo }, this.animateLogos);
+    }
+  };
 
   render() {
     const { currentLogo } = this.state;
     return (
       <>
         <div onClick={this.handleSkip} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#f0f0f0' }}>
-          <img key={currentLogo} src={logos[currentLogo]} alt="Logo" style={{ width: '200px', height: '200px', animation: 'fade 2s ease-in-out' }} />
+          <img key={currentLogo} src={logos[currentLogo]} alt="Logo" style={{ width: '200px', height: '200px', opacity: 1, transition: 'opacity 1s ease-in-out' }} />
         </div>
 
         <style>
           {`
-            @keyframes fade { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+            @keyframes fade {
+              0% { opacity: 0; }
+              50% { opacity: 1; }
+              100% { opacity: 0; }
+            }
           `}
         </style>
       </>
