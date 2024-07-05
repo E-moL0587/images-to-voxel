@@ -15,7 +15,8 @@ export class Particle extends Component {
       interpolationProgress: 0,
       initialInterpolationDone: false,
       burstPoints: [],
-      burstProgress: 0
+      burstProgress: 0,
+      burstDirections: [],
     };
     this.switchInterval = 4000;
     this.interpolationDuration = 2000;
@@ -46,6 +47,15 @@ export class Particle extends Component {
       (Math.random() - 0.5) * 50,
       (Math.random() - 0.5) * 50,
       (Math.random() - 0.5) * 50
+    ]);
+  };
+
+  generateBurstDirections = (points) => {
+    if (!points || points.length === 0) return points;
+    return points.map(() => [
+      (Math.random() - 0.5) * 2,
+      (Math.random() - 0.5) * 2,
+      (Math.random() - 0.5) * 2
     ]);
   };
 
@@ -127,15 +137,15 @@ export class Particle extends Component {
   };
 
   renderPoints = () => {
-    const { currentPoints, randomPoints, interpolationProgress, initialInterpolationDone, burstPoints, burstProgress } = this.state;
+    const { currentPoints, randomPoints, interpolationProgress, initialInterpolationDone, burstPoints, burstProgress, burstDirections } = this.state;
     if (currentPoints.length === 0 || randomPoints.length === 0) return null;
 
     let displayPoints;
     if (burstPoints.length > 0) {
       displayPoints = burstPoints.map((p, i) => [
-        p[0] * (1 - burstProgress) + (Math.random() - 0.5) * 100 * burstProgress,
-        p[1] * (1 - burstProgress) + (Math.random() - 0.5) * 100 * burstProgress,
-        p[2] * (1 - burstProgress) + (Math.random() - 0.5) * 100 * burstProgress,
+        p[0] + burstDirections[i][0] * burstProgress,
+        p[1] + burstDirections[i][1] * burstProgress,
+        p[2] + burstDirections[i][2] * burstProgress,
       ]);
     } else {
       displayPoints = initialInterpolationDone ? currentPoints : currentPoints.map((p, i) => [
@@ -152,7 +162,11 @@ export class Particle extends Component {
   };
 
   handleBurst = () => {
-    this.setState({ burstPoints: this.state.currentPoints, burstProgress: 0 });
+    this.setState({
+      burstPoints: this.state.currentPoints,
+      burstDirections: this.generateBurstDirections(this.state.currentPoints),
+      burstProgress: 0
+    });
     const startBurstTime = performance.now();
     const animateBurst = (timestamp) => {
       const burstProgress = (timestamp - startBurstTime) / this.burstDuration;
@@ -174,7 +188,7 @@ export class Particle extends Component {
           <directionalLight position={[10, 5, 10]} intensity={1.0} />
           <directionalLight position={[-10, 5, 10]} intensity={1.0} />
           <directionalLight position={[0, 5, -10]} intensity={1.0} />
-          <OrbitControls />
+          <OrbitControls enablePan={false} enableZoom={false} />
           {this.renderPoints()}
         </Canvas>
       </div>

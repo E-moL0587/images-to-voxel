@@ -144,7 +144,7 @@ export class MainView extends Component {
           <div className="col-md-4 no-padding overflow-auto full-height">
             <div className="card no-margin mb-4">
               <div className="card-body">
-                <h5 className="card-title">Binary Images</h5>
+                <h5 className="card-title">ピクセル画像</h5>
                 <div className="d-flex justify-content-around">
                   <Binary canvasId="frontCanvas" binaryData={binaryData.front} size={size} color={`rgb(${red},${green},${blue})`} />
                   <Binary canvasId="sideCanvas" binaryData={binaryData.side} size={size} color={`rgb(${red},${green},${blue})`} />
@@ -155,7 +155,7 @@ export class MainView extends Component {
 
             <div className="card no-margin mb-4">
               <div className="card-body">
-                <h5 className="card-title">Controls</h5>
+                <h5 className="card-title">コントロールパネル</h5>
                 <div className="mb-3">
                   <label className="form-label">Color Controls</label>
                   <input type="range" className="form-range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', parseInt(e.target.value))} />
