@@ -15,6 +15,7 @@ export default class App extends Component {
 
   render() {
     const { view } = this.state;
+
     return (
       <>
         <div>

@@ -196,7 +196,7 @@ export class Particle extends Component {
 
   render() {
     return (
-      <div>
+      <>
         <Canvas style={{ width: '100vw', height: '100vh' }} camera={{ position: [0, 0, 50] }}>
           <ambientLight intensity={1.0} />
           <directionalLight position={[10, 5, 10]} intensity={1.0} />
@@ -205,7 +205,7 @@ export class Particle extends Component {
           <OrbitControls enablePan={false} enableZoom={false} />
           {this.renderPoints()}
         </Canvas>
-      </div>
+      </>
     );
   }
 }
