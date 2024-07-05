@@ -43,9 +43,9 @@ export class Particle extends Component {
   generateRandomPoints = (points) => {
     if (!points || points.length === 0) return points;
     return points.map(() => [
-      (Math.random() - 0.5) * 100,
-      (Math.random() - 0.5) * 100,
-      (Math.random() - 0.5) * 100
+      (Math.random() - 0.5) * 50,
+      (Math.random() - 0.5) * 50,
+      (Math.random() - 0.5) * 50
     ]);
   };
 
@@ -133,9 +133,9 @@ export class Particle extends Component {
     let displayPoints;
     if (burstPoints.length > 0) {
       displayPoints = burstPoints.map((p, i) => [
-        p[0] * (1 - burstProgress) + (Math.random() - 0.5) * 200 * burstProgress,
-        p[1] * (1 - burstProgress) + (Math.random() - 0.5) * 200 * burstProgress,
-        p[2] * (1 - burstProgress) + (Math.random() - 0.5) * 200 * burstProgress,
+        p[0] * (1 - burstProgress) + (Math.random() - 0.5) * 100 * burstProgress,
+        p[1] * (1 - burstProgress) + (Math.random() - 0.5) * 100 * burstProgress,
+        p[2] * (1 - burstProgress) + (Math.random() - 0.5) * 100 * burstProgress,
       ]);
     } else {
       displayPoints = initialInterpolationDone ? currentPoints : currentPoints.map((p, i) => [
