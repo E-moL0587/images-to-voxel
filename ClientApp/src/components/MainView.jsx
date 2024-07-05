@@ -133,8 +133,8 @@ export class MainView extends Component {
     return (
       <div className="container mt-4">
         <div className="row">
-          <div className="col-md-8">
-            <div className="card mb-4">
+          <div className="col-md-8 d-flex flex-column align-items-center justify-content-center">
+            <div className="card mb-4" style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <div className="card-body">
                 <Display ref={this.displayRef} displayType={displayType} voxelData={voxelData} meshData={meshData} smoothData={smoothData} color={`rgb(${red},${green},${blue})`} />
               </div>
