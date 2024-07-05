@@ -92,7 +92,7 @@ export class MainView extends Component {
   handleColorChange = (color, value) => { this.setState({ [color]: value }); };
 
   exportGLB = () => {
-    const { displayType, voxelData } = this.state;
+    const { displayType, voxelData, red, green, blue } = this.state;
 
     if (this.displayRef.current) {
       if (window.confirm('3Dモデルを出力しますか？')) {
@@ -103,7 +103,7 @@ export class MainView extends Component {
         if (displayType === 'voxel' && voxelData) {
           voxelData.forEach(([x, y, z]) => {
             const geometry = new THREE.BoxGeometry(1, 1, 1);
-            const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+            const material = new THREE.MeshStandardMaterial({ color: new THREE.Color(`rgb(${red},${green},${blue})`) });
             const cube = new THREE.Mesh(geometry, material);
             cube.position.set(-x, -y, -z);
             scene.add(cube);
