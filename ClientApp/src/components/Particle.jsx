@@ -17,6 +17,7 @@ export class Particle extends Component {
       burstPoints: [],
       burstProgress: 0,
       burstDirections: [],
+      rotation: { x: 0, y: 0, z: 0 }
     };
     this.switchInterval = 4000;
     this.interpolationDuration = 2000;
@@ -28,6 +29,7 @@ export class Particle extends Component {
   componentDidMount() {
     this.startTime = performance.now();
     this.animationFrameId = requestAnimationFrame(this.interpolatePoints);
+    this.animate();
   }
 
   componentWillUnmount() {
@@ -57,6 +59,15 @@ export class Particle extends Component {
       (Math.random() - 0.5) * 2,
       (Math.random() - 0.5) * 2
     ]);
+  };
+
+  animate = () => {
+    if (this.mesh) {
+      this.mesh.rotation.x += 0.005;
+      this.mesh.rotation.y += 0.005;
+      this.mesh.rotation.z += 0.005;
+    }
+    this.animationFrameId = requestAnimationFrame(this.animate);
   };
 
   interpolatePoints = (timestamp) => {
@@ -158,7 +169,10 @@ export class Particle extends Component {
     const vertices = displayPoints.map(p => new THREE.Vector3(...p));
     const geometry = new THREE.BufferGeometry().setFromPoints(vertices);
     const material = new THREE.PointsMaterial({ size: 0.2, color: '#ff00ff', opacity: burstPoints.length > 0 ? 1 - burstProgress : 1, transparent: true });
-    return <points geometry={geometry} material={material} />;
+
+    return (
+      <points ref={mesh => { this.mesh = mesh; }} geometry={geometry} material={material} />
+    );
   };
 
   handleBurst = () => {
