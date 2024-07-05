@@ -11,7 +11,7 @@ export class Display extends Component {
     this.meshes = [];
     this.materialRef = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
     this.startTransitionTime = null;
-    this.transitionDuration = 1000;
+    this.transitionDuration = 500;
 
     this.pointsGeometry = new THREE.BufferGeometry();
     this.pointsMaterial = new THREE.PointsMaterial({ size: 0.1, color: props.color });
