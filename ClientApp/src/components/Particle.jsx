@@ -154,9 +154,9 @@ export class Particle extends Component {
     let displayPoints;
     if (burstPoints.length > 0) {
       displayPoints = burstPoints.map((p, i) => [
-        p[0] + burstDirections[i][0] * burstProgress,
-        p[1] + burstDirections[i][1] * burstProgress,
-        p[2] + burstDirections[i][2] * burstProgress,
+        p[0] + burstDirections[i][0] * 100 * burstProgress,
+        p[1] + burstDirections[i][1] * 100 * burstProgress,
+        p[2] + burstDirections[i][2] * 100 * burstProgress,
       ]);
     } else {
       displayPoints = initialInterpolationDone ? currentPoints : currentPoints.map((p, i) => [
