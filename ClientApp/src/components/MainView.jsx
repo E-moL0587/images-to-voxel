@@ -179,7 +179,7 @@ export class MainView extends Component {
                     <button type="button" className={`btn btn-outline-primary ${displayType === 'mesh' ? 'active' : ''}`} onClick={() => this.setDisplayType('mesh')}>メッシュ</button>
                     <button type="button" className={`btn btn-outline-primary ${displayType === 'smooth' ? 'active' : ''}`} onClick={() => this.setDisplayType('smooth')}>スムーズ</button>
                   </div>
-                  <button type="button" className="btn btn-success mt-2" onClick={this.exportGLB}>GLB形式で出力</button>
+                  <button type="button" className="btn btn-success mt-2" style={{ borderRadius: '0.4rem' }} onClick={this.exportGLB}>GLB形式で出力</button>
                 </div>
 
                 <div className="mb-4">
@@ -199,9 +199,7 @@ export class MainView extends Component {
           {`
             .full-height { height: 100vh; display: flex; flex-direction: column; }
             .overflow-auto { overflow-y: auto; }
-            @media (max-width: 768px) {
-              .full-height { height: 50vh; }
-            }
+            @media (max-width: 768px) { .full-height { height: 50vh; } }
           `}
         </style>
       </div>
