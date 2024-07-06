@@ -12,7 +12,7 @@ export class MainView extends Component {
     this.state = {
       binaryData: { front: '', side: '', top: '' },
       files: { front: null, side: null, top: null },
-      size: 24, iterations: 2, lambda: 0.5,
+      size: 25, iterations: 2, lambda: 0.5,
       displayType: 'voxel',
       voxelData: null, meshData: null, smoothData: null,
       red: 0, green: 128, blue: 255
@@ -166,6 +166,11 @@ export class MainView extends Component {
             <div className="card mb-4">
               <div className="card-body">
                 <h5 className="card-title">コントロールパネル</h5>
+
+                {/* <textarea value={JSON.stringify(voxelData)} readOnly />
+                <textarea value={JSON.stringify(meshData)} readOnly />
+                <textarea value={JSON.stringify(smoothData)} readOnly /> */}
+
                 <div className="mb-4">
                   <label className="form-label">色の変更</label>
                   <input type="range" className="form-range" min="0" max="255" value={red} onChange={(e) => this.handleColorChange('red', parseInt(e.target.value))} />

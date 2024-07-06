@@ -63,9 +63,9 @@ export class Particle extends Component {
 
   animate = () => {
     if (this.mesh) {
-      this.mesh.rotation.x += 0.002;
-      this.mesh.rotation.y += 0.002;
-      this.mesh.rotation.z += 0.002;
+      this.mesh.rotation.x += 0.003;
+      this.mesh.rotation.y += 0.003;
+      this.mesh.rotation.z += 0.003;
     }
     this.animationFrameId = requestAnimationFrame(this.animate);
   };

@@ -148,7 +148,7 @@ export class Display extends Component {
 
     return (
       <>
-        <Canvas ref={this.sceneRef} camera={{ position: [0, 0, 20] }}>
+        <Canvas ref={this.sceneRef} camera={{ position: [15, 10, 15] }}>
           <ambientLight intensity={1.0} />
           <directionalLight position={[10, 5, 10]} intensity={1.0} />
           <directionalLight position={[-10, 5, 10]} intensity={1.0} />
