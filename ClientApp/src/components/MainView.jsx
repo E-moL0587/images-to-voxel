@@ -12,7 +12,7 @@ export class MainView extends Component {
     this.state = {
       binaryData: { front: '', side: '', top: '' },
       files: { front: null, side: null, top: null },
-      size: 25, iterations: 2, lambda: 0.5,
+      size: 24, iterations: 2, lambda: 0.5,
       displayType: 'voxel',
       voxelData: null, meshData: null, smoothData: null,
       red: 0, green: 128, blue: 255

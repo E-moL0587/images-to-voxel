@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
-import pointsArray from './pointsArray';
+import pointsArray from './mibrim';
 
 export class Particle extends Component {
   constructor(props) {
